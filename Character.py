@@ -24,14 +24,16 @@ CondensedBase = {'acrobatics': 'dex', 'athletics': 'str', 'finesse': 'dex', 'inf
                    'stealth': 'dex', 'survival': 'wis'}
 
 # a much more common bonus to the standard skill list, that gives more skillpoints to specifically fill out these
-# skills, doesn't change anything about these skills in particular, just separates them out.
-BackgroundSkills = {'appraise', 'artistry', 'handle animal', 'linguistics', 'knowledge(engineering)',
+# skills, doesn't change anything about these skills in particular, just separates them out. This is a simple list
+BackgroundSkills = ['appraise', 'artistry', 'handle animal', 'linguistics', 'knowledge(engineering)',
                     'knowledge(geography)', 'knowledge(history)', 'knowledge(nobility)', 'lore', 'perform',
-                    'profession', 'sleight of hand'}
+                    'profession', 'sleight of hand']
 
 # list for trained/untrained and dict for armor penalty
-#TrainedSkills = {}
+#TrainedSkills = []
 #ArmorPenalty = {}
+
+## The actual class for characters
 
 class Character:
         # Attributes
@@ -40,17 +42,18 @@ class Character:
                  'maxhp': 10, 'temp': 0, 'speed': 30}
         skills = { 'null': 0}
         skillBase = {'null': 'NULL'}
-        ClassSkill = {'null': False}
-        #Race
+        classSkill = {'null': False}
+        #race
         #class
         #feat
         #items
         #equipment slots
-        misc flags = 0
+        miscFlags = 0
         
         #constructor
         def __init__(self):
                 del self.skills['null']
+                self.skills = STDSkills
         
         #functions (... means to be filled)
                 
@@ -59,12 +62,14 @@ class Character:
         
         #def Attack(self, ...):
         
-        #def Damage(self, ...)
+        #def Damage(self, ...):
         
 
 
 
 #test code, comment out and ignore for your work
+
 i = Character()
 
+# it throws errors if you ask for something that doesn't exist.
 print i.skills
