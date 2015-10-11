@@ -1,7 +1,7 @@
-#Python File for Pathfinder Character Assistant
+# Python File for Pathfinder Character Assistant
 
-#Global lists for skills could probably be floated off into a less permanent file for ease of alteration.
-#These are dictionaries.
+# Global lists for skills could probably be floated off into a less permanent file for ease of alteration.
+# These are dictionaries.
 STDSkills = {'acrobatics': 0, 'appraise': 0, 'bluff': 0, 'climb': 0, 'diplomacy': 0, 'disable device': 0,
              'disguise': 0, 'escape artist': 0, 'fly': 0, 'handle animal': 0, 'heal': 0, 'intimidate': 0,
              'linguistics': 0, 'perception': 0, 'ride': 0, 'sense motive': 0, 'slight of hand': 0,
@@ -23,13 +23,14 @@ CondensedBase = {'acrobatics': 'dex', 'athletics': 'str', 'finesse': 'dex', 'inf
                    'perception': 'wis', 'performance': 'cha', 'religion': 'int', 'society': 'int', 'spellcraft': 'int',
                    'stealth': 'dex', 'survival': 'wis'}
 
-# a much more common bonus to the standard skill list, that gives more skillpoints to specifically fill out these
-# skills, doesn't change anything about these skills in particular, just separates them out. This is a simple list
+# a much more common bonus to the standard skill list, that gives more skillpoints to specifically fill
+# out these skills, doesn't change anything about these skills in particular, just separates them out. 
+# This is a simple list
 BackgroundSkills = ['appraise', 'artistry', 'handle animal', 'linguistics', 'knowledge(engineering)',
                     'knowledge(geography)', 'knowledge(history)', 'knowledge(nobility)', 'lore', 'perform',
                     'profession', 'sleight of hand']
 
-# list for trained/untrained and dict for armor penalty
+# list for trained/untrained and dict for armor penalty for skills
 #TrainedSkills = []
 #ArmorPenalty = {}
 
