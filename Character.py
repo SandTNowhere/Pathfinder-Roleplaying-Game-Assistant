@@ -1,5 +1,12 @@
 # Python File for Pathfinder Character Assistant
 
+# includes
+import Race
+import CLS
+import Feat
+import Item
+
+
 # Global lists for skills could probably be floated off into a less permanent file for ease of alteration.
 # These are dictionaries.
 STDSkills = {'acrobatics': 0, 'appraise': 0, 'bluff': 0, 'climb': 0, 'diplomacy': 0, 'disable device': 0,
@@ -44,15 +51,41 @@ class Character:
         skills = { 'null': 0}
         skillBase = {'null': 'NULL'}
         classSkill = {'null': False}
-        #race
-        #class
-        #feat
-        #items
+        pRace # should be init'd in the init
+        cls
+        feats # a list of strings, rather than making more instances than neccissary, just use this for searching
+        gold # should be a value, 1 = 1gp so .1 = 1sp, and .01 = 1cp
         #equipment slots
+        #items all items, active and inactive
         miscFlags = 0
         
         #constructor
         def __init__(self):
+                #Mechanically useless info
+                misc['name'] = 'Garbelkox'
+                misc['player'] = 'Uranus'
+                misc['Deity'] = 'None'
+                misc['homeland'] = 'High But'
+                misc['gender'] = 'Male'
+                misc['age'] = 21
+                misc['height'] = '6\'3"'
+                misc['weight'] = 420
+                misc['hair'] = 'Black'
+                misc['eyes'] = 'Black'
+                #mechanical core, all come from this font of life, this also is required by a level 0 char
+                stats['str'] = 18
+                stats['dex'] = 12
+                stats['con'] = 14
+                stats['int'] = 13
+                stats['wis'] = 12
+                stats['cha'] = 7
+                pRace = Race.Race()
+                stats['speed'] = pRace.Speed()
+                #Class stuff, here we go, into the fun stuff
+                cls = CLS.CLS('fighter') # technically should only give level 1 for init, but we'll deal with that later
+                stats['maxhp'] = cls.hd()*cls.level
+                feats = ['power attack', 'weapon focus', 'weapon specialization']
+                
                 del self.skills['null']
                 self.skills = STDSkills
         
