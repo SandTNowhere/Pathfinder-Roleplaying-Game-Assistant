@@ -1,5 +1,7 @@
 # Race file for Pathfinder Roleplaying game assistant
 
+import Feat
+
 # some useful information that should be constant for the most part (there are no constants in python)
 # can be added to or changed if needed, but should make that later feature
 # sizes, includes all for later integration into monsters.
@@ -31,13 +33,24 @@ class Race:
     #Attributes
     stats = {'str': 0, 'dex': 0, 'con': 0, 'int': 0, 'wis': 0, 'cha':0}
     size = 'med'
-    type = 'humanoid'
+    rtype = 'humanoid'
     subtype = 'human'
     speed = 30
     startingLanguages = 'Common'
-    #traits, method of work TBD
-	
-	#lore/race information typed out in words
-	extraText = 'uman bro'
+    traits
+    	
+    #lore/race information typed out in words
+    extraText = 'uman bro'
 
     
+    def __init__(self,Choices): #choices is a placeholder currently, may be smart to window up for choices
+        stats['str'] = 2
+        size = 'med'
+        rtype = 'humanoid'
+        subtype = 'human'
+        speed = 30
+        startingLanguages = 'common'
+        traits = {'Human Bonus Feat': Feat.Feat('Human Bonus Feat'), 'Skilled': Feat.Feat('Skilled')}
+
+    def Speed():
+        return speed
