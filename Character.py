@@ -5,6 +5,7 @@ import Race
 import CLS
 import Feat
 import Item
+import math
 
 
 # Global lists for skills could probably be floated off into a less permanent file for ease of alteration.
@@ -49,57 +50,56 @@ BackgroundSkills = ['appraise', 'artistry', 'handle animal', 'linguistics', 'kno
 
 ## The actual class for characters
 
-class Character:
+class Character(object):
         # Attributes
-        misc = {'name': 'Someone', 'player': 'no one'}
-        stats = {'str': 10, 'dex': 10, 'con': 10, 'int': 10, 'wis': 10, 'cha': 10, 'hp': 10,
-                 'maxhp': 10, 'temp': 0, 'speed': 30}
-        skills = { 'null': 0}
+        # Fun fact, if you want the variable to be instanced purposefully, just do it in __init__()
         skillBase = {'null': 'NULL'}
         classSkill = {'null': False}
-        pRace # should be init'd in the init
-        cls
-        feats # a list of strings, rather than making more instances than neccissary, just use this for searching
-        gold # should be a value, 1 = 1gp so .1 = 1sp, and .01 = 1cp
+        feats = 0# a list of strings, rather than making more instances than neccissary, just use this for searching
+        cumulativeGold = 0 # the total value of everything owned by the player
+        gold = 0# should be a value, 1 = 1gp so .1 = 1sp, and .01 = 1cp
         #equipment slots
         #items all items, active and inactive
         miscFlags = 0
-        languages
+        languages = 0
         
         #constructor
         def __init__(self):
                 #Mechanically useless info
-                misc['name'] = 'Garbelkox'
-                misc['player'] = 'Uranus'
-                misc['Deity'] = 'None'
-                misc['homeland'] = 'High But'
-                misc['gender'] = 'Male'
-                misc['age'] = 21
-                misc['height'] = '6\'3"'
-                misc['weight'] = 420
-                misc['hair'] = 'Black'
-                misc['eyes'] = 'Black'
+                self.name = 'Bumquist Garbelkox'
+                self.player = 'Uranus'
+                self.alignment = 'CO'
+                self.deity = 'None'
+                self.homeland = 'High But'
+                self.gender = 'Male'
+                self.age = 21
+                self.height = '6\'3"'
+                self.weight = 420
+                self.hair = 'Black'
+                self.eyes = 'Black'
                 #mechanical core, all come from this font of life, this also is required by a level 0 char
-                stats['str'] = 18
-                stats['dex'] = 12
-                stats['con'] = 14
-                stats['int'] = 13
-                stats['wis'] = 12
-                stats['cha'] = 7
-                pRace = Race.Race()
-                stats['speed'] = pRace.Speed()
+                self.stats = {'str': 10}
+                self.stats['str'] = 18
+                self.stats['dex'] = 12
+                self.stats['con'] = 14
+                self.stats['int'] = 13
+                self.stats['wis'] = 12
+                self.stats['cha'] = 7
+                self.stats['temp'] = 0
+                self.pRace = Race.Race('human')
+                self.stats['speed'] = self.pRace.Speed()
                 #Class stuff, here we go, into the fun stuff
-                cls = CLS.CLS('fighter') # technically should only give level 1 for init, but we'll deal with that later
-                stats['maxhp'] = cls.hd()*cls.level
-                feats = ['power attack', 'weapon focus', 'weapon specialization']
-                del self.skills['null']
+                self.cls = CLS.CLS('fighter') # technically should only give level 1 for init, but we'll deal with that later
+                self.stats['maxhp'] = self.cls.hd()*self.cls.level
+                self.stats['hp'] = self.stats['maxhp']
+                self.feats = ['power attack', 'weapon focus', 'skill focus(climb)']
                 self.skills = STDSkills
                 #for loop to make class skills
-                for i in skills:
-                        classSkill[i] = False
+                for i in self.skills:
+                        self.classSkill[i] = False
 
-                for i in cls.skills:
-                        classSkill[i] = True
+                for i in self.cls.skills:
+                        self.classSkill[i] = True
                 
         
         #functions (... means to be filled)
@@ -107,12 +107,23 @@ class Character:
         def AC(self, flags, misc):
                 return 10+self.stats['dex']
         
+        #def Touch(self):
+        #def Flatfooted(self):
         #def Attack(self):
         #def Damage(self):
-        #def Initiative(self):
-        #def Fort(self):
-        #def Ref(self):
-        #def Will(self):
+        
+        def Initiative(self):
+                return self.stats['dex']
+        
+        def Fort(self):
+                return math.floor((self.stats['wis']-10)/2)
+        
+        def Ref(self):
+                return 10
+        
+        def Will(self):
+                return 10
+        
         #def BAB(self):
         #def CMB(self):
         #def CMD(self):
@@ -121,6 +132,15 @@ class Character:
         #def SR(self):
         #def AbilityCheck(self, Ability):
 
+        def printCharacter(self):
+                print "Character Name:" + self.name + " \t Player Name:" + self.player
+                print "Alignment: " + self.alignment + " \t Deity:" + self.deity + " \t Homeland:" + self.homeland
+                print "Gender:" + self.gender + " \t Age:%d \t Height:"%(self.age) + self.height + "\t Weight:%d"%(self.weight)
+                print "Hair:" + self.hair + "\t Eyes:" + self.eyes + " \t Race:" + self.pRace.Name()
+                print "---------------------------------------------------------------------------"
+                print "Max Hit Points:%d \t Current Hit Points:%d"%(self.stats['maxhp'],self.stats['hp'])
+                print "Speed: %d \t Initiative: %d"%(self.stats['speed'], self.Initiative())
+                print "Fortitude: %d \t Reflex: %d \t Will: %d"%(self.Fort(),self.Ref(),self.Will())
 
 
 #test code, comment out and ignore for your work
@@ -128,4 +148,4 @@ class Character:
 i = Character()
 
 # it throws errors if you ask for something that doesn't exist.
-print i.skills
+i.printCharacter()

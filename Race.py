@@ -29,28 +29,34 @@ Languages = ['aboleth','abyssal','aklo','aquan','auran','boggard','celestial','c
 
 #Race class
 
-class Race:
+class Race(object):
     #Attributes
+    name = 'Human'
     stats = {'str': 0, 'dex': 0, 'con': 0, 'int': 0, 'wis': 0, 'cha':0}
     size = 'med'
     rtype = 'humanoid'
     subtype = 'human'
     speed = 30
     startingLanguages = 'Common'
-    traits
+    traits = {'null': 'null'}
     	
     #lore/race information typed out in words
     extraText = 'uman bro'
 
     
-    def __init__(self,Choices): #choices is a placeholder currently, may be smart to window up for choices
-        stats['str'] = 2
-        size = 'med'
-        rtype = 'humanoid'
-        subtype = 'human'
-        speed = 30
-        startingLanguages = 'common'
-        traits = {'Human Bonus Feat': Feat.Feat('Human Bonus Feat'), 'Skilled': Feat.Feat('Skilled')}
+    def __init__(self,choices): #choices is a placeholder currently, may be smart to window up for choices
+        self.name = 'human'
+        self.stats['str'] = 2
+        self.size = 'med'
+        self.rtype = 'humanoid'
+        self.subtype = 'human'
+        self.speed = 30
+        self.startingLanguages = 'common'
+        del self.traits['null']
+        self.traits = {'Human Bonus Feat': Feat.Feat('Human Bonus Feat'), 'Skilled': Feat.Feat('Skilled')}
 
-    def Speed():
-        return speed
+    def Speed(self):
+        return self.speed
+
+    def Name(self):
+        return self.name
