@@ -12,13 +12,19 @@ import Item
 STDSkills = {'acrobatics': 0, 'appraise': 0, 'bluff': 0, 'climb': 0, 'diplomacy': 0, 'disable device': 0,
              'disguise': 0, 'escape artist': 0, 'fly': 0, 'handle animal': 0, 'heal': 0, 'intimidate': 0,
              'linguistics': 0, 'perception': 0, 'ride': 0, 'sense motive': 0, 'slight of hand': 0,
-             'spellcraft': 0, 'stealth': 0, 'survival': 0, 'swim': 0, 'use magic device': 0}
+             'spellcraft': 0, 'stealth': 0, 'survival': 0, 'swim': 0, 'use magic device': 0,
+             'knowledge(arcana)': 0, 'knowledge(dungeoneering)': 0, 'knowledge(engineering)': 0,
+             'knowledge(geography)': 0, 'knowledge(history)': 0, 'knowledge(local)': 0, 'knowledge(nature)': 0,
+             'knowledge(nobility)': 0, 'knowledge(planes)': 0, 'knowledge(religion)': 0}
 STDBase = {'acrobatics': 'dex', 'appraise': 'int', 'bluff': 'cha', 'climb': 'str', 'diplomacy':
            'cha', 'disable device': 'dex', 'disguise': 'cha', 'escape artist': 'dex', 'fly': 'dex',
            'handle animal': 'cha', 'heal': 'wis', 'intimidate': 'cha', 'linguistics': 'int',
            'perception': 'wis', 'ride': 'dex', 'sense motive': 'wis', 'slight of hand': 'dex',
            'spellcraft': 'int', 'stealth': 'dex', 'survival': 'wis', 'swim': 'swim',
-           'use magic device': 'cha'}
+           'use magic device': 'cha', 'knowledge(arcana)': 'int', 'knowledge(dungeoneering)': 'int',
+           'knowledge(engineering)': 'int', 'knowledge(geography)': 'int', 'knowledge(history)': 'int',
+           'knowledge(local)': 'int', 'knowledge(nature)': 'int', 'knowledge(nobility)': 'int', 'knowledge(planes)': 'int',
+           'knowledge(religion)': 'int'}
 # the variable skills have been left out (craft, Knowledge (should be added hard), proffession,
 # perform, artistry, and lore.
 
@@ -58,6 +64,7 @@ class Character:
         #equipment slots
         #items all items, active and inactive
         miscFlags = 0
+        languages
         
         #constructor
         def __init__(self):
@@ -85,19 +92,34 @@ class Character:
                 cls = CLS.CLS('fighter') # technically should only give level 1 for init, but we'll deal with that later
                 stats['maxhp'] = cls.hd()*cls.level
                 feats = ['power attack', 'weapon focus', 'weapon specialization']
-                
                 del self.skills['null']
                 self.skills = STDSkills
+                #for loop to make class skills
+                for i in skills:
+                        classSkill[i] = False
+
+                for i in cls.skills:
+                        classSkill[i] = True
+                
         
         #functions (... means to be filled)
                 
         def AC(self, flags, misc):
                 return 10+self.stats['dex']
         
-        #def Attack(self, ...):
-        
-        #def Damage(self, ...):
-        
+        #def Attack(self):
+        #def Damage(self):
+        #def Initiative(self):
+        #def Fort(self):
+        #def Ref(self):
+        #def Will(self):
+        #def BAB(self):
+        #def CMB(self):
+        #def CMD(self):
+        #def Speed(self):
+        #def SkillCheck(self, skill, mods):
+        #def SR(self):
+        #def AbilityCheck(self, Ability):
 
 
 
