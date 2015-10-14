@@ -60,3 +60,9 @@ class Race(object):
 
     def Name(self):
         return self.name
+
+    def Traits(self):
+        return self.traits
+
+    def TraitData(self, Trait):
+        return self.traits[Trait]

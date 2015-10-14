@@ -21,7 +21,7 @@ STDBase = {'acrobatics': 'dex', 'appraise': 'int', 'bluff': 'cha', 'climb': 'str
            'cha', 'disable device': 'dex', 'disguise': 'cha', 'escape artist': 'dex', 'fly': 'dex',
            'handle animal': 'cha', 'heal': 'wis', 'intimidate': 'cha', 'linguistics': 'int',
            'perception': 'wis', 'ride': 'dex', 'sense motive': 'wis', 'slight of hand': 'dex',
-           'spellcraft': 'int', 'stealth': 'dex', 'survival': 'wis', 'swim': 'swim',
+           'spellcraft': 'int', 'stealth': 'dex', 'survival': 'wis', 'swim': 'str',
            'use magic device': 'cha', 'knowledge(arcana)': 'int', 'knowledge(dungeoneering)': 'int',
            'knowledge(engineering)': 'int', 'knowledge(geography)': 'int', 'knowledge(history)': 'int',
            'knowledge(local)': 'int', 'knowledge(nature)': 'int', 'knowledge(nobility)': 'int', 'knowledge(planes)': 'int',
@@ -53,14 +53,11 @@ BackgroundSkills = ['appraise', 'artistry', 'handle animal', 'linguistics', 'kno
 class Character(object):
         # Attributes
         # Fun fact, if you want the variable to be instanced purposefully, just do it in __init__()
-        skillBase = {'null': 'NULL'}
-        classSkill = {'null': False}
         feats = 0# a list of strings, rather than making more instances than neccissary, just use this for searching
         cumulativeGold = 0 # the total value of everything owned by the player
         gold = 0# should be a value, 1 = 1gp so .1 = 1sp, and .01 = 1cp
         #equipment slots
         #items all items, active and inactive
-        miscFlags = 0
         languages = 0
         
         #constructor
@@ -68,15 +65,16 @@ class Character(object):
                 #Mechanically useless info
                 self.name = 'Bumquist Garbelkox'
                 self.player = 'Uranus'
-                self.alignment = 'CO'
+                self.alignment = ['chaotic', 'evil'] # for required alignments mostly
                 self.deity = 'None'
                 self.homeland = 'High But'
                 self.gender = 'Male'
-                self.age = 21
-                self.height = '6\'3"'
+                self.age = 69
+                self.height = '6\'9"'
                 self.weight = 420
                 self.hair = 'Black'
                 self.eyes = 'Black'
+                
                 #mechanical core, all come from this font of life, this also is required by a level 0 char
                 self.stats = {'str': 10}
                 self.stats['str'] = 18
@@ -88,18 +86,36 @@ class Character(object):
                 self.stats['temp'] = 0
                 self.pRace = Race.Race('human')
                 self.stats['speed'] = self.pRace.Speed()
+                
                 #Class stuff, here we go, into the fun stuff
                 self.cls = CLS.CLS('fighter') # technically should only give level 1 for init, but we'll deal with that later
-                self.stats['maxhp'] = self.cls.hd()*self.cls.level
+                self.stats['maxhp'] = self.cls.HD()*self.cls.level
                 self.stats['hp'] = self.stats['maxhp']
                 self.feats = ['power attack', 'weapon focus', 'skill focus(climb)']
                 self.skills = STDSkills
+                self.classSkill = {'null': 'null'}
+                
                 #for loop to make class skills
                 for i in self.skills:
                         self.classSkill[i] = False
 
                 for i in self.cls.skills:
                         self.classSkill[i] = True
+
+                del self.classSkill['null']
+                
+                # set skill ranks, need to allow for multiple classes
+                self.ranks = (self.cls.Ranks() + self.AbilityCheck('int'))*self.cls.level
+                # check for skilled bonus feat
+                if 'skilled' in self.pRace.Traits():
+                        self.ranks = self.ranks + 1*self.cls.level# should aggrigate level here
+
+                # put ranks into skills, should never go higher than the ranks allowed, and no more ranks than level
+                self.skills['climb'] = 5
+                self.skills['handle animal'] = 5
+                self.skills['ride'] = 5
+                self.skills['intimidate'] = 5
+                        
                 
         
         #functions (... means to be filled)
@@ -113,34 +129,72 @@ class Character(object):
         #def Damage(self):
         
         def Initiative(self):
-                return self.stats['dex']
+                return self.AbilityCheck('dex')
         
-        def Fort(self):
-                return math.floor((self.stats['wis']-10)/2)
+        def Save(self,save):
+                stat = 'null'
+                if save == 'fort':
+                        stat = 'con'
+                elif save == 'ref':
+                        stat = 'dex'
+                elif save == 'will':
+                        stat = 'wis'
+                else: #catch
+                        return False
+
+                ret = self.AbilityCheck(stat)
+                #for i in self.cls:
+                ret = ret + self.cls.Save(save)
+
+                return ret
         
-        def Ref(self):
-                return 10
+        def BAB(self):
+                ret = 0
+                #for i in self.cls
+                ret = self.cls.BAB()
+                return ret
+                
+        def CMB(self):
+                ret = self.BAB() + self.AbilityCheck('str') #+ self.SizeMod()
+                return ret
         
-        def Will(self):
-                return 10
+        def CMD(self):
+                ret = self.BAB() + self.AbilityCheck('str') + self.AbilityCheck('dex') #+ self.SizeMod()
+                return ret
         
-        #def BAB(self):
-        #def CMB(self):
-        #def CMD(self):
-        #def Speed(self):
-        #def SkillCheck(self, skill, mods):
+        def Speed(self):
+                # insert check for speed increases options and adding them together along with any penalties
+                # don't forget to include other potential movement methods.
+                return self.stats['speed']
+        
+        def SkillCheck(self, skill):
+                ret = self.skills[skill]
+                ret = ret + self.AbilityCheck(STDBase[skill])
+                if self.classSkill[skill] and (self.skills[skill] > 0):
+                        ret = ret + 3
+                return ret
+                
         #def SR(self):
-        #def AbilityCheck(self, Ability):
+		
+        def AbilityCheck(self, Ability):
+                return math.floor((self.stats[Ability]-10)/2)
+		
 
         def printCharacter(self):
                 print "Character Name:" + self.name + " \t Player Name:" + self.player
-                print "Alignment: " + self.alignment + " \t Deity:" + self.deity + " \t Homeland:" + self.homeland
+                print "Alignment: " + self.alignment[0] + ' ' + self.alignment[1] + " \t Deity:" + self.deity + " \t Homeland:" + self.homeland
                 print "Gender:" + self.gender + " \t Age:%d \t Height:"%(self.age) + self.height + "\t Weight:%d"%(self.weight)
                 print "Hair:" + self.hair + "\t Eyes:" + self.eyes + " \t Race:" + self.pRace.Name()
                 print "---------------------------------------------------------------------------"
                 print "Max Hit Points:%d \t Current Hit Points:%d"%(self.stats['maxhp'],self.stats['hp'])
-                print "Speed: %d \t Initiative: %d"%(self.stats['speed'], self.Initiative())
-                print "Fortitude: %d \t Reflex: %d \t Will: %d"%(self.Fort(),self.Ref(),self.Will())
+                print "Speed: %d \t Initiative: %d"%(self.Speed(), self.Initiative())
+                print "Fortitude: %d \t Reflex: %d \t Will: %d"%(self.Save('fort'),self.Save('ref'),self.Save('will'))
+                print "BAB: %d \t CMB: %d \t CMD: %d"%(self.BAB(), self.CMB(), self.CMD())
+                for i in self.skills:
+                        print "%s: %d"%(i,self.SkillCheck(i))
+				
+	#def update(self):
+	#	Update all data upon any alteration.
 
 
 #test code, comment out and ignore for your work
