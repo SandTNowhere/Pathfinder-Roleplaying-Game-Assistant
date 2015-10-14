@@ -74,6 +74,7 @@ class Character(object):
                 self.weight = 420
                 self.hair = 'Black'
                 self.eyes = 'Black'
+                self.notes = 'nothing'# placeholder for later
                 
                 #mechanical core, all come from this font of life, this also is required by a level 0 char
                 self.stats = {'str': 10}
@@ -107,7 +108,7 @@ class Character(object):
                 # set skill ranks, need to allow for multiple classes
                 self.ranks = (self.cls.Ranks() + self.AbilityCheck('int'))*self.cls.level
                 # check for skilled bonus feat
-                if 'skilled' in self.pRace.Traits():
+                if 'Skilled' in self.pRace.Traits():
                         self.ranks = self.ranks + 1*self.cls.level# should aggrigate level here
 
                 # put ranks into skills, should never go higher than the ranks allowed, and no more ranks than level
@@ -190,6 +191,7 @@ class Character(object):
                 print "Speed: %d \t Initiative: %d"%(self.Speed(), self.Initiative())
                 print "Fortitude: %d \t Reflex: %d \t Will: %d"%(self.Save('fort'),self.Save('ref'),self.Save('will'))
                 print "BAB: %d \t CMB: %d \t CMD: %d"%(self.BAB(), self.CMB(), self.CMD())
+                print "Ranks: %d"%(self.ranks)
                 for i in self.skills:
                         print "%s: %d"%(i,self.SkillCheck(i))
 				

@@ -9,10 +9,11 @@ class CLS(object):
     def __init__(self,cname):
         #insert search/call to collect all class info from storage
         self.name = cname
+        self.reqs = {'level': -1}
         self.level = 5
-        self.stats = {'hd': 10}
-        self.stats['bab'] = 1
-        self.stats['fort'] = True
+        self.hd = 10
+        self.bab = 1
+        self.stats = {'fort': True}
         self.stats['ref'] = False
         self.stats['will'] = False
         self.skills = ['climb','craft', 'handle animal', 'intimidate', 'knowledge(dungeoneering)',
@@ -25,7 +26,7 @@ class CLS(object):
         self.text = 'null'
 
     def HD(self):
-        return self.stats['hd']
+        return self.hd
 
     def Save(self,save):
         if self.stats[save]:
@@ -34,7 +35,7 @@ class CLS(object):
             return math.floor(self.level/3)
 
     def BAB(self):
-        return self.level*self.stats['bab']
+        return math.floor(self.level*self.bab)
 
     def Ranks(self):
         return self.ranks
