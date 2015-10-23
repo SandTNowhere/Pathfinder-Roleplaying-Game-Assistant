@@ -1,0 +1,24 @@
+<!-- This is the base html file -->
+<!-- the rest of the html files in csheet extend off of this in the block content tag below -->
+{% load staticfiles %}
+<html>
+    <head>
+        <title>Pathfinder RPG Character Manager</title>
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+        <link href='//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="{% static "css/csheets.css" %}">
+    </head>
+    <body>
+    <div class="page-header">
+        <a href="{% url "character_new" %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>
+        <h1><a href="/">Pathfinder RPG Character Manager</a></h1>
+    </div>
+    <div class="content container">
+        
+            {% block content %}
+            {% endblock %}
+        
+    </div>
+</body>
+</html>

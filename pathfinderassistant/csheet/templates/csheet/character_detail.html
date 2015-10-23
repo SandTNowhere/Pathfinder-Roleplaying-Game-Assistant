@@ -1,0 +1,13 @@
+{% extends "csheet/base.html" %}
+
+{% block content %}
+        <a id="editbutton" class="btn btn-default" href="{% url "character_edit" pk=character.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
+
+    <div class="character">
+    	<div class="row">
+	        <div class="col-md-3"><h1>Name: {{ character.name }}</h1></div>
+	        <div class="col-md-2"><p>Race: {{ character.race }}</p></div>
+	        <div class="col-md-2"><p>Class: {{ character.cclass }} </p></div>
+        </div>
+    </div>
+{% endblock %}

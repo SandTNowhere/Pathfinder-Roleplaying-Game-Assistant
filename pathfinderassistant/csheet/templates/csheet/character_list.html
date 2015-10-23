@@ -1,0 +1,11 @@
+{% extends "csheet/base.html" %}
+
+{% block content %}
+    {% for character in characters %}
+        <div class="character">
+            <h1><a href="{% url "character_detail" pk=character.pk %}">{{ character.name }}</a></h1>
+            <p>Race: {{ character.race }}</p>
+            <p>Class: {{ character.cclass }} </p>
+        </div>
+    {% endfor %}
+{% endblock content %}
