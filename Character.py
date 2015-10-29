@@ -61,11 +61,11 @@ class Character(object):
         languages = 0
         
         #constructor
-        def __init__(self):
+        def __init__(self): # If it is setting data, assume it's not supposed to be in the end, at best it should be initialization
                 #Mechanically useless info
                 self.name = 'Bumquist Garbelkox'
                 self.player = 'Uranus'
-                self.alignment = ['chaotic', 'evil'] # for required alignments mostly
+                self.alignment = ['chaotic', 'evil'] # for required alignments mostly, but this is a soft requirement
                 self.deity = 'None'
                 self.homeland = 'High But'
                 self.gender = 'Male'
@@ -175,7 +175,10 @@ class Character(object):
                         ret = ret + 3
                 return ret
                 
-        #def SR(self):
+        def SR(self):
+                TSR = self.pRace.SR()
+                # insert check for SR and choose highest, it doesn't stack
+                return TSR
 		
         def AbilityCheck(self, Ability):
                 return math.floor((self.stats[Ability]-10)/2)

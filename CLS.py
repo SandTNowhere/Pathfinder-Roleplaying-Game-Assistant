@@ -1,6 +1,7 @@
 #File for the class class
 
 import Feat
+import Spells
 import math
 
 # Class class (looking for better name than CLS)
