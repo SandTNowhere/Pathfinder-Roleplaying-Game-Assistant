@@ -45,8 +45,12 @@ BackgroundSkills = ['appraise', 'artistry', 'handle animal', 'linguistics', 'kno
                     'profession', 'sleight of hand']
 
 # list for trained/untrained and dict for armor penalty for skills
-#TrainedSkills = []
-#ArmorPenalty = {}
+TrainedSkills = ['disable device', 'handle animal', 'knowledge(arcana)', 'knowledge(dungeoneering)',
+                 'knowledge(engineering)','knowledge(geography)','knowledge(history)','knowledge(local)',
+                 'knowledge(nature)','knowledge(nobility)','knowledge(planes)','knowledge(religion)','linguistics',
+                 'proffession','sleight of hand','spellcraft','use magic device']
+ArmorPenalty = {'acrobatics': 1,'climb': 1,'disable device': 1, 'escape artist': 1, 'fly': 1, 'ride': 1,
+                'sleight of hand': 1,'stealth': 1,'swim': 1}
 
 ## The actual class for characters
 
@@ -133,10 +137,6 @@ class Character(object):
                 # for characters in combat. These items are also much more generic and standardized.
                 self.Inventory = None
 
-                        
-                
-        
-        #functions (... means to be filled)
                 
         def AC(self, flags, misc):
                 return 10+self.stats['dex']
