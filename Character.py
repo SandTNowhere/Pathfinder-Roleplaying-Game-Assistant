@@ -91,16 +91,14 @@ class Character(object):
                 self.stats['speed'] = 30
                 # This sets the size of the charater, it will also change with the race potentially.
                 self.stats['size'] = 'med'
-                # Languages are almost always given common, so it is used as the initialization, but exact
-                # languages are determined by the race.
-                self.Language = ['common']
+                # Languages are determined by the race, and most languages are learnable, but there are a
+                # few secret languages that have requirements to learn.
+                self.Language = []
                 
                 # Class stuff, here we go, into the fun stuff
-                # Initializes to a blank class that will be replaced with a real class during character creation
-                # proper
-                self.cls = CLS.CLS()
+                self.cls = []
                 # A list of feats that are initialized here and properly set during character creation.
-                self.feats = None
+                self.Feats = []
                 # Creates the list of skills and their dependents that are
                 self.skills = STDSkills
                 # Creates a list of class skills that again, will be filled properly with character creation.
@@ -121,23 +119,23 @@ class Character(object):
                 # Equipment slots, Floated off from the main list are weapons and armor as they are unique enough
                 # to warrant being separate, also since weapons can often be easily swapped between, weapons are
                 # a list unto themselves.
-                self.Weapons = None
+                self.Weapons = []
                 # Armor is much more static, but still very different from other items, hence it's place here.
                 # There are two pieces of armor, the actual armor, and shields. Shields are not as bad, but
                 # Are still rather unique among item types.
-                self.Armor = None
+                self.Armor = [None, None]
                 # the proper equipment slots in order: Belts, Body, Chest, Eyes, Feet, Hands, Head,
                 # Headband, Neck, Shield, Shoulders, Wrists, Ring1, and Ring2
-                self.Slots = None
+                self.Slots = [None,None,None,None,None,None,None,None,None,None,None,None,None,None]
                 # Lastly, the slotless equipment section, this is meant to be flexible as there are no limits on
                 # Slotless magic items
-                self.Slotless = None
+                self.Slotless = []
                 
                 # The last part is inventory, this is miscellaneous items that have few if any immediate effects
                 # for characters in combat. These items are also much more generic and standardized.
-                self.Inventory = None
+                self.Inventory = []
 
-                
+        # AC is based off of bonuses and is a bit hard to define easily, but it requires a few searches.
         def AC(self, flags, misc):
                 ret = 10
                 if self.armor != None:
@@ -200,9 +198,42 @@ class Character(object):
                 TSR = self.pRace.SR()
                 # insert check for SR and choose highest, it doesn't stack
                 return TSR
-		
+
+	# Returns the requested ability check.
         def AbilityCheck(self, Ability):
                 return math.floor((self.stats[Ability]-10)/2)
+
+        # Returns a list of names for features that give bonuses to the situation so they can be called b
+        def BonusSearch(self, To, BType):
+                ret = []
+                ret.extend(self.Race.Bonus(To,BType))
+                # Cycle through feats
+                if self.Feats:
+                        for x in self.Feats:
+                                if To == self.Feats[x].BonusTo() and BType == self.Feats[x].BonusType():
+                                        ret.append(self.Feats[x].Bonus())
+                
+                # Cycle through class and their features (and the feats they give *cough*)
+                # While players must have a class, mosters may not, so checking is still required.
+                if self.cls:
+                        for x in self.cls: # Extend rather than append as BonusSearch will return a list
+                                ret.extend(self.cls.BonusSearch(To, BType))
+                
+                # Cycle through armor, and equipment. Weapons are split off as their immediate flexibility make
+                # them harder to control and their bonuses may be applied improperly using this function.
+                for x in self.Armor: # Since armor always have the slots, even if they aren't filled.
+                        if self.Armor[x]: # Since armor can give multiple bonuses to different things.
+                                ret.append(self.Armor[x].Bonus(To, BType))
+
+                for x in self.Slots:
+                        if self.Slots[x]:
+                                ret.append(self.Slots[x].Bonus(To, BType))
+
+                # And last, slotless items
+                if self.Slotless:
+                        for x in self.Slotless:
+                                ret.append(self.Slotless[x].Bonus(To, BType))
+                return ret
 		
 
         def printCharacter(self):

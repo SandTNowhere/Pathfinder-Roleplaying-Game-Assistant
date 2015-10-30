@@ -48,9 +48,9 @@ class Race(object):
         # Racial Traits
         self.Speed = 30
         # The starting languages of the race, these are always given to the player regardless of race.
-        self.StartingLanguages = 'common'
+        self.StartingLanguages = []
         # The list of race Traits that are more unique than can be immediately described.
-        self.traits = None
+        self.Traits = []
         # The section of racial information, nothing particularly important in terms of mechanics, but it's needed
         self.Notes = ' '
 
@@ -60,8 +60,11 @@ class Race(object):
     def Name(self):
         return self.name
 
-    def Traits(self):
-        return self.traits
-
-    def TraitData(self, Trait):
-        return self.traits[Trait]
+    # Returns a list of bonuses to a stat that have the proper type
+    def Bonus(self, To, BType):
+        ret = []
+        if self.Traits:# have to check just to be sure.
+            for x in self.Traits:
+                if self.Traits[x].BonusCheck(To, BType):
+                    ret.append(self.Traits[x].Bonus(To, BType))
+        return ret

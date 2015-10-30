@@ -125,5 +125,3 @@ class Traits(object):
         self.BonusPer = [0]
         self.BonusFrom = [' ']
         self.BonusType = [' ']
-
-        

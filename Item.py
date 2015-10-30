@@ -88,7 +88,10 @@ class Armor(object):
         self.Enchantments = None
 
     def ACBonus(self):
-        return self.ACBonus
+        ret = self.ACBonus
+        if self.Enchantments != None:
+            ret = ret + self.EnchantmentBonus()
+        return ret
 	
 	
 	
@@ -167,6 +170,10 @@ class Enchantments(object):
 	# include more specific requirements such as must be on ranged weapons and such, but so long as it's not a
 	# weapon or armor enchantment, it's a soft requirement.
 	self.Weapon = [' ']
+	# The text of the enchantment in general.
+	self.Text = ' '
+	# The shortened text that states only the bonuses given, so that it can be added to miscellaneous notes.
+	self.SubText = ' '
 
 	# Now onto the enchantment's effects.
 	# What the effect is going to.
