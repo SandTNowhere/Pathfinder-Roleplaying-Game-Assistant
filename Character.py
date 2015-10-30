@@ -51,71 +51,88 @@ BackgroundSkills = ['appraise', 'artistry', 'handle animal', 'linguistics', 'kno
 ## The actual class for characters
 
 class Character(object):
-        # Attributes
         # Fun fact, if you want the variable to be instanced purposefully, just do it in __init__()
-        feats = 0# a list of strings, rather than making more instances than neccissary, just use this for searching
-        cumulativeGold = 0 # the total value of everything owned by the player
-        gold = 0# should be a value, 1 = 1gp so .1 = 1sp, and .01 = 1cp
-        #equipment slots
-        #items all items, active and inactive
-        languages = 0
         
         #constructor
         def __init__(self): # If it is setting data, assume it's not supposed to be in the end, at best it should be initialization
-                #Mechanically useless info
-                self.name = 'Bumquist Garbelkox'
-                self.player = 'Uranus'
-                self.alignment = ['chaotic', 'evil'] # for required alignments mostly, but this is a soft requirement
-                self.deity = 'None'
-                self.homeland = 'High But'
-                self.gender = 'Male'
-                self.age = 69
-                self.height = '6\'9"'
-                self.weight = 420
-                self.hair = 'Black'
-                self.eyes = 'Black'
-                self.notes = 'nothing'# placeholder for later
+                # Mechanically useless info. This should be self-explanatory for the most part as this really has
+                # little if no mechanical effects.
+                self.name = ' '
+                self.player = ''
+                self.alignment = ['Neutral', 'Neutral'] # for required alignments mostly, but this is a soft requirement
+                self.deity = ' '
+                self.homeland = ' '
+                self.gender = ' '
+                self.age = 0
+                self.height = ' '
+                self.weight = 0
+                self.hair = ' '
+                self.eyes = ' '
+                self.notes = ' '# This is not entirely a catch all, but meant for non-mechanical information.
                 
-                #mechanical core, all come from this font of life, this also is required by a level 0 char
-                self.stats = {'str': 10}
-                self.stats['str'] = 18
-                self.stats['dex'] = 12
-                self.stats['con'] = 14
-                self.stats['int'] = 13
-                self.stats['wis'] = 12
-                self.stats['cha'] = 7
+                # mechanical core, all come from this font of life, this also is required by a level 0 char
+                # These are the big six, the central most mechanical stats, that are called by more abilities than
+                # any other.
+                self.stats = {'str': 10,'dex': 10,'con': 10,'int': 10,'wis': 10,'cha': 10}
+                # The maximum HP allowed for the character, calculated based off of class HD+Con*Level, this is a
+                # stand in till classes are chosen
+                self.stats = {'maxhp': 4}
+                # Another initialization to be made complete in proper creation.
+                self.stats = {'hp': 4}
+                # Temp is a for Temporary HP. 
                 self.stats['temp'] = 0
-                self.pRace = Race.Race('human')
-                self.stats['speed'] = self.pRace.Speed()
+                # This calls up a blank race that has no stats or bonuses
+                self.pRace = Race.Race()
+                # This sets the basic speed of the character
+                self.stats['speed'] = 30
+                # This sets the size of the charater, it will also change with the race potentially.
+                self.stats['size'] = 'med'
+                # Languages are almost always given common, so it is used as the initialization, but exact
+                # languages are determined by the race.
+                self.Language = ['common']
                 
-                #Class stuff, here we go, into the fun stuff
-                self.cls = CLS.CLS('fighter') # technically should only give level 1 for init, but we'll deal with that later
-                self.stats['maxhp'] = self.cls.HD()*self.cls.level
-                self.stats['hp'] = self.stats['maxhp']
-                self.feats = ['power attack', 'weapon focus', 'skill focus(climb)']
+                # Class stuff, here we go, into the fun stuff
+                # Initializes to a blank class that will be replaced with a real class during character creation
+                # proper
+                self.cls = CLS.CLS()
+                # A list of feats that are initialized here and properly set during character creation.
+                self.feats = None
+                # Creates the list of skills and their dependents that are
                 self.skills = STDSkills
+                # Creates a list of class skills that again, will be filled properly with character creation.
                 self.classSkill = {'null': 'null'}
-                
-                #for loop to make class skills
-                for i in self.skills:
-                        self.classSkill[i] = False
 
-                for i in self.cls.skills:
-                        self.classSkill[i] = True
-
-                del self.classSkill['null']
-                
                 # set skill ranks, need to allow for multiple classes
                 self.ranks = (self.cls.Ranks() + self.AbilityCheck('int'))*self.cls.level
                 # check for skilled bonus feat
                 if 'Skilled' in self.pRace.Traits():
                         self.ranks = self.ranks + 1*self.cls.level# should aggrigate level here
 
-                # put ranks into skills, should never go higher than the ranks allowed, and no more ranks than level
-                self.skills['climb'] = 5
-                self.skills['handle animal'] = 5
-                self.skills['ride'] = 5
-                self.skills['intimidate'] = 5
+                # Again, initialized to default value, and should be set during proper creation
+                self.GP = 0
+                # Cumulative value, should techinally be aggrigated, but is easier to calculate GP = Cum-Items
+                # than the other way around, and it gives the GM more fine control over his player's total wealth.
+                self.CumulativeGP = 0
+
+                # Equipment slots, Floated off from the main list are weapons and armor as they are unique enough
+                # to warrant being separate, also since weapons can often be easily swapped between, weapons are
+                # a list unto themselves.
+                self.Weapons = None
+                # Armor is much more static, but still very different from other items, hence it's place here.
+                # There are two pieces of armor, the actual armor, and shields. Shields are not as bad, but
+                # Are still rather unique among item types.
+                self.Armor = None
+                # the proper equipment slots in order: Belts, Body, Chest, Eyes, Feet, Hands, Head,
+                # Headband, Neck, Shield, Shoulders, Wrists, Ring1, and Ring2
+                self.Slots = None
+                # Lastly, the slotless equipment section, this is meant to be flexible as there are no limits on
+                # Slotless magic items
+                self.Slotless = None
+                
+                # The last part is inventory, this is miscellaneous items that have few if any immediate effects
+                # for characters in combat. These items are also much more generic and standardized.
+                self.Inventory = None
+
                         
                 
         
@@ -173,6 +190,7 @@ class Character(object):
                 ret = ret + self.AbilityCheck(STDBase[skill])
                 if self.classSkill[skill] and (self.skills[skill] > 0):
                         ret = ret + 3
+                #insert additional bonuses
                 return ret
                 
         def SR(self):
@@ -204,7 +222,7 @@ class Character(object):
 
 #test code, comment out and ignore for your work
 
-i = Character()
+# Replace with i = Character()
 
 # it throws errors if you ask for something that doesn't exist.
 i.printCharacter()

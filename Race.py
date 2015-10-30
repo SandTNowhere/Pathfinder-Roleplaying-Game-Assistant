@@ -30,30 +30,29 @@ Languages = ['aboleth','abyssal','aklo','aquan','auran','boggard','celestial','c
 #Race class
 
 class Race(object):
-    #Attributes
-    name = 'Human'
-    stats = {'str': 0, 'dex': 0, 'con': 0, 'int': 0, 'wis': 0, 'cha':0}
-    size = 'med'
-    rtype = 'humanoid'
-    subtype = 'human'
-    speed = 30
-    startingLanguages = 'Common'
-    traits = {'null': 'null'}
-    	
-    #lore/race information typed out in words
-    extraText = 'uman bro'
-
-    
-    def __init__(self,choices): #choices is a placeholder currently, may be smart to window up for choices
-        self.name = 'human'
-        self.stats['str'] = 2
-        self.size = 'med'
-        self.rtype = 'humanoid'
-        self.subtype = 'human'
-        self.speed = 30
-        self.startingLanguages = 'common'
-        del self.traits['null']
-        self.traits = {'Human Bonus Feat': Feat.Feat('Human Bonus Feat'), 'Skilled': Feat.Feat('Skilled')}
+    def __init__(self):
+        # The name of the race
+        self.Name = ' '
+        # The static Stat Block of the race, if the race has flexible bonuses to these, then they are under
+        # Racial traits rather than here.
+        self.Stats = {'str': 0, 'dex': 0, 'con': 0, 'int': 0, 'wis': 0, 'cha':0}
+        # The size of the race 'med' being the standard for most races.
+        self.Size = 'med'
+        # The type of the race, this has a number of effects on the bonuses and what the race get's but for most
+        # characters, this is rather unimportant.
+        self.RaceType = 'humanoid'
+        # Subtype adds and creates a few more things for the races, however, again, this is more for monsters than
+        # characters
+        self.SubType = 'human'
+        # This is how fast the character moves by default and most move at 30. Extra modes of movement are under
+        # Racial Traits
+        self.Speed = 30
+        # The starting languages of the race, these are always given to the player regardless of race.
+        self.StartingLanguages = 'common'
+        # The list of race Traits that are more unique than can be immediately described.
+        self.traits = None
+        # The section of racial information, nothing particularly important in terms of mechanics, but it's needed
+        self.Notes = ' '
 
     def Speed(self):
         return self.speed
