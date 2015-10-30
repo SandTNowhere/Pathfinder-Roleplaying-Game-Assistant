@@ -175,4 +175,5 @@ class Enchantments(object):
 
 	# If they give feats
 	self.BonusFeat = None
-	
+	# If they give spells
+	self.Spells = None

@@ -70,6 +70,18 @@ class Spell(object):
         self.PerCL = [0]
         # Type is what the bonus counts as, this is mostly for purposes of stacking, but overall, shouldn't
         # be too much of a problem with spells.
+        self.BonusType = [' ']
+        # The maximum of a flat bonus that it gives
+        self.BonusMax = [0]
+
+        # The rolls to be had by the spell
+        # Rolls are done in duples, XdX
+        self.Roll = [[0,0]]
+        # Caster level bonus Ratio, caster level never changes die size, only number of die
+        self.BonusRT = [0]
+        # The maximum number of dice that can be rolled by the roll.
+        self.RollDieMax = [0]
+        # any flat damage will be marked in the previous bonus section
 
         # Effect is the area or how it effects a grouping of things, this include how it is aimed and other such
         # stuff.

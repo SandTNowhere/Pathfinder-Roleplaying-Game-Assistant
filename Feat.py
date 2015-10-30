@@ -26,6 +26,8 @@ class Feat(object):
         # the Prereq will be 'feature' the ReqVal will be 'FeatureName' in many cases it will be a number.
         # Also, in the case for negative requirements (Cannot have X) it will have a -1 in the spot
         self.ReqVal = [0]
+        # Feat text, nothing really to say
+        self.Text = ' '
 
         # Bonuses and their application All of these arrays should be of even size, even if there are some blank
         # spots. If a feat replaces something (a la weapon finesse) this will also subtract out the bonus
@@ -58,15 +60,70 @@ class Feature(object):
         # Parent Class, There are a few classes that share features, but it's easier to copy them for each class
         # than to make this that flexible from my position
         self.Parent = ' '
+        # This is for archetyping. Again, if empty it's not part of any archetype and is part of the base class.
+        self.Archetype = ' '
         # Level is either the level it is gained, or the level it becomes available.
         self.Level = 0
+        # This 'slot' is for archetype application and is used to make things easier as archetypes can't touch the
+        # same abilities. The slot is the name of the feature from the base class, and if blank has is the base
+        # feature/doesn't replace something.
+        self.Slot = [' ']
         
         # This is where the complex stuff starts
+        # Bonus Feats
+        self.BonusFeat = None
+        # Limits or list of allowed feats
+        self.FeatLimits = [' ']
+        # A bool to state whether the feature is activated, or a permanent passive ability
+        self.Active = False
+        # Class Based static Bonuses if you really want to know these mechanics look to previous examples.
+        self.BonusTo = [' ']
+        self.BonusOf = [0]
+        self.BonusPer = [0]
+        self.BonusFrom = [' ']
+        self.BonusType = [' ']
+        # Since it is most appropriate here, There is a difference between class and
+        # character level, if it is based off of class level it's 'clslvl' if its characetr level it's just
+        # 'chrlvl'
+
+        # 'Currency' abilities, this is in either rounds, or just points.
+        # The first is the static number given, the second is the dynamic amount.
+        self.Points = [0,0]
+        # What the dynamic is based off of.
+        self.PointStat = [' ']
+        # The modifier on the dynamic bonus (often doesn't exist, but it's for extra cases).
+        self.PointMod = [0]
         
+        # The text for the feature
+        self.Text = ' '
 
 
 
 # Traits are by far the simplest of the three as it has no requirements to speak of, but it also has the ability
 # to be swaped out for other racial traits.
 class Traits(object):
-    
+    def __init__(self):
+        # The name of the Trait
+        self.Name = ' '
+        # The slot of what the racial ability takes, some do take more than one, and just like the Features and
+        # their slots, the same ability cannot be touched twice. Also, if the slot is blank, then it's the base
+        # ability.
+        self.Slot = ' '
+
+        # If the ability gives a feat
+        self.RaceFeat = None
+
+        # If the ability gives a spell-like ability
+        self.RaceSpell = None
+        # The uses as almost all SLA's have a limited number of uses, -1 means unlimited
+        self.DailyUses
+        # Note, the Caster level of all Spell-like abilities are based off of the character's class levels
+
+        # Bonus Stuff again, just like feats
+        self.BonusTo = [' ']
+        self.BonusOf = [0]
+        self.BonusPer = [0]
+        self.BonusFrom = [' ']
+        self.BonusType = [' ']
+
+        
