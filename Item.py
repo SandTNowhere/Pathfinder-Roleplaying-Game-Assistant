@@ -61,6 +61,8 @@ class Armor(object):
         self.Title = ' '
         # The name of the Armor
         self.Name = ' '
+        # Is this armor, or a Shield
+        self.IsArmor = True
         # The price of the item
         self.Price = 0
         # The armor bonus to AC that the item gives.
@@ -84,6 +86,9 @@ class Armor(object):
         self.Mods = 0 #non-magical mods that are generally cheap.
         # The enchantment the item holds and the collection of total bonuses
         self.Enchantments = None
+
+    def ACBonus(self):
+        return self.ACBonus
 	
 	
 	

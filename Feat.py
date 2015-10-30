@@ -37,7 +37,7 @@ class Feat(object):
         # What is being added to the stat
         self.BonusOf = [0]
         # What it scales off of it it's not 1:1
-        self.BonusPer = [1]
+        self.BonusPer = [0]
         # What it is pulling from statwise
         self.BonusFrom = [' ']
 

@@ -139,7 +139,10 @@ class Character(object):
 
                 
         def AC(self, flags, misc):
-                return 10+self.stats['dex']
+                ret = 10
+                if self.armor != None:
+                        
+                return ret
         
         #def Touch(self):
         #def Flatfooted(self):
