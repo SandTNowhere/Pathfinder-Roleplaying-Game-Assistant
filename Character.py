@@ -97,10 +97,10 @@ class Character(object):
                 self.Language = []
                 
                 # Class stuff, here we go, into the fun stuff
-                self.cls = []
+                self.cls = [CLS.CLS()]
                 # A list of feats that are initialized here and properly set during character creation.
                 self.Feats = []
-                # Creates the list of skills and their dependents that are
+                # Creates the list of skills and ranks
                 self.skills = STDSkills
                 # Creates a list of class skills that again, will be filled properly with character creation.
                 self.classSkill = {'null': 'null'}
@@ -110,8 +110,9 @@ class Character(object):
 
                 # Again, initialized to default value, and should be set during proper creation
                 self.GP = 0
-                # Cumulative value, should techinally be aggrigated, but is easier to calculate GP = Cum-Items
+                # Cumulative value, should techinally be aggrigated, but is easier to calculate GP=Cumulative-Items
                 # than the other way around, and it gives the GM more fine control over his player's total wealth.
+                # and makes it easier to tell when someone is creating wealth.
                 self.CumulativeGP = 0
 
                 # Equipment slots, Floated off from the main list are weapons and armor as they are unique enough
@@ -136,6 +137,7 @@ class Character(object):
         # AC is based off of bonuses and is a bit hard to define easily, but it requires a few searches.
         def AC(self, flags, misc):
                 ret = 10
+                ret = ret + self.AbilityCheck('dex')
                 return ret
         
         #def Touch(self):
@@ -158,15 +160,15 @@ class Character(object):
                         return False
 
                 ret = self.AbilityCheck(stat)
-                #for i in self.cls:
-                ret = ret + self.cls.Save(save)
+                for i in self.cls:
+                        ret = ret + i.Save(save)
 
                 return ret
         
         def BAB(self):
                 ret = 0
-                #for i in self.cls
-                ret = self.cls.BAB()
+                for i in self.cls:
+                        ret = ret + i.BAB()
                 return ret
                 
         def CMB(self):
@@ -185,9 +187,8 @@ class Character(object):
         def SkillCheck(self, skill):
                 ret = self.skills[skill]
                 ret = ret + self.AbilityCheck(STDBase[skill])
-                if self.classSkill[skill] and (self.skills[skill] > 0):
-                        ret = ret + 3
-                #insert additional bonuses
+                if skill in self.classSkill:
+                        ret += 3
                 return ret
                 
         def SR(self):
@@ -200,36 +201,36 @@ class Character(object):
                 return math.floor((self.stats[Ability]-10)/2)
 
         # Returns a list of names for features that give bonuses to the situation so they can be called b
-        def BonusSearch(self, To, BType):
-                ret = []
-                ret.extend(self.Race.Bonus(To,BType))
-                # Cycle through feats
-                if self.Feats:
-                        for x in self.Feats:
-                                if To == self.Feats[x].BonusTo() and BType == self.Feats[x].BonusType():
-                                        ret.append(self.Feats[x].Bonus())
-                
-                # Cycle through class and their features (and the feats they give *cough*)
-                # While players must have a class, mosters may not, so checking is still required.
-                if self.cls:
-                        for x in self.cls: # Extend rather than append as BonusSearch will return a list
-                                ret.extend(self.cls.BonusSearch(To, BType))
-                
-                # Cycle through armor, and equipment. Weapons are split off as their immediate flexibility make
-                # them harder to control and their bonuses may be applied improperly using this function.
-                for x in self.Armor: # Since armor always have the slots, even if they aren't filled.
-                        if self.Armor[x]: # Since armor can give multiple bonuses to different things.
-                                ret.append(self.Armor[x].Bonus(To, BType))
-
-                for x in self.Slots:
-                        if self.Slots[x]:
-                                ret.append(self.Slots[x].Bonus(To, BType))
-
-                # And last, slotless items
-                if self.Slotless:
-                        for x in self.Slotless:
-                                ret.append(self.Slotless[x].Bonus(To, BType))
-                return ret
+        #def BonusSearch(self, To, BType):
+        #        ret = []
+        #        ret.extend(self.Race.Bonus(To,BType))
+        #        # Cycle through feats
+        #        if self.Feats:
+        #                for x in self.Feats:
+        #                        if To == self.Feats[x].BonusTo() and BType == self.Feats[x].BonusType():
+        #                                ret.append(self.Feats[x].Bonus())
+        #        
+        #        # Cycle through class and their features (and the feats they give *cough*)
+        #        # While players must have a class, mosters may not, so checking is still required.
+        #        if self.cls:
+        #                for x in self.cls: # Extend rather than append as BonusSearch will return a list
+        #                        ret.extend(self.cls.BonusSearch(To, BType))
+        #       
+        #        # Cycle through armor, and equipment. Weapons are split off as their immediate flexibility make
+        #        # them harder to control and their bonuses may be applied improperly using this function.
+        #        for x in self.Armor: # Since armor always have the slots, even if they aren't filled.
+        #                if self.Armor[x]: # Since armor can give multiple bonuses to different things.
+        #                        ret.append(self.Armor[x].Bonus(To, BType))
+        #
+        #        for x in self.Slots:
+        #                if self.Slots[x]:
+        #                        ret.append(self.Slots[x].Bonus(To, BType))
+        #
+        #        # And last, slotless items
+        #        if self.Slotless:
+        #                for x in self.Slotless:
+        #                        ret.append(self.Slotless[x].Bonus(To, BType))
+        #        return ret
 
         def MaxLoad(self):
                 if self.stats['str'] in range(0, 11):
@@ -238,8 +239,9 @@ class Character(object):
                         return 2 * max_load(self.stats['str'] - 5)
                 else:
                         return [115, 130, 150, 175][self.stats['stats'] - 11]
-		
 
+	# This is test code and should not be seen as part of the end product to be shown. It's rough and simply for
+	# command Python IDLE testing of Character.py
         def printCharacter(self):
                 print "Character Name:" + self.name + " \t Player Name:" + self.player
                 print "Alignment: " + self.alignment[0] + ' ' + self.alignment[1] + " \t Deity:" + self.deity + " \t Homeland:" + self.homeland
@@ -253,14 +255,15 @@ class Character(object):
                 print "Ranks: %d"%(self.ranks)
                 for i in self.skills:
                         print "%s: %d"%(i,self.SkillCheck(i))
+                print "Max Carrying Capacity:%d"%(self.MaxLoad())
 				
 	#def update(self):
 	#	Update all data upon any alteration.
 
 
-#test code, comment out and ignore for your work
+#test code, comment out and ignore for your work at higher levels.
 i = Character()
-ClassEx = CLS.cls()
+ClassEx = CLS.CLS()
 
 FeatEx = Feat.Feat()
 
