@@ -6,6 +6,7 @@ import CLS
 import Feat
 import Item
 import math
+import Spells
 
 
 # Global lists for skills could probably be floated off into a less permanent file for ease of alteration.
@@ -80,9 +81,9 @@ class Character(object):
                 self.stats = {'str': 10,'dex': 10,'con': 10,'int': 10,'wis': 10,'cha': 10}
                 # The maximum HP allowed for the character, calculated based off of class HD+Con*Level, this is a
                 # stand in till classes are chosen
-                self.stats = {'maxhp': 4}
+                self.stats['maxhp'] = 4
                 # Another initialization to be made complete in proper creation.
-                self.stats = {'hp': 4}
+                self.stats['hp'] = 4
                 # Temp is a for Temporary HP. 
                 self.stats['temp'] = 0
                 # This calls up a blank race that has no stats or bonuses
@@ -105,10 +106,7 @@ class Character(object):
                 self.classSkill = {'null': 'null'}
 
                 # set skill ranks, need to allow for multiple classes
-                self.ranks = (self.cls.Ranks() + self.AbilityCheck('int'))*self.cls.level
-                # check for skilled bonus feat
-                if 'Skilled' in self.pRace.Traits():
-                        self.ranks = self.ranks + 1*self.cls.level# should aggrigate level here
+                self.ranks = 0
 
                 # Again, initialized to default value, and should be set during proper creation
                 self.GP = 0
@@ -138,8 +136,6 @@ class Character(object):
         # AC is based off of bonuses and is a bit hard to define easily, but it requires a few searches.
         def AC(self, flags, misc):
                 ret = 10
-                if self.armor != None:
-                        
                 return ret
         
         #def Touch(self):
@@ -234,13 +230,21 @@ class Character(object):
                         for x in self.Slotless:
                                 ret.append(self.Slotless[x].Bonus(To, BType))
                 return ret
+
+        def MaxLoad(self):
+                if self.stats['str'] in range(0, 11):
+                        return 10 * self.stats['str']
+                elif self.stats > 14:
+                        return 2 * max_load(self.stats['str'] - 5)
+                else:
+                        return [115, 130, 150, 175][self.stats['stats'] - 11]
 		
 
         def printCharacter(self):
                 print "Character Name:" + self.name + " \t Player Name:" + self.player
                 print "Alignment: " + self.alignment[0] + ' ' + self.alignment[1] + " \t Deity:" + self.deity + " \t Homeland:" + self.homeland
                 print "Gender:" + self.gender + " \t Age:%d \t Height:"%(self.age) + self.height + "\t Weight:%d"%(self.weight)
-                print "Hair:" + self.hair + "\t Eyes:" + self.eyes + " \t Race:" + self.pRace.Name()
+                print "Hair:" + self.hair + "\t Eyes:" + self.eyes + " \t Race:" + self.pRace.GetName()
                 print "---------------------------------------------------------------------------"
                 print "Max Hit Points:%d \t Current Hit Points:%d"%(self.stats['maxhp'],self.stats['hp'])
                 print "Speed: %d \t Initiative: %d"%(self.Speed(), self.Initiative())
@@ -255,8 +259,10 @@ class Character(object):
 
 
 #test code, comment out and ignore for your work
+i = Character()
+ClassEx = CLS.cls()
 
-# Replace with i = Character()
+FeatEx = Feat.Feat()
 
 # it throws errors if you ask for something that doesn't exist.
 i.printCharacter()

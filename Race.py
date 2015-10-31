@@ -40,10 +40,10 @@ class Race(object):
         self.Size = 'med'
         # The type of the race, this has a number of effects on the bonuses and what the race get's but for most
         # characters, this is rather unimportant.
-        self.RaceType = 'humanoid'
+        self.RaceType = ' '
         # Subtype adds and creates a few more things for the races, however, again, this is more for monsters than
         # characters
-        self.SubType = 'human'
+        self.SubType = ' '
         # This is how fast the character moves by default and most move at 30. Extra modes of movement are under
         # Racial Traits
         self.Speed = 30
@@ -57,8 +57,8 @@ class Race(object):
     def Speed(self):
         return self.speed
 
-    def Name(self):
-        return self.name
+    def GetName(self):
+        return self.Name
 
     # Returns a list of bonuses to a stat that have the proper type
     def Bonus(self, To, BType):
