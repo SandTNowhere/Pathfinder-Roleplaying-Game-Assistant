@@ -39,6 +39,9 @@ class CLS(object):
         # one at a time so that any overlap can be caught immediately. If empty then there are no archetypes
         # active.
         self.Archetype = [' ']
+        # Starting Wealth is the wealth the player should have a level 1, this is a bit random, but it only really
+        # matters at level 1. This should be a rolled wealth, that gives
+        self.StartingGP = ' '
 
     def HD(self):
         return self.hd
@@ -54,3 +57,12 @@ class CLS(object):
 
     def Ranks(self):
         return self.ranks
+
+    def ClassSkills(self):
+        return self.Skills
+
+    def IsClassSkills(self, skill):
+        if skill in self.skills
+            return True
+
+        return False
