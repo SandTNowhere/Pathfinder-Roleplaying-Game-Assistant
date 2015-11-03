@@ -1,0 +1,23 @@
+CLS bard;
+	bard.name = 'Bard'
+	bard.reqs = {'level': -1}
+	bard.level = 0
+	bard.hd = 8
+	#Needs impementation in CLS.py
+	#Starting wealth calculated as wealth * d6 * 10gp 
+	#bard.wealth = 3
+	bard.bab = 3/4
+	bard.stats = {'fort': False, 'ref': True, 'will': True}
+	bard.skills = ['acrobatics', 'appraise', 'bluff', 'climb', 'craft', 'diplomacy', 'disguise', 'escape artist', 'intimidate',
+	'knowledge(arcana)', 'knowledge(dungeoneering)', 'knowledge(engineering)', 'knowledge(geography)',
+	'knowledge(history)', 'knowledge(local)', 'knowledge(nature)', 'knowledge(nobility)', 'knowledge(planes)',
+	'knowledge(religion)', 'linguistics', 'perception', 'perform', 'profession', 'sense motive', 'sleight of hand',
+	'spellcraft', 'stealth', 'use magic device']
+	bard.ranks = 6
+	#Would need impementation in CLS.py
+	#I think splitting proficeincies into weapons / armor+shields would make searching/checking easier
+	#bard.weaponprof = ['simple': True, 'martial' : 'short sword', 'martial' : 'longsword', 'martial' : 'rapier', 'martial' : 'shortbow', 'martial' : 'sap', 'exotic' : 'whip' ]
+	#bard.armorprof = ['light': True, 'shield': not 'tower']
+	bard.text = 'Untold wonders and secrets exist for those skillful enough to discover them. Through cleverness, talent, and magic, these cunning few unravel the wiles of the world, becoming adept in the arts of persuasion, manipulation, and inspiration. Typically masters of one or many forms of artistry, bards possess an uncanny ability to know more than they should and use what they learn to keep themselves and their allies ever one step ahead of danger. Bards are quick-witted and captivating, and their skills might lead them down many paths, be they gamblers or jacks-of-all-trades, scholars or performers, leaders or scoundrels, or even all of the above. For bards, every day brings its own opportunities, adventures, and challenges, and only by bucking the odds, knowing the most, and being the best might they claim the treasures of each. Role: Bards capably confuse and confound their foes while inspiring their allies to ever-greater daring. While accomplished with both weapons and magic, the true strength of bards lies outside melee, where they can support their companions and undermine their foes without fear of interruptions to their performances.'
+	bard.features = [''] #To be filled
+	bard.Archetype = ['']
