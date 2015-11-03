@@ -34,23 +34,23 @@ class Item(object):
 class equimpent(object):
     def __init__(self):
         # The name of the equipment
-	self.Name = ' '
-	# The magical aura of the item, while non-magical items don't have these most equipment other than armor and
-	# Weapons are magical.
-	self.Aura = ' '
-	# The caster level of the enchantment of the item. Same thing as the aura.
-	self.CL = 0
-	# The slot the item belongs to. Weapons and armor are not valid slots for this class.
-	self.Slot = ' '
-	# Self explanatory
-	self.Price = 0
-	# Self Explanatory
-	self.Weight = 0
-	# The requirements to craft the item yourself. Often in the order of 'feat' then 'spell', price is based off
-	# of the items market price (1/2 market price to make yourself).
-	self.CraftReqs = [' ']
-	# The enchantment it has, this is cover almost everything it does
-	self.Enchantments = None
+        self.Name = ' '
+        # The magical aura of the item, while non-magical items don't have these most equipment other than armor and
+        # Weapons are magical.
+        self.Aura = ' '
+        # The caster level of the enchantment of the item. Same thing as the aura.
+        self.CL = 0
+        # The slot the item belongs to. Weapons and armor are not valid slots for this class.
+        self.Slot = ' '
+        # Self explanatory
+        self.Price = 0
+        # Self Explanatory
+        self.Weight = 0
+        # The requirements to craft the item yourself. Often in the order of 'feat' then 'spell', price is based off
+        # of the items market price (1/2 market price to make yourself).
+        self.CraftReqs = [' ']
+        # The enchantment it has, this is cover almost everything it does
+        self.Enchantments = None
 	
 
 # Armor is equiped and only one may be had by any character at any time in terms of effects.
@@ -86,12 +86,6 @@ class Armor(object):
         self.Mods = 0 #non-magical mods that are generally cheap.
         # The enchantment the item holds and the collection of total bonuses
         self.Enchantments = None
-
-    def ACBonus(self):
-        ret = self.ACBonus
-        if self.Enchantments != None:
-            ret = ret + self.EnchantmentBonus()
-        return ret
 	
 	
 	
@@ -137,7 +131,6 @@ class Weapon(object):
         # The enchantments of the item
         self.Enchantments = None
 
-
 # Enchantments are going to need a bit more of an explanation than the other items. 1st, for armor and weapons, they
 # Calculate their value differently and add to it their items a bit differently than other magic items. Standard
 # magic items have a straightforward price to them, that is defined elsewhere. While other's are dependent upon the
@@ -155,37 +148,37 @@ class Weapon(object):
 class Enchantments(object):
     def __init__(self):
         # The name of the enchantment
-	self.name = ' '
-	# The flat price of the enchantment
-	self.price = 0
-	# The enchantment price that is added to weapons and armor.
-	self.enchant = 0
-	# The aura of the enchantment, this is primarily for weapons and armor, but is also to confirm other item's
-	# and equipment's auras.
-	self.aura = ' '
-	# The caster level of the bonus, this is both a requirement and a modifier. Again, it also reafirms the
-	# item's bonuses.
-	self.CL = 0
-	# What the weapon is allowed on by default, this can be broken, but it must still make sense. This does
-	# include more specific requirements such as must be on ranged weapons and such, but so long as it's not a
-	# weapon or armor enchantment, it's a soft requirement.
-	self.Weapon = [' ']
-	# The text of the enchantment in general.
-	self.Text = ' '
-	# The shortened text that states only the bonuses given, so that it can be added to miscellaneous notes.
-	self.SubText = ' '
-
-	# Now onto the enchantment's effects.
-	# What the effect is going to.
-	self.BonusTo = [' ']
-	# The ammount of the bonus
-	self.BonusOf = [' ']
-	# What the scaling bonus.
-	self.BonusPer = [' ']
-	# What the bonus is pulling from if any.
-	self.BonusFrom = [' ']
-
-	# If they give feats
-	self.BonusFeat = None
-	# If they give spells
-	self.Spells = None
+        self.name = ' '
+        # The flat price of the enchantment
+        self.price = 0
+        # The enchantment price that is added to weapons and armor.
+        self.enchant = 0
+        # The aura of the enchantment, this is primarily for weapons and armor, but is also to confirm other item's
+        # and equipment's auras.
+        self.aura = ' '
+        # The caster level of the bonus, this is both a requirement and a modifier. Again, it also reafirms the
+        # item's bonuses.
+        self.CL = 0
+        # What the weapon is allowed on by default, this can be broken, but it must still make sense. This does
+        # include more specific requirements such as must be on ranged weapons and such, but so long as it's not a
+        # weapon or armor enchantment, it's a soft requirement.
+        self.Weapon = [' ']
+        # The text of the enchantment in general.
+        self.Text = ' '
+        # The shortened text that states only the bonuses given, so that it can be added to miscellaneous notes.
+        self.SubText = ' '
+        
+        # Now onto the enchantment's effects.
+        # What the effect is going to.
+        self.BonusTo = [' ']
+        # The ammount of the bonus
+        self.BonusOf = [' ']
+        # What the scaling bonus.
+        self.BonusPer = [' ']
+        # What the bonus is pulling from if any.
+        self.BonusFrom = [' ']
+        
+        # If they give feats
+        self.BonusFeat = None
+        # If they give spells
+        self.Spells = None
