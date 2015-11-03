@@ -52,7 +52,7 @@ class Spell(object):
         # Saving throw has two parts and up to a number of saves, for simple multiple saves such as Phantasmal
         # Killer which requires both a will and a fort save to have its effects, modifiers will be given on the part
         # returned by the dictionary. Examples include {'will': 'to disbelieve'} and {'will': 'negates(harmless)'}
-        self.Duration = {' ': ' '}
+        self.SavingThrow = {' ': ' '}
         # Spell resistance is a simple yes or no, and marks it as having to break spell resistance if it exists on
         # the affected party
         self.SR = False
@@ -62,7 +62,7 @@ class Spell(object):
         # Bonus is designed in a similar fashion to feats and enchantments, but these only last for a specific
         # Duration and must be in the active position to give their effect.
 
-        # What it goes to be it skill or stat or attacks
+        # What it goes to, be it skill or stat or attacks
         self.BonusTo = [' ']
         # The amount of the bonus, if there is a scaling bonus from caster level it gives it in the next spot
         self.BonusOf = [1]
