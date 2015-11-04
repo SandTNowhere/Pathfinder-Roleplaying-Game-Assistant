@@ -8,7 +8,7 @@ cursor = connection.cursor()
 
 # Character stats that exist in the game(strength, intelligence, etc)
 cursor.execute('''
-CREATE TABLE Stats(
+CREATE TABLE IF NOT EXISTS Stats(
 st_id INTEGER PRIMARY KEY AUTOINCREMENT,
 st_name VARCHAR(20),
 st_descrip TEXT -- explanation of what the stat does.
@@ -16,7 +16,7 @@ st_descrip TEXT -- explanation of what the stat does.
 
 # Powers granted by domains
 cursor.execute('''
-CREATE TABLE Granted_Powers(
+CREATE TABLE IF NOT EXISTS Granted_Powers(
 gp_id INTEGER PRIMARY KEY AUTOINCREMENT,
 gp_name VARCHAR(20),
 effect TEXT -- may expand this later to be more similar to spells
@@ -24,14 +24,14 @@ effect TEXT -- may expand this later to be more similar to spells
 
 # Wizardry Schools, not Hogwarts
 cursor.execute('''
-CREATE TABLE Schools(
+CREATE TABLE IF NOT EXISTS Schools(
 sc_id INTEGER PRIMARY KEY AUTOINCREMENT,
 sc_name VARCHAR(20)
 );''')
 
 # Cleric Domains
 cursor.execute('''
-CREATE TABLE Domains(
+CREATE TABLE IF NOT EXISTS Domains(
 do_id INTEGER PRIMARY KEY AUTOINCREMENT,
 do_name VARCHAR(20),
 deities VARCHAR(200),
@@ -48,21 +48,21 @@ FOREIGN KEY (power4) REFERENCES Granted_Powers(gp_name)
 
 # Spell Descriptors. Acid, fire, ice, etc
 cursor.execute('''
-CREATE TABLE Descriptors(
+CREATE TABLE IF NOT EXISTS Descriptors(
 de_id INTEGER PRIMARY KEY AUTOINCREMENT,
 de_name VARCHAR(20)
 );''')
 
 #Spell types. Enhancement, attack, etc
 cursor.execute('''
-CREATE TABLE Spell_Types(
+CREATE TABLE IF NOT EXISTS Spell_Types(
 ty_id INTEGER PRIMARY KEY AUTOINCREMENT,
 ty_name VARCHAR(20)
 );''')
 
 # Spells
 cursor.execute('''
-CREATE TABLE Spells (
+CREATE TABLE IF NOT EXISTS Spells (
 id INTEGER PRIMARY KEY AUTOINCREMENT,
 sp_name VARCHAR(64),
 school VARCHAR(20), -- include school and subschool, space delim
@@ -113,5 +113,3 @@ FOREIGN KEY (bonus_type) REFERENCES Spell_Types(ty_name)
 
 connection.commit()
 connection.close()
-
-print("done")
