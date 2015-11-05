@@ -1,6 +1,5 @@
-# Creates sqlite3 tables for Spells and other, related tables. Will expand later to create all tables needed for the project.
-# Will use a CSV (comma seperated values) file to populate the tables later. If someone else wants to do it for some reason: 
-# http://www.dreamincode.net/forums/topic/190453-importing-csv-into-sqlite3-db/
+# Creates sqlite3 tables for Spells and other, related tables.
+# Will expand later to create all tables needed for the project.
 
 import sqlite3
 connection = sqlite3.connect("pathfinder.db")
@@ -9,7 +8,7 @@ cursor = connection.cursor()
 # Character stats that exist in the game(strength, intelligence, etc)
 cursor.execute('''
 CREATE TABLE IF NOT EXISTS Stats(
-st_id INTEGER PRIMARY KEY AUTOINCREMENT,
+st_id INTEGER PRIMARY KEY,
 st_name VARCHAR(20),
 st_descrip TEXT -- explanation of what the stat does.
 );''')
@@ -17,7 +16,7 @@ st_descrip TEXT -- explanation of what the stat does.
 # Powers granted by domains
 cursor.execute('''
 CREATE TABLE IF NOT EXISTS Granted_Powers(
-gp_id INTEGER PRIMARY KEY AUTOINCREMENT,
+gp_id INTEGER PRIMARY KEY,
 gp_name VARCHAR(20),
 effect TEXT -- may expand this later to be more similar to spells
 );''')
@@ -25,14 +24,14 @@ effect TEXT -- may expand this later to be more similar to spells
 # Wizardry Schools, not Hogwarts
 cursor.execute('''
 CREATE TABLE IF NOT EXISTS Schools(
-sc_id INTEGER PRIMARY KEY AUTOINCREMENT,
+sc_id INTEGER PRIMARY KEY,
 sc_name VARCHAR(20)
 );''')
 
 # Cleric Domains
 cursor.execute('''
 CREATE TABLE IF NOT EXISTS Domains(
-do_id INTEGER PRIMARY KEY AUTOINCREMENT,
+do_id INTEGER PRIMARY KEY,
 do_name VARCHAR(20),
 deities VARCHAR(200),
 power1 VARCHAR(20),
@@ -49,21 +48,21 @@ FOREIGN KEY (power4) REFERENCES Granted_Powers(gp_name)
 # Spell Descriptors. Acid, fire, ice, etc
 cursor.execute('''
 CREATE TABLE IF NOT EXISTS Descriptors(
-de_id INTEGER PRIMARY KEY AUTOINCREMENT,
+de_id INTEGER PRIMARY KEY,
 de_name VARCHAR(20)
 );''')
 
 #Spell types. Enhancement, attack, etc
 cursor.execute('''
 CREATE TABLE IF NOT EXISTS Spell_Types(
-ty_id INTEGER PRIMARY KEY AUTOINCREMENT,
+ty_id INTEGER PRIMARY KEY,
 ty_name VARCHAR(20)
 );''')
 
 # Spells
 cursor.execute('''
 CREATE TABLE IF NOT EXISTS Spells (
-id INTEGER PRIMARY KEY AUTOINCREMENT,
+id INTEGER PRIMARY KEY,
 sp_name VARCHAR(64),
 school VARCHAR(20), -- include school and subschool, space delim
 domain VARCHAR(20), -- include domain and subdomain, space delim
