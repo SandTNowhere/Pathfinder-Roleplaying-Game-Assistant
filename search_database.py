@@ -13,8 +13,7 @@ def search_db(att, table, condition):
     command = 'SELECT ' + att + ' FROM ' + table + ' WHERE ' + condition
     cursor.execute(command)
     response = cursor.fetchall()
-    print "after selection"
-    for resp in response:
-        print resp
-    print "done"
+
+    connection.close()
+    return response
 

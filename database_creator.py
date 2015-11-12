@@ -5,6 +5,37 @@ import sqlite3
 connection = sqlite3.connect("pathfinder.db")
 cursor = connection.cursor()
 
+# Items
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS Items(
+it_id INTEGER PRIMARY KEY,
+it_name VARCHAR(30),
+it_type VARCHAR(30), -- reference another table?
+price VARCHAR(20), -- should this be Real or Int? Break it into coin types?
+weight REAL,
+descritption TEXT,
+enchantment VARCHAR(30), -- reference another table? allow multi-enchant?
+charges INT,
+rechargeable BOOLEAN,
+source VARCHAR(30) -- reference another table?
+);''')
+
+# Equipment. Not Armor or Weapons. These are the base versions and may
+# not be the same as what appears in a given character sheet or campaign.
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS Equipment(
+eq_id INTEGER PRIMARY KEY,
+eq_name VARCHAR(30),
+aura VARCHAR(20), -- None if not applicable
+caster Level INT, -- 0 if not applicable
+slot VARCHAR(20),  -- reference another table or list?
+-- Slot refers to equipment slot. Back, head, neck, right index finger, etc
+price VARCHAR(20), -- Real or Int? Coin types?
+weight REAL,
+craft_requirements TEXT,
+enchantments VARCHAR(30) -- reference another table? allow multi-enchant?
+);''')
+
 # Character stats that exist in the game(strength, intelligence, etc)
 cursor.execute('''
 CREATE TABLE IF NOT EXISTS Stats(

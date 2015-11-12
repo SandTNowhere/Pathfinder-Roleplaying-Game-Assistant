@@ -6,5 +6,7 @@ print "table populated"
 test_table="Stats"
 test_att = '*'
 test_condition=str('st_name="Strength" OR st_descrip="HULK THINK!"')
-search_database.search_db(test_att,test_table,test_condition)
-print "db searched"
+test_search = search_database.search_db(test_att,test_table,test_condition)
+
+for i in test_search:
+    print i
