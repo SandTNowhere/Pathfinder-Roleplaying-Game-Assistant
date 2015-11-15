@@ -2,7 +2,9 @@
 # Will expand later to create all tables needed for the project.
 
 import sqlite3
-connection = sqlite3.connect("pathfinder.db")
+from config import database
+
+connection = sqlite3.connect(database)
 cursor = connection.cursor()
 
 # Items

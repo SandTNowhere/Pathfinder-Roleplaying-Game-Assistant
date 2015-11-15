@@ -5,11 +5,12 @@
 
 import csv
 import sqlite3
+from config import database
 
 def populate_table(table_name, csv_file, att_num):
 
     # open database
-    db = sqlite3.connect("pathfinder.db")
+    db = sqlite3.connect(database)
     cursor=db.cursor()
 
     #for testing only
@@ -30,7 +31,7 @@ def populate_table(table_name, csv_file, att_num):
     command +=');'
     
     # open csv file
-    csvfile = open(csv_file,'rb')
+    csvfile = open(csv_file,'r')
     creader = csv.reader(csvfile)
     next(creader)
 
