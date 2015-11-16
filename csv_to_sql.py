@@ -2,6 +2,11 @@
 # att_num = number of attributes in the table (disregarding ID)
 #   this may not be needed if I can figure out how to check the number
 #   of elements in the first line of the csv
+# Should throw an error if a line of the csv is improperly formated.
+# This will not catch instances of bad data of the correct type
+#  (i.e.: typing 1,2 instead of 2,1 when recording two integer
+#   columns in the csv)
+
 
 import csv
 import sqlite3
@@ -39,7 +44,11 @@ def populate_table(table_name, csv_file, att_num):
     for j in creader:
         last+=1
         row = [last]+j
-        db.execute(command,row)
+        try:
+            db.execute(command,row)
+        except:
+            print(str(j) + " could not be added to " + table_name + ".")
+            last-=1
 
     # save changes and close
     csvfile.close()

@@ -1,8 +1,10 @@
 import csv_to_sql
 import search_database
+from config import csvfiles
 
-csv_to_sql.populate_table("Stats","test.csv",2)
-print ("table populated")
+for item in csvfiles:
+    csv_to_sql.populate_table(item[0],item[1],item[2])
+
 test_table="Stats"
 test_att = '*'
 test_condition=str(' WHERE st_name="Strength" OR st_descrip="HULK THINK!"')

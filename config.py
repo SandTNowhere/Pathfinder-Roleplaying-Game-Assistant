@@ -2,3 +2,4 @@
 # feel free to add other variables that will accomplish similar goals
 
 database="pathfinder.db"
+csvfiles=[['Stats','test.csv',2]]
