@@ -7,6 +7,41 @@ from config import database
 connection = sqlite3.connect(database)
 cursor = connection.cursor()
 
+#Classes.
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS Enchantments(
+cl_id INTEGER PRIMARY KEY,
+cl_name VARCHAR(30),
+prereqs VARCHAR(30),   -- expand to something that the sys can understnad?
+hit_dice INTEGER,      -- reference a list?
+basic_atk_bonus REAL,  -- make INT? reference list?
+save_reflex BOOLEAN,   -- FALSE = bad, TRUE=good
+save_fortitude BOOLEAN,
+save_will BOOLEAN,
+-- skills are being left out here.
+-- They will get its own table that refernces this one.
+rank_per_level INTEGER,
+proficencies TEXT,  -- bows, exotics, two-handed, etc
+description TEXT,   -- book description of class
+-- features also left out and put in their own table.
+initial_gp REAL     -- starting money
+-- also leaving out archetypes. Will get their own table.
+);''')
+
+#Enchantments.
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS Enchantments(
+ec_id INTEGER PRIMARY KEY,
+ec_name VARCHAR(30),
+base_price REAL,  -- price of enchanting
+price_mod REAL,   -- price adjustment to enchanted item
+aura VARCHAR(30), -- reference list?
+caster_level INTEGER DEFAULT 0,
+available_for VARCHAR(30), -- reference items, equipment ,armour,weapons,null?
+description TEXT, -- book description
+summary TEXT      -- boiled down description (+2 fire damage or whatever)
+);''')
+
 # Items
 cursor.execute('''
 CREATE TABLE IF NOT EXISTS Items(
@@ -17,7 +52,7 @@ price VARCHAR(20), -- should this be Real or Int? Break it into coin types?
 weight REAL,
 descritption TEXT,
 enchantment VARCHAR(30), -- reference another table? allow multi-enchant?
-charges INT,
+charges INTEGER,
 rechargeable BOOLEAN,
 source VARCHAR(30) -- reference another table?
 );''')
@@ -36,6 +71,42 @@ price VARCHAR(20), -- Real or Int? Coin types?
 weight REAL,
 craft_requirements TEXT,
 enchantments VARCHAR(30) -- reference another table? allow multi-enchant?
+);''')
+
+#Armour.
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS Armour(
+ar_id INTEGER PRIMARY KEY,
+ar_name VARCHAR(30),
+eq_slot VARCHAR(30),
+base_price REAL,
+ac_bonus INTEGER DEFAULT 0,
+max_dex INTEGER DEFAULT -1, -- -1 if not applicable
+armour_penalty INTEGER DEFAULT 0,
+spell_failure INTEGER DEFAULT 0,
+speed20 INTEGER DEFAULT 0,
+speed30 INTEGER DEFAULT 0,
+weight REAL,
+description TEXT --description from book
+);''')
+
+#Weapons.
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS Weapons(
+we_id VARCHAR(30),
+we_name VARCHAR(30),
+category VARCHAR(30),   -- reference a list?
+handedness VARCHAR(30), -- reference a list?
+base_price REAL,        -- real or 3+ ints?
+damage_dt INTEGER,      -- die type
+damage_dn INTEGER,      -- number of dice
+size VARCHAR(20),       -- reference a list?
+crit_rng INTEGER,       -- critical range
+crit_m INTEGER,         -- critical multiplier
+range INTEGER DEFAULT -1,  -- -1 if not meant to be thrown
+weight REAL,
+dam_type VARCHAR(30),   -- reference list?
+description TEXT        -- from book
 );''')
 
 # Character stats that exist in the game(strength, intelligence, etc)

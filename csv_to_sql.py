@@ -6,7 +6,8 @@
 # This will not catch instances of bad data of the correct type
 #  (i.e.: typing 1,2 instead of 2,1 when recording two integer
 #   columns in the csv)
-
+# leave spaces for empty strings, and 0s for non-applicable numbers
+#   unless noted otherwise in database_creator.
 
 import csv
 import sqlite3
