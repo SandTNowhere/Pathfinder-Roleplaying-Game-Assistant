@@ -1,4 +1,7 @@
 # Creates sqlite3 tables for Spells and other, related tables.
+# tables are based on class objects but are not exact matches to those
+#   objects as instances of class objects are meant to be customizable
+#   versions of entries found in the tables.
 # Will expand later to create all tables needed for the project.
 
 import sqlite3
@@ -63,14 +66,14 @@ cursor.execute('''
 CREATE TABLE IF NOT EXISTS Equipment(
 eq_id INTEGER PRIMARY KEY,
 eq_name VARCHAR(30),
-aura VARCHAR(20), -- None if not applicable
+aura VARCHAR(20), -- leave empty if not applicable
 caster Level INT, -- 0 if not applicable
 slot VARCHAR(20),  -- reference another table or list?
 -- Slot refers to equipment slot. Back, head, neck, right index finger, etc
 price VARCHAR(20), -- Real or Int? Coin types?
 weight REAL,
 craft_requirements TEXT,
-enchantments VARCHAR(30) -- reference another table? allow multi-enchant?
+-- reference another table? allow multi-enchant? leave out altogether?
 );''')
 
 #Armour.
