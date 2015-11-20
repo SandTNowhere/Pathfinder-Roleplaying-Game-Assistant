@@ -12,7 +12,7 @@ cursor = connection.cursor()
 
 #Classes.
 cursor.execute('''
-CREATE TABLE IF NOT EXISTS Enchantments(
+CREATE TABLE IF NOT EXISTS Classes(
 cl_id INTEGER PRIMARY KEY,
 cl_name VARCHAR(30),
 prereqs VARCHAR(30),   -- expand to something that the sys can understnad?
@@ -21,14 +21,65 @@ basic_atk_bonus REAL,  -- make INT? reference list?
 save_reflex BOOLEAN,   -- FALSE = bad, TRUE=good
 save_fortitude BOOLEAN,
 save_will BOOLEAN,
--- skills are being left out here.
--- They will get its own table that refernces this one.
 rank_per_level INTEGER,
 proficencies TEXT,  -- bows, exotics, two-handed, etc
 description TEXT,   -- book description of class
 -- features also left out and put in their own table.
 initial_gp REAL     -- starting money
--- also leaving out archetypes. Will get their own table.
+);''')
+
+#Skills
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS Skills(
+skd_id INTEGER PRIMARY KEY,
+sk_name VARCHAR(30),
+sk_desc TEXT
+);''')
+
+#Skill/Class relations
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS Skills_by_Class(
+skbc_id INTEGER PRIMARY KEY,
+sk_name VARCHAR(30),
+class VARCHAR(30),
+FOREIGN KEY (class) REFERENCES Classes(cl_name),
+FOREIGN KEY (sk_name) REFERENCES Skills(sk_name)
+);''')
+
+#Features. Not really sure what should these two tables
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS Features(
+fet_id INTEGER PRIMARY KEY,
+fet_name VARCHAR(30),
+min_level INT, -- minimum level needed to acquire
+               -- may need to be moved to Features_by_Class
+               -- if this is variable by class
+-- don't understand what slot is supposed to be doing,
+-- so not sure if it should be in db
+-- same for Bonus Feats, Feat Limits, BonusTo, BonusOf, BonusPer,
+-- BonusFrom, BonusType and the various Points attributes
+active BOOLEAN,
+description TEXT -- book description
+);''')
+
+# feature/class relations
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS Features_by_Class(
+fetbc_id INTEGER PRIMARY KEY,
+fet_name VARCHAR(30),
+class VARCHAR(30),
+FOREIGN KEY (class) REFERENCES Classes(cl_name),
+FOREIGN KEY (fet_name) REFERENCES Features(fet_name)
+);''')
+
+#Archetypes. Can more than one base class have the same archetype? Assuming no atm.
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS Archetypes(
+ar_id INTEGER PRIMARY KEY,
+ar_name VARCHAR(30),
+description TEXT,
+class VARCHAR(30),
+FOREIGN KEY (class) REFERENCES CLASSES(cl_name)
 );''')
 
 #Enchantments.
@@ -66,13 +117,14 @@ cursor.execute('''
 CREATE TABLE IF NOT EXISTS Equipment(
 eq_id INTEGER PRIMARY KEY,
 eq_name VARCHAR(30),
-aura VARCHAR(20), -- leave empty if not applicable
-caster Level INT, -- 0 if not applicable
+aura VARCHAR(20),  -- leave empty if not applicable
+caster Level INT,  -- 0 if not applicable
 slot VARCHAR(20),  -- reference another table or list?
 -- Slot refers to equipment slot. Back, head, neck, right index finger, etc
 price VARCHAR(20), -- Real or Int? Coin types?
 weight REAL,
 craft_requirements TEXT,
+enchantments TEXT
 -- reference another table? allow multi-enchant? leave out altogether?
 );''')
 
@@ -120,7 +172,7 @@ st_name VARCHAR(20),
 st_descrip TEXT -- explanation of what the stat does.
 );''')
 
-# Powers granted by domains
+# Powers granted by priest domains
 cursor.execute('''
 CREATE TABLE IF NOT EXISTS Granted_Powers(
 gp_id INTEGER PRIMARY KEY,
