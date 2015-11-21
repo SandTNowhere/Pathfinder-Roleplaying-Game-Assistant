@@ -15,10 +15,11 @@ def csvfinder():
     db.close()
     return(csvfiles)
 
-#csvfiles=csvfinder()       # will give list of all tables in database
+csvfiles=csvfinder()       # will give list of all tables in database
                             #   as a list of strings
-csvfiles=['Stats', 'Stats'] # for use when testing
 
-"""for file in csvfiles:  # for creating new csv files enmasse
-    temp=open('data\\'+file+'csv','w+')
-    temp.close()"""
+for file in csvfiles:  # for creating new csv files enmasse
+    temp=open('data\\'+file+'.csv','a+')
+    temp.close()
+
+#csvfiles=['Stats', 'Stats'] # for use when testing

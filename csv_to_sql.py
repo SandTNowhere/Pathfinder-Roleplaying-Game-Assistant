@@ -34,20 +34,22 @@ def populate_table(table_name):
     # setting up sql command dynamically
     # NULL is for the ID which will be auto-allocated by the system    
     command = 'INSERT INTO '+ table_name + ' VALUES (?' 
-    for i in next(creader): #eliminating csv header
-        command += ',?'
-    command +=');'
+    try:
+        for i in next(creader): #eliminating csv header
+            command += ',?'
+        command +=');'
 
     # copy csv file
-    for j in creader:
-        last+=1
-        row = [last]+j
-        try:
-            db.execute(command,row)
-        except:
-            print(str(j) + " could not be added to " + table_name + ".")
-            last-=1
-
+        for j in creader:
+            last+=1
+            row = [last]+j
+            try:
+                db.execute(command,row)
+            except:
+                print(str(j) + " could not be added to " + table_name + ".")
+                last-=1
+    except:
+        print(table_name + ' is empty')
     # save changes and close
     csvfile.close()
     db.commit()

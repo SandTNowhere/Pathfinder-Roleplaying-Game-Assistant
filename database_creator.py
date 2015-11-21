@@ -10,6 +10,66 @@ from config import database
 connection = sqlite3.connect(database)
 cursor = connection.cursor()
 
+# Stats.(strength, intelligence, etc)
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS Stats(
+st_id INTEGER PRIMARY KEY,
+st_name VARCHAR(20),
+st_descrip TEXT -- explanation of what the stat does.
+);''')
+
+#Racial Sizes (med, large(tall), colossal(long), etc )
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS Racial_Sizes(
+rs_id INTEGER PRIMARY KEY,
+rs_name VARCHAR(30)
+);''')
+
+#Racial Types (aberration, animal, dragon, etc)
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS Racial_Types(
+rt_id INTEGER PRIMARY KEY,
+rt_name VARCHAR(30)
+);''')
+
+#Racial Sub-Types (air, angel, kaiju, kami, etc)
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS Racial_Sub_Types(
+rst_id INTEGER PRIMARY KEY,
+rst_name VARCHAR(30)
+);''')
+
+#Races
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS Races(
+ra_id INTEGER PRIMARY KEY,
+ra_name VARCHAR(30),
+base_str INTEGER,
+base_dex INTEGER,
+base_con INTEGER,
+base_int INTEGER,
+base_wis INTEGER,
+base_cha INTEGER,
+size VARCHAR(30),
+type VARCHAR(30),
+sub_type VARCHAR(30),
+speed INTEGER,
+traits TEXT,  -- should this reference a list?
+notes TEXT,
+FOREIGN KEY (size) REFERENCES Racial_Sizes(rs_name),
+FOREIGN KEY (type) REFERENCES Racial_Types(rt_name),
+FOREIGN KEY (sub_type) REFERENCES Racial_Sub_Types(rst_name)
+);''')
+
+#Languages. Also links to races that learn them naturally.
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS Languages(
+la_id INTEGER PRIMARY KEY,
+la_name VARCHAR(30),
+race VARCHAR,
+FOREIGN KEY (race) REFERENCES Races (ra_name)
+);''')
+
 #Classes.
 cursor.execute('''
 CREATE TABLE IF NOT EXISTS Classes(
@@ -46,7 +106,7 @@ FOREIGN KEY (class) REFERENCES Classes(cl_name),
 FOREIGN KEY (sk_name) REFERENCES Skills(sk_name)
 );''')
 
-#Features. Not really sure what should these two tables
+#Features.
 cursor.execute('''
 CREATE TABLE IF NOT EXISTS Features(
 fet_id INTEGER PRIMARY KEY,
@@ -58,7 +118,9 @@ min_level INT, -- minimum level needed to acquire
 -- so not sure if it should be in db
 -- same for Bonus Feats, Feat Limits, BonusTo, BonusOf, BonusPer,
 -- BonusFrom, BonusType and the various Points attributes
-active BOOLEAN,
+active BOOLEAN, -- true if it needs to be activated, false otherwise
+-- do any features have both an active and a passive component?
+--   if so, how should we handle them?
 description TEXT -- book description
 );''')
 
@@ -66,13 +128,14 @@ description TEXT -- book description
 cursor.execute('''
 CREATE TABLE IF NOT EXISTS Features_by_Class(
 fetbc_id INTEGER PRIMARY KEY,
-fet_name VARCHAR(30),
+fetbc_name VARCHAR(30),
 class VARCHAR(30),
 FOREIGN KEY (class) REFERENCES Classes(cl_name),
-FOREIGN KEY (fet_name) REFERENCES Features(fet_name)
+FOREIGN KEY (fetbc_name) REFERENCES Features(fet_name)
 );''')
 
-#Archetypes. Can more than one base class have the same archetype? Assuming no atm.
+#Archetypes. Can more than one base class have the same archetype?
+#  Assuming no at the moment.
 cursor.execute('''
 CREATE TABLE IF NOT EXISTS Archetypes(
 ar_id INTEGER PRIMARY KEY,
@@ -80,6 +143,46 @@ ar_name VARCHAR(30),
 description TEXT,
 class VARCHAR(30),
 FOREIGN KEY (class) REFERENCES CLASSES(cl_name)
+);''')
+
+#Feats
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS Feats(
+fe_id INTEGER PRIMARY KEY,
+fe_name VARCHAR(30),
+class VARCHAR(30),
+arche VARCHAR(30),
+min_level INTEGER DEFAULT 0,
+-- should slot be included? Not sure what it is
+bonus_feat VARCHAR(30),  -- should this be a foreign key refernces feats?
+                         -- can there be more than one bonus feat?
+                         -- can a feat be a bonus feat of more than one feat?
+-- not sure exactly what feat limits is.
+--   does having a feat limit what other feats you can take?
+--   or is this something else?
+active BOOLEAN,  -- True=activate to use, False= always active
+-- not sure what to do with Bonus stuff
+points_static INTEGER,
+points_dynam INTEGER,
+points_stat VARCHAR(30),
+points_mod INTEGER,
+-- I assume this is an int, change to whatever is appropriate if I'm wrong
+descrption TEXT,
+FOREIGN KEY (class) REFERENCES CLASSES(cl_name),
+FOREIGN KEY (arche) REFERENCES Archetypes(ar_name),
+FOREIGN KEY (points_stat) REFERENCES Stats(st_name)
+);''')
+
+#Traits
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS Traits(
+tr_id INTEGER PRIMARY KEY,
+tr_name VARCHAR(30),
+-- still not sure what's up with slots
+feat VARCHAR(30),  --associated feat. can there be more than one?
+daily_uses INTEGER DEFAULT -1,
+FOREIGN KEY (feat) REFERENCES Feats(fe_name)
+-- still not sure about bonus stuff either
 );''')
 
 #Enchantments.
@@ -162,14 +265,6 @@ range INTEGER DEFAULT -1,  -- -1 if not meant to be thrown
 weight REAL,
 dam_type VARCHAR(30),   -- reference list?
 description TEXT        -- from book
-);''')
-
-# Character stats that exist in the game(strength, intelligence, etc)
-cursor.execute('''
-CREATE TABLE IF NOT EXISTS Stats(
-st_id INTEGER PRIMARY KEY,
-st_name VARCHAR(20),
-st_descrip TEXT -- explanation of what the stat does.
 );''')
 
 # Powers granted by priest domains
