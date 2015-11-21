@@ -1,7 +1,5 @@
-# Imports csv file into database
-# att_num = number of attributes in the table (disregarding ID)
-#   this may not be needed if I can figure out how to check the number
-#   of elements in the first line of the csv
+# Imports csv file located in data folder into database
+# Assumes that the csv file and the table have the same name
 # Should throw an error if a line of the csv is improperly formated.
 # This will not catch instances of bad data of the correct type
 #  (i.e.: typing 1,2 instead of 2,1 when recording two integer
@@ -13,7 +11,7 @@ import csv
 import sqlite3
 from config import database
 
-def populate_table(table_name, csv_file, att_num):
+def populate_table(table_name):
 
     # open database
     db = sqlite3.connect(database)
@@ -27,19 +25,18 @@ def populate_table(table_name, csv_file, att_num):
     cursor.execute(command)
     last=cursor.fetchone()[0]
     if last is None:
-        last=0
-        
-    # setting up sql command dynamically
-    # NULL is for the ID which will be auto-allocated by the system
-    command = 'INSERT INTO '+ table_name + ' VALUES (?' 
-    for i in range(att_num):
-        command += ',?'
-    command +=');'
+        last=0  
     
     # open csv file
-    csvfile = open(csv_file,'r')
+    csvfile = open(('data\\' + table_name + '.csv'),'r')
     creader = csv.reader(csvfile)
-    next(creader)
+    
+    # setting up sql command dynamically
+    # NULL is for the ID which will be auto-allocated by the system    
+    command = 'INSERT INTO '+ table_name + ' VALUES (?' 
+    for i in next(creader): #eliminating csv header
+        command += ',?'
+    command +=');'
 
     # copy csv file
     for j in creader:

@@ -3,7 +3,7 @@ import search_database
 from config import csvfiles
 
 for item in csvfiles:
-    csv_to_sql.populate_table(item[0],item[1],item[2])
+    csv_to_sql.populate_table(item)
 
 test_table="Stats"
 test_att = '*'
