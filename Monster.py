@@ -42,6 +42,8 @@ class Monster(object):
         self.Type = ' '
         # The subtypes of the monster
         self.SubType = [' ']
+        # The size of the creature
+        self.Size = 'med'
         # The templates that have been added on.
         self.Templates = [Templates()]
         # The character sheet that the monster holds most of it's data in. (may consider changing out

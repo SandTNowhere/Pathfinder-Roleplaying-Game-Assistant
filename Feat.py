@@ -70,7 +70,7 @@ class Feature(object):
         self.Slot = [' ']
         
         # This is where the complex stuff starts
-        # Bonus Feats
+        # Bonus Feats, if it has a subname, then
         self.BonusFeat = None
         # Limits or list of allowed feats
         self.FeatLimits = [' ']
@@ -101,7 +101,7 @@ class Feature(object):
 
 # Traits are by far the simplest of the three as it has no requirements to speak of, but it also has the ability
 # to be swaped out for other racial traits.
-class Traits(object):
+class Trait(object):
     def __init__(self):
         # The name of the Trait
         self.Name = ' '
@@ -116,7 +116,7 @@ class Traits(object):
         # If the ability gives a spell-like ability
         self.RaceSpell = None
         # The uses as almost all SLA's have a limited number of uses, -1 means unlimited
-        self.DailyUses
+        self.DailyUses = 0
         # Note, the Caster level of all Spell-like abilities are based off of the character's class levels
 
         # Bonus Stuff again, just like feats

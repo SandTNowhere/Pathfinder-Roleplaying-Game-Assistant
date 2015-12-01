@@ -11,7 +11,9 @@ class CLS(object):
         # The name of the class
         self.name = ' '
         # The prerequirements of the class, base classes simply have the default value as there are no
-        # requirements
+        # requirements, as an addition, everything split by key is an and, everything split in a key is an or.
+        # Ex. {'alignment': [ ['lawful',' '] , ['neutral',' '] ]} requires either lawful or neutral, but nothing
+        # chaotic in alignment.
         self.reqs = {'level': -1}
         # The levels in the class, this is more for PC's than the class itself.
         self.level = 0
@@ -24,7 +26,8 @@ class CLS(object):
         # This is the skill list for the class.
         self.skills = [' ']
         # The ranks per level that the class gets, again only come in a few level 2,4,6, and 8 all get
-        # the intelligence mod to them. It is retroactive.
+        # the intelligence mod to them. It is retroactive so the total number of ranks should be equal to
+        # (ranks+int mod)*level
         self.ranks = 2
         # The proficiencies the class gets. Foremost should be the groups of weapons, and at the end should be
         # specific weapons and other such stuff. This can include some Exotic weapons, but will never contain more
@@ -62,7 +65,7 @@ class CLS(object):
         return self.Skills
 
     def IsClassSkills(self, skill):
-        if skill in self.skills
+        if skill in self.skills:
             return True
 
         return False
