@@ -54,7 +54,7 @@ size VARCHAR(30),
 type VARCHAR(30),
 sub_type VARCHAR(30),
 speed INTEGER,
-traits TEXT,  -- should this reference a list?
+traits TEXT,  -- should this reference a list? Yes, as there are multiple traits
 notes TEXT,
 FOREIGN KEY (size) REFERENCES Racial_Sizes(rs_name),
 FOREIGN KEY (type) REFERENCES Racial_Types(rt_name),
@@ -75,9 +75,9 @@ cursor.execute('''
 CREATE TABLE IF NOT EXISTS Classes(
 cl_id INTEGER PRIMARY KEY,
 cl_name VARCHAR(30),
-prereqs VARCHAR(30),   -- expand to something that the sys can understnad?
-hit_dice INTEGER,      -- reference a list?
-basic_atk_bonus REAL,  -- make INT? reference list?
+prereqs VARCHAR(30),   -- expand to something that the sys can understnad? Maybe, currently it looks for flags and if they meet the numerical requirement it asks for.
+hit_dice INTEGER,      -- reference a list? No, a single number that defines the size of die rolled.
+basic_atk_bonus REAL,  -- make INT? reference list? This need not be a list, it's 1 of 3 possibilities, and they are flat growth curves.
 save_reflex BOOLEAN,   -- FALSE = bad, TRUE=good
 save_fortitude BOOLEAN,
 save_will BOOLEAN,
@@ -107,6 +107,7 @@ FOREIGN KEY (sk_name) REFERENCES Skills(sk_name)
 );''')
 
 #Features.
+# We sholud probably go over this together.
 cursor.execute('''
 CREATE TABLE IF NOT EXISTS Features(
 fet_id INTEGER PRIMARY KEY,
@@ -118,9 +119,11 @@ min_level INT, -- minimum level needed to acquire
 -- so not sure if it should be in db
 -- same for Bonus Feats, Feat Limits, BonusTo, BonusOf, BonusPer,
 -- BonusFrom, BonusType and the various Points attributes
+--
+-- Slot is for archetyping, an archetype changes out some class features for other class features, but you may apply as many archetypes as you wish. BUT, they cannot overlap, hence the slot.
 active BOOLEAN, -- true if it needs to be activated, false otherwise
 -- do any features have both an active and a passive component?
---   if so, how should we handle them?
+--   if so, how should we handle them? I don't know exactly, but I'd say better safe then sorry for now.
 description TEXT -- book description
 );''')
 
@@ -136,6 +139,7 @@ FOREIGN KEY (fetbc_name) REFERENCES Features(fet_name)
 
 #Archetypes. Can more than one base class have the same archetype?
 #  Assuming no at the moment.
+# No, Archetypes cannot have more than one class at a time. Names may be shared, but that is what the class part is for, to keep any similar naming problems that coldu arries a non-issue.
 cursor.execute('''
 CREATE TABLE IF NOT EXISTS Archetypes(
 ar_id INTEGER PRIMARY KEY,
@@ -146,6 +150,7 @@ FOREIGN KEY (class) REFERENCES CLASSES(cl_name)
 );''')
 
 #Feats
+# This needs quite a bit of correction, but this feature, not feat, from how it's been written.
 cursor.execute('''
 CREATE TABLE IF NOT EXISTS Feats(
 fe_id INTEGER PRIMARY KEY,
@@ -153,20 +158,24 @@ fe_name VARCHAR(30),
 class VARCHAR(30),
 arche VARCHAR(30),
 min_level INTEGER DEFAULT 0,
--- should slot be included? Not sure what it is
-bonus_feat VARCHAR(30),  -- should this be a foreign key refernces feats?
-                         -- can there be more than one bonus feat?
-                         -- can a feat be a bonus feat of more than one feat?
+-- should slot be included? Yes, it is pertinent for Archetyping.
+bonus_feat VARCHAR(30),  -- should this be a foreign key refernces feats? -- ... yes. Very few do, and we can discuss more later, but the short answer is yes.
+                         -- can there be more than one bonus feat? Yes.
+                         -- can a feat be a bonus feat of more than one feat? Potentially, but probably not.
 -- not sure exactly what feat limits is.
---   does having a feat limit what other feats you can take?
+--   does having a feat limit what other feats you can take? 
 --   or is this something else?
+--
+-- Feat limits are what is allowed to be taken by the feature. Most features give a preexisting list of feats, or type of feat that is allowed.
 active BOOLEAN,  -- True=activate to use, False= always active
 -- not sure what to do with Bonus stuff
+-- I'm not quite sure either, but again, it's part of the logic to apply numerical bonuses.
 points_static INTEGER,
 points_dynam INTEGER,
 points_stat VARCHAR(30),
 points_mod INTEGER,
 -- I assume this is an int, change to whatever is appropriate if I'm wrong
+-- This should be a real as it could 1/2 or something similar.
 descrption TEXT,
 FOREIGN KEY (class) REFERENCES CLASSES(cl_name),
 FOREIGN KEY (arche) REFERENCES Archetypes(ar_name),
@@ -179,10 +188,12 @@ CREATE TABLE IF NOT EXISTS Traits(
 tr_id INTEGER PRIMARY KEY,
 tr_name VARCHAR(30),
 -- still not sure what's up with slots
-feat VARCHAR(30),  --associated feat. can there be more than one?
+-- Slots in this case, are for traits that can be taken instead of others, but they cannot overlap with each other.
+feat VARCHAR(30),  --associated feat. can there be more than one? I'll say no, as I haven't seen a trait give more than 1 feat.
 daily_uses INTEGER DEFAULT -1,
 FOREIGN KEY (feat) REFERENCES Feats(fe_name)
 -- still not sure about bonus stuff either
+-- Reference would be better, but a simple string could get the job done if we do it right.
 );''')
 
 #Enchantments.
@@ -192,9 +203,9 @@ ec_id INTEGER PRIMARY KEY,
 ec_name VARCHAR(30),
 base_price REAL,  -- price of enchanting
 price_mod REAL,   -- price adjustment to enchanted item
-aura VARCHAR(30), -- reference list?
+aura VARCHAR(30), -- reference list? Technically, but things can be added and there's no real need to make it so strict.
 caster_level INTEGER DEFAULT 0,
-available_for VARCHAR(30), -- reference items, equipment ,armour,weapons,null?
+available_for VARCHAR(30), -- reference items, equipment ,armour,weapons,null? No direct reference to items, only the type as some enchantments only work on shields, others only on weapons.
 description TEXT, -- book description
 summary TEXT      -- boiled down description (+2 fire damage or whatever)
 );''')
@@ -222,13 +233,14 @@ eq_id INTEGER PRIMARY KEY,
 eq_name VARCHAR(30),
 aura VARCHAR(20),  -- leave empty if not applicable
 caster Level INT,  -- 0 if not applicable
-slot VARCHAR(20),  -- reference another table or list?
+slot VARCHAR(20),  -- reference another table or list?  List should be fine as only 'unslotted' equipment can have multiples equipped.
 -- Slot refers to equipment slot. Back, head, neck, right index finger, etc
-price VARCHAR(20), -- Real or Int? Coin types?
+price VARCHAR(20), -- Real or Int? Coin types? It is in GP, so Real as SP or CP may be used.
 weight REAL,
 craft_requirements TEXT,
 enchantments TEXT
 -- reference another table? allow multi-enchant? leave out altogether?
+-- Should connect to multiple enchantments, reference would be better as enchantments hav an effect.
 );''')
 
 #Armour.
@@ -253,12 +265,12 @@ cursor.execute('''
 CREATE TABLE IF NOT EXISTS Weapons(
 we_id VARCHAR(30),
 we_name VARCHAR(30),
-category VARCHAR(30),   -- reference a list?
-handedness VARCHAR(30), -- reference a list?
-base_price REAL,        -- real or 3+ ints?
+category VARCHAR(30),   -- reference a list? Yes, list.
+handedness VARCHAR(30), -- reference a list? Yes, list.
+base_price REAL,        -- real or 3+ ints?  Real, its easier that way as GP is default standard (and lesser value is simply .1 and .01)
 damage_dt INTEGER,      -- die type
 damage_dn INTEGER,      -- number of dice
-size VARCHAR(20),       -- reference a list?
+size VARCHAR(20),       -- reference a list? Yes.
 crit_rng INTEGER,       -- critical range
 crit_m INTEGER,         -- critical multiplier
 range INTEGER DEFAULT -1,  -- -1 if not meant to be thrown
