@@ -106,7 +106,7 @@ class Weapon(object):
         # number of die and the size of the die d1 is a should be ignored and just put at 1 and all weapons, even
         # with penalty a weapon will always deal at least 1 point of damage. If the size changes from the weapon it
         # should automatically change the damage to the appropriate damage.
-        self.Damage = [ 1, 1]
+        self.Damage = [1,1]
         # The size of the weapon, Again, most default to medium, but if altered it will effect the standard damage
         # of the weapon.
         self.Size = ' '
@@ -114,12 +114,12 @@ class Weapon(object):
         # this is a 20 with a x2 multiplier as this is the most common and standard.
         self.Critical = [20,2]
         # The range of the weapon if it has one. If the range is -1 then it has no range and is not meant to be
-        # thrown, Feats can change this, but that's something else entirely.
+        # thrown, Feats can change this, but that's something else entirely. Number of Feet
         self.Range = 10
-        # The weight of the weapon
+        # The weight of the weapon in pounds
         self.Weight = 4
         # The damage type of the weapon, some weapons can have multiple types (for example a proper bite attack is
-        # considered to be B,P, and S. The Types are Bludgeoning, Piercing, and Slashing.
+        # considered to be B,P, and S. The Types are 'B'ludgeoning, 'P'iercing, and 'S'lashing.
         self.Type = [' '] # the type of damage dealt
         # This is any special features the weapon has, these are both dependent on the item itself and other special
         # modifiers such as material. For the most part it should be static.
@@ -130,6 +130,12 @@ class Weapon(object):
         self.Text = ' '
         # The enchantments of the item
         self.Enchantments = None
+
+    def Attack(self):
+        ret = 0
+        # Iterate and add enchantments
+        return ret
+        
 
 # Enchantments are going to need a bit more of an explanation than the other items. 1st, for armor and weapons, they
 # Calculate their value differently and add to it their items a bit differently than other magic items. Standard

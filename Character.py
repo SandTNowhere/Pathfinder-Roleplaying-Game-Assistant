@@ -106,7 +106,7 @@ class Character(object):
                 # This sets the basic speed of the character
                 self.stats['speed'] = 30
                 # This sets the size of the charater, it will also change with the race potentially.
-                self.stats['size'] = 'med'
+                self.stats['size'] = 'medium'
                 # Languages are determined by the race, and most languages are learnable, but there are a
                 # few secret languages that have requirements to learn.
                 self.Language = []
@@ -189,23 +189,53 @@ class Character(object):
                 return ret
 
         # The attack roll to hit, this doesn't include damage this is only checking for the hit.
-        def Attack(self, Weapon = ' '):
+        def Attack(self, Weapon = None):
                 ret = self.BAB()
-                # Get info from weapon
-                # check weapon for bonuses and add them
-                # check weapon for type and decide str or dex as the to hit stat (melee is strength and range is dex by
-                # default don't check for weapon finesse, weapon finesse's bonus is calculated to remove str while
-                # adding dex.
-                ret += self.AbilityCheck('str')
-                # add feat bonuses, most of these are dependent on weapons.
+                # Check if With Weapon
+                if Weapon != None:
+                        # Get info from weapon including it's bonuses
+                        temp = Weapon.Attack()
+                        # check weapon for type and decide str or dex as the to hit stat (melee is strength and range is dex by
+                        if Weapon.Handedness == 'ranged':
+                                temp = temp + self.AbilityCheck('dex')
+                        else:
+                                # default don't check for weapon finesse, weapon finesse's bonus is calculated to remove str while
+                                # adding dex. Weapons that add dex by default are not finessible
+                                temp = temp + self.AbilityCheck('str')
+                        
+                        ret = ret + temp
+                # add feat bonuses, most of these are dependent on weapons but some aren't
                 # Put any penalties onto it
                 return ret
 
         # The damage of the attack, this is based off of the weapon and damage, and has nothing to do with actually
-        # hitting. This is pure damage. There should be a call to roll, or a return of what should be rolled by the
+        # hitting. This is pure damage. It should return of what should be rolled by the
         # player as a string (and/or numbers parsed for use in a string.
-        def Damage(self):
-                pass
+        def Damage(self, Weapon = None):
+                # Get base damage
+                if Weapon != None: # Weapon
+                        ret = "%dd%d"%((Weapon.Damage[0]), Weapon.Damage[1])
+                else: # Unarmed
+                        # Based on creature size and bonuses
+                        # Check for bonuses
+                        if self.stats['size'] == 'medium':
+                                ret  = "1d3"
+                        if self.stats['size'] == 'small':
+                                ret = "1d2"
+                # Add damage bonuses Melee, ranged is dependent on other stuff and doesn't add bonuses naturally
+                # one handed only adds STR, two-handed Adds 1.5 STR (rounded down)
+                if Weapon == None:
+                        ret = ret + "+%d"%(self.AbilityCheck('str'))
+                elif Weapon.Handedness == 'ranged':
+                        ret = ret
+                elif Weapon.Handedness == 'two-handed':
+                        ret = ret + "+%d"%(math.floor(1.5*self.AbilityCheck('str')))
+                else: # light and one-handed
+                        ret = ret + "+%d"%(self.AbilityCheck('str'))
+
+                return ret
+                                
+                        
         
         def Initiative(self):
                 ret = self.AbilityCheck('dex')
@@ -301,7 +331,7 @@ class Character(object):
         def MaxLoad(self,STR):
                 if STR in range(0, 11):
                         return 10 * STR
-                elif self.stats > 14:
+                elif self.stats['str'] > 14:
                         return 2 * self.MaxLoad(STR - 5)
                 else:
                         return [115, 130, 150, 175][STR - 11]
@@ -329,7 +359,12 @@ class Character(object):
                 print ("Classes:")
                 for i in self.cls:
                         print ("%s  %d"%(i.name,i.level))
-                print ("Attack: %d"%(self.Attack()))
+                print ("Weapon Attacks:")
+                print ("\t Unarmed Strike +%d: %s"%(self.Attack(), self.Damage()))
+                if self.Weapons:
+                        for i in self.Weapons:
+                                print ("\t %s +%d: %s"%(i.Name, self.Attack(i), self.Damage(i)))
+                        
 
 
         # DING is a special context to allow for easy alteration and addition of new features from level to level.
@@ -375,7 +410,6 @@ Upon reaching 4th level, and every four levels thereafter (8th, 12th, and so on)
 ClassEx.features = [FBF]
 
 REX = Race.Race()
-
 REX.Name = 'Human'
 REX.RaceType = 'Humanoid'
 REX.SubType = 'Human'
@@ -383,10 +417,30 @@ REX.StartingLanguages = ['common']
 REX.Traits = [Feat.Trait(), Feat.Trait(), Feat.Trait()]
 REX.Notes = 'Human'
 
+#test Weapon standard case, nothing special
+SWEP = Item.Weapon()
+SWEP.Title = ' '
+SWEP.Name = 'Club'
+SWEP.Catagory = 'Simple'
+SWEP.Handedness = 'One-Handed'
+SWEP.Cost = 0
+SWEP.Damage[0] = 1
+SWEP.Damage[1] = 6
+SWEP.Size = 'Medium'
+SWEP.Critical = [20,2]
+SWEP.Range = 10
+SWEP.Weight = 3
+SWEP.Type = ['B']
+SWEP.Special = []
+SWEP.Source = 'PRG:CRB'
+SWEP.Text = 'This weapon is usually just a shaped piece of wood, sometimes with a few nails or studs embedded in it.'
+SWEP.Enchantments = None
+
 Test = Character()
 Test.cls[0] = ClassEx
 Test.stats['str'] = 15
 Test.stats['int'] = 14
+Test.Weapons = [SWEP]
 
 # it throws errors if you ask for something that doesn't exist.
 Test.printCharacter()
