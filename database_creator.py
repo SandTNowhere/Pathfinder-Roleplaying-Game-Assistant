@@ -84,7 +84,7 @@ cursor.execute('''
 CREATE TABLE IF NOT EXISTS Classes(
 cl_id INTEGER PRIMARY KEY,
 cl_name VARCHAR(30),
-prereqs VARCHAR(30),   -- expand to something that the sys can understnad? Maybe, currently it looks for flags and if they meet the numerical requirement it asks for.
+prereqs VARCHAR(30),   -- expand to something that the sys can understnad? Maybe, currently it looks for flags and if they meet the numerical requirement it asks for. 5 should be good.
 hit_dice INTEGER,      
 base_atk_bonus REAL,  
 save_reflex BOOLEAN,   -- FALSE = bad, TRUE=good
@@ -130,6 +130,8 @@ min_level INT, -- minimum level needed to acquire
 -- same for Bonus Feats, Feat Limits, BonusTo, BonusOf, BonusPer,
 -- BonusFrom, BonusType and the various Points attributes
 --
+-- Slot:VARCHAR, Bonus Feats: Varhcar + Varchar referencing another table (id, name, description, type, 5 ints)
+-- Feat Limits: 5 referenced varchars, 
 -- Slot is for archetyping, an archetype changes out some class features for other class features, but you may apply as many archetypes as you wish. BUT, they cannot overlap, hence the slot.
 active INT, -- 0 = Passive, 1 = Active, anything else means it has both an active and a passive component
 description TEXT -- book description
@@ -166,7 +168,7 @@ fe_name VARCHAR(30),
 class VARCHAR(30),
 arche VARCHAR(30),
 min_level INTEGER DEFAULT 0,
--- should slot be included? Yes, it is pertinent for Archetyping.
+-- should slot be included? Yes, it is pertinent for Archetyping. Varchar referencing Classes
 bonus_feat_1 VARCHAR(30),
 bonus_feat_2 VARCHAR(30),
 bonus_feat_3 VARCHAR(30),
@@ -176,10 +178,10 @@ bonus_feat_n TEXT,
 --   or is this something else?
 --
 -- Feat limits are what is allowed to be taken by the feature. Most features give a preexisting list of feats, or type of feat that is allowed.
--- So should Feat limit be a list of feats that are referenced or just a Text field?
+-- So should Feat limit be a list of feats that are referenced or just a Text field? 5 varchars referencing feats.
 active BOOLEAN,  -- True=activate to use, False= always active
 -- not sure what to do with Bonus stuff
--- I'm not quite sure either, but again, it's part of the logic to apply numerical bonuses.
+-- I'm not quite sure either, but again, it's part of the logic to apply numerical bonuses. See above solution
 points_static INTEGER,
 points_dynam INTEGER,
 points_stat VARCHAR(30),
@@ -198,13 +200,13 @@ cursor.execute('''
 CREATE TABLE IF NOT EXISTS Traits(
 tr_id INTEGER PRIMARY KEY,
 tr_name VARCHAR(30),
--- still not sure what's up with slots
+-- still not sure what's up with slots. Varchar referencing traits.
 -- Slots in this case, are for traits that can be taken instead of others, but they cannot overlap with each other.
 feat VARCHAR(30),  --associated feat.
 daily_uses INTEGER DEFAULT -1,
 FOREIGN KEY (feat) REFERENCES Feats(fe_name)
 -- still not sure about bonus stuff either
--- Reference would be better, but a simple string could get the job done if we do it right.
+-- Reference would be better, but a simple string could get the job done if we do it right. See above solution
 );''')
 
 #Item types (weapon, shield, armor, sword, etc).
@@ -239,7 +241,6 @@ it_type VARCHAR(30),
 price REAL,
 weight REAL,
 descritption TEXT,
-enchantment VARCHAR(30), -- reference another table? allow multi-enchant?
 charges INTEGER,
 rechargeable BOOLEAN,
 source VARCHAR(30), -- reference another table?
@@ -300,7 +301,7 @@ crit_rng INTEGER,       -- critical range
 crit_m INTEGER,         -- critical multiplier
 range INTEGER DEFAULT -1,  -- -1 if not meant to be thrown
 weight REAL,
-dam_type VARCHAR(30),   -- reference list?
+dam_type VARCHAR(30),   -- reference list? slash, pierce, bludgeon (spb)
 description TEXT,        -- from book
 FOREIGN KEY (category) REFERENCES Item_types (it_name)  -- relying on those entering the data to not list a sabre as a type of armor
 CHECK(handedness = "one" OR handedness = "two" OR handedness = "one or two" OR handedness = "special"), -- this about cover it?
@@ -313,7 +314,7 @@ cursor.execute('''
 CREATE TABLE IF NOT EXISTS Granted_Powers(
 gp_id INTEGER PRIMARY KEY,
 gp_name VARCHAR(20),
-effect TEXT -- may expand this later to be more similar to spells
+effect TEXT 
 );''')
 
 # Wizardry Schools, not Hogwarts
@@ -379,7 +380,7 @@ save_descrip TEXT, -- describes effect of succesful save
 resist INT, --bool. Used for spells that are affected by spell resistance
 sp_descrip TEXT, -- spell description
 
-bonus_to VARCHAR(20), -- this section is still a work in progress
+bonus_to VARCHAR(20), -- this section is still a work in progress. see above solutions. all bonus list references should go to same table.
 bonus_of INT,
 bonus_per_CL INT,
 bonus_type VARCHAR(20),
