@@ -136,7 +136,7 @@ att_1 INTEGER,  -- list numbers in order of appearnce in description text
 att_2 INTEGER,
 att_3 INTEGER,
 att_4 INTEGER,
-att_5 INTEGER,
+att_5 INTEGER
 );''')
 
 #Features.
@@ -233,11 +233,10 @@ tr_name VARCHAR(30),
 slot VARCHAR(30),
 feat VARCHAR(30),  --associated feat.
 daily_uses INTEGER DEFAULT -1,
-
-FOREIGN KEY (feat) REFERENCES Feats(fe_name),
-FOREIGN KEY (slot) REFERENCES Traits(tr_name),
 bonus_feat TEXT,  -- use for feats with effects the machine won't recognize
-bonus_feat_ref VARCHAR (30)   -- use for feats that the machine can understand (ex:str +10 when HP < HP/2)
+bonus_feat_ref VARCHAR (30),   -- use for feats that the machine can understand (ex:str +10 when HP < HP/2)
+FOREIGN KEY (feat) REFERENCES Feats(fe_name),
+FOREIGN KEY (slot) REFERENCES Traits(tr_name)
 );''')
 
 #Item types (weapon, shield, armor, sword, etc).
