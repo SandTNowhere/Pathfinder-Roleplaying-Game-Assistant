@@ -46,8 +46,12 @@ def populate_table(table_name):
             try:
                 db.execute(command,row)
             except:
-                print(str(j) + " could not be added to " + table_name + ".")
-                last-=1
+                try:
+                    row=row[:len(row)-1] #in case of trailing comma
+                    db.execute(command,row)
+                except:
+                    print(str(row) + " could not be added to " + table_name + ".")
+                    last-=1
     except:
         print(table_name + ' is empty')
     # save changes and close
