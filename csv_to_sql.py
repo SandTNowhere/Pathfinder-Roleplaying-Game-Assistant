@@ -10,6 +10,7 @@
 import csv
 import sqlite3
 from config import database
+import traceback
 
 def populate_table(table_name):
 
@@ -50,6 +51,7 @@ def populate_table(table_name):
                     row=row[:len(row)-1] #in case of trailing comma
                     db.execute(command,row)
                 except:
+                    traceback.print_exc()
                     print(str(row) + " could not be added to " + table_name + ".")
                     last-=1
     except:
