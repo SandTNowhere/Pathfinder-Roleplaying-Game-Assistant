@@ -39,7 +39,7 @@ rst_id INTEGER PRIMARY KEY,
 rst_name VARCHAR(30)
 );''')
 
-#Traits
+#Racial Traits
 cursor.execute('''
 CREATE TABLE IF NOT EXISTS Racial_Traits(
 rtr_id INTEGER PRIMARY KEY,
@@ -84,7 +84,16 @@ cursor.execute('''
 CREATE TABLE IF NOT EXISTS Classes(
 cl_id INTEGER PRIMARY KEY,
 cl_name VARCHAR(30),
-prereqs VARCHAR(30),   -- expand to something that the sys can understnad? Maybe, currently it looks for flags and if they meet the numerical requirement it asks for. 5 should be good.
+prereq_1 VARCHAR(30),  -- name of requirement (strength, elf, alignment, whatever)
+prereq1_1_value VARCHAR(30), -- value required. May need to convert to int to be useable.
+prereq_2 VARCHAR(30),
+prereq1_2_value VARCHAR(30),
+prereq_3 VARCHAR(30),
+prereq1_3_value VARCHAR(30),
+prereq_4 VARCHAR(30),
+prereq1_4_value VARCHAR(30),
+prereq_5 VARCHAR(30),
+prereq1_5_value VARCHAR(30),
 hit_dice INTEGER,      
 base_atk_bonus REAL,  
 save_reflex BOOLEAN,   -- FALSE = bad, TRUE=good
@@ -116,6 +125,20 @@ FOREIGN KEY (class) REFERENCES Classes(cl_name),
 FOREIGN KEY (sk_name) REFERENCES Skills(sk_name)
 );''')
 
+#Bonus
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS Bonus(
+bo_id INTEGER PRIMARY KEY,
+bo_name VARCHAR(30),
+description TEXT,
+type VARCHAR(30),
+att_1 INTEGER,  -- list numbers in order of appearnce in description text
+att_2 INTEGER,
+att_3 INTEGER,
+att_4 INTEGER,
+att_5 INTEGER,
+);''')
+
 #Features.
 # We sholud probably go over this together.
 cursor.execute('''
@@ -125,16 +148,12 @@ fet_name VARCHAR(30),
 min_level INT, -- minimum level needed to acquire
                -- may need to be moved to Features_by_Class
                -- if this is variable by class
--- don't understand what slot is supposed to be doing,
--- so not sure if it should be in db
--- same for Bonus Feats, Feat Limits, BonusTo, BonusOf, BonusPer,
--- BonusFrom, BonusType and the various Points attributes
---
--- Slot:VARCHAR, Bonus Feats: Varhcar + Varchar referencing another table (id, name, description, type, 5 ints)
--- Feat Limits: 5 referenced varchars, 
--- Slot is for archetyping, an archetype changes out some class features for other class features, but you may apply as many archetypes as you wish. BUT, they cannot overlap, hence the slot.
+slot VARACHAR(30),
+bonus_feat TEXT,  -- use for feats with effects the machine won't recognize
+bonus_feat_ref VARCHAR (30),   -- use for feats that the machine can understand (ex:str +10 when HP < HP/2)
 active INT, -- 0 = Passive, 1 = Active, anything else means it has both an active and a passive component
-description TEXT -- book description
+description TEXT, -- book description
+FOREIGN KEY (bonus_feat_ref) REFERENCES Bonus (bo_name)
 );''')
 
 # feature/class relations
@@ -147,9 +166,8 @@ FOREIGN KEY (class) REFERENCES Classes(cl_name),
 FOREIGN KEY (fetbc_name) REFERENCES Features(fet_name)
 );''')
 
-#Archetypes. Can more than one base class have the same archetype?
-#  Assuming no at the moment.
-# No, Archetypes cannot have more than one class at a time. Names may be shared, but that is what the class part is for, to keep any similar naming problems that coldu arries a non-issue.
+#Archetypes. Multiple classes may have archetypes with the same name.
+#These are not the same Archetypes and should each have their own entry.
 cursor.execute('''
 CREATE TABLE IF NOT EXISTS Archetypes(
 ar_id INTEGER PRIMARY KEY,
@@ -161,6 +179,7 @@ FOREIGN KEY (class) REFERENCES CLASSES(cl_name)
 
 #Feats
 # This needs quite a bit of correction, but this feature, not feat, from how it's been written.
+# What needs to be done? Should it be relabled as features and rework features into feats instead?
 cursor.execute('''
 CREATE TABLE IF NOT EXISTS Feats(
 fe_id INTEGER PRIMARY KEY,
@@ -168,20 +187,28 @@ fe_name VARCHAR(30),
 class VARCHAR(30),
 arche VARCHAR(30),
 min_level INTEGER DEFAULT 0,
--- should slot be included? Yes, it is pertinent for Archetyping. Varchar referencing Classes
-bonus_feat_1 VARCHAR(30),
-bonus_feat_2 VARCHAR(30),
-bonus_feat_3 VARCHAR(30),
-bonus_feat_n TEXT,
--- not sure exactly what feat limits is.
---   does having a feat limit what other feats you can take? 
---   or is this something else?
---
--- Feat limits are what is allowed to be taken by the feature. Most features give a preexisting list of feats, or type of feat that is allowed.
--- So should Feat limit be a list of feats that are referenced or just a Text field? 5 varchars referencing feats.
+slot VARCHAR(30),
+
+bonus_feat_1 TEXT,  -- use for feats with effects the machine won't recognize
+bonus_feat_2 TEXT,
+bonus_feat_3 TEXT,
+bonus_feat_4 TEXT,
+bonus_feat_5 TEXT,
+
+bonus_feat_ref_1 VARCHAR (30),   -- use for feats that the machine can understand (ex:str +10 when HP < HP/2)
+bonus_feat_ref_2 VARCHAR (30),
+bonus_feat_ref_3 VARCHAR (30),
+bonus_feat_ref_4 VARCHAR (30),
+bonus_feat_ref_5 VARCHAR (30),
+
+feat_limit_1 VARCHAR(30),
+feat_limit_2 VARCHAR(30),
+feat_limit_3 VARCHAR(30),
+feat_limit_4 VARCHAR(30),
+feat_limit_5 VARCHAR(30),
+
 active BOOLEAN,  -- True=activate to use, False= always active
--- not sure what to do with Bonus stuff
--- I'm not quite sure either, but again, it's part of the logic to apply numerical bonuses. See above solution
+
 points_static INTEGER,
 points_dynam INTEGER,
 points_stat VARCHAR(30),
@@ -190,9 +217,12 @@ descrption TEXT,
 FOREIGN KEY (class) REFERENCES CLASSES(cl_name),
 FOREIGN KEY (arche) REFERENCES Archetypes(ar_name),
 FOREIGN KEY (points_stat) REFERENCES Stats(st_name),
-FOREIGN KEY (bonus_feat_1) REFERENCES Feats(fe_name),
-FOREIGN KEY (bonus_feat_2) REFERENCES Feats(fe_name),
-FOREIGN KEY (bonus_feat_3) REFERENCES Feats(fe_name)
+FOREIGN KEY (bonus_feat_ref_1) REFERENCES Bonus(bo_name),
+FOREIGN KEY (bonus_feat_ref_2) REFERENCES Bonus(bo_name),
+FOREIGN KEY (bonus_feat_ref_3) REFERENCES Bonus(bo_name),
+FOREIGN KEY (bonus_feat_ref_4) REFERENCES Bonus(bo_name),
+FOREIGN KEY (bonus_feat_ref_5) REFERENCES Bonus(bo_name),
+FOREIGN KEY (slot) REFERENCES Classes (cl_name)
 );''')
 
 #Traits
@@ -200,13 +230,14 @@ cursor.execute('''
 CREATE TABLE IF NOT EXISTS Traits(
 tr_id INTEGER PRIMARY KEY,
 tr_name VARCHAR(30),
--- still not sure what's up with slots. Varchar referencing traits.
--- Slots in this case, are for traits that can be taken instead of others, but they cannot overlap with each other.
+slot VARCHAR(30),
 feat VARCHAR(30),  --associated feat.
 daily_uses INTEGER DEFAULT -1,
-FOREIGN KEY (feat) REFERENCES Feats(fe_name)
--- still not sure about bonus stuff either
--- Reference would be better, but a simple string could get the job done if we do it right. See above solution
+
+FOREIGN KEY (feat) REFERENCES Feats(fe_name),
+FOREIGN KEY (slot) REFERENCES Traits(tr_name),
+bonus_feat TEXT,  -- use for feats with effects the machine won't recognize
+bonus_feat_ref VARCHAR (30)   -- use for feats that the machine can understand (ex:str +10 when HP < HP/2)
 );''')
 
 #Item types (weapon, shield, armor, sword, etc).
@@ -256,7 +287,7 @@ eq_name VARCHAR(30),
 aura VARCHAR(20),  -- leave empty if not applicable
 caster Level INT,  -- 0 if not applicable
 slot VARCHAR(20),  -- Slot refers to equipment slot. Back, head, neck, right index finger, etc
-                   -- unslotted if multiples can be equipped.
+                   -- "unslotted" if multiples can be equipped.
 price REAL, 
 weight REAL,
 craft_requirements TEXT,
@@ -301,12 +332,12 @@ crit_rng INTEGER,       -- critical range
 crit_m INTEGER,         -- critical multiplier
 range INTEGER DEFAULT -1,  -- -1 if not meant to be thrown
 weight REAL,
-dam_type VARCHAR(30),   -- reference list? slash, pierce, bludgeon (spb)
+dam_type VARCHAR(1),   -- slash, pierce, bludgeon (s,p,b)
 description TEXT,        -- from book
 FOREIGN KEY (category) REFERENCES Item_types (it_name)  -- relying on those entering the data to not list a sabre as a type of armor
 CHECK(handedness = "light" OR handedness = "one" OR handedness = "two" OR handedness = "one or two" OR handedness = "special"), -- this about cover it?
-CHECK(size="fine" OR size ="diminutive" OR size="tiny" OR size ="medium" OR size="large" OR size="huge" OR size="Gargantuan" OR size="colossal")
-
+CHECK(size="fine" OR size ="diminutive" OR size="tiny" OR size ="medium" OR size="large" OR size="huge" OR size="Gargantuan" OR size="colossal"),
+CHECK(dam_type="s" OR dam_type="p" OR dam_type="b")
 );''')
 
 # Powers granted by priest domains
@@ -380,7 +411,7 @@ save_descrip TEXT, -- describes effect of succesful save
 resist INT, --bool. Used for spells that are affected by spell resistance
 sp_descrip TEXT, -- spell description
 
-bonus_to VARCHAR(20), -- this section is still a work in progress. see above solutions. all bonus list references should go to same table.
+bonus_to VARCHAR(20),
 bonus_of INT,
 bonus_per_CL INT,
 bonus_type VARCHAR(20),
