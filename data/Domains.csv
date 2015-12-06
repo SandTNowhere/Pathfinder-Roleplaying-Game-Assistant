@@ -1,8 +1,8 @@
 Domain,Deities,Power 1,Power 2,Power 3, Power 4
-Air Domain,"Ithreia, Nise, Veiloaria",Lightning Arc (Sp),Electricity Resistance (Ex),
-Cloud,"Veiloaria",Thundercloud(Su),
-Wind,"Ithreia, Nise",Wind Blast(Su),
-Animal Domain,"Chiuta, Eshsalqua, Ithreia, Saren",Speak with Animals (Sp),Animal Companion (Ex),
+Air Domain,"Ithreia, Nise, Veiloaria",Lightning Arc (Sp),Electricity Resistance (Ex), ,
+Cloud,"Veiloaria",Thundercloud(Su), , ,
+Wind,"Ithreia, Nise",Wind Blast(Su), , ,
+Animal Domain,"Chiuta, Eshsalqua, Ithreia, Saren",Speak with Animals (Sp),Animal Companion (Ex), , ,
 Feather,"Chiuta, Eshsalqua, Ithreia",Eyes of the Hawk (Ex),
 Fur,"Saren",Predator’s Grace (Su),
 Artifice Domain,"Kamus, Linium, Toma Thule",Artificer's Touch (Sp),Dancing Weapons (Su),
