@@ -12,11 +12,17 @@ from config import database
 
 def search_db(att, table, condition):
     connection = sqlite3.connect(database)
+    connection.text_factory=str
     cursor = connection.cursor()
-    # ?'s get replaced by the values after the ' in order
+
     command = 'SELECT ' + att + ' FROM ' + table + ' ' + condition
-    cursor.execute(command)
-    response = cursor.fetchall()
+    try:
+        cursor.execute(command)
+        response = cursor.fetchall()
+    except:
+        print("couldn't execute command: " + command)
+        connection.close()
+        return
 
     connection.close()
     return response
