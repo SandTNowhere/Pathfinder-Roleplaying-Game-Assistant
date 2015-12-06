@@ -304,7 +304,7 @@ weight REAL,
 dam_type VARCHAR(30),   -- reference list? slash, pierce, bludgeon (spb)
 description TEXT,        -- from book
 FOREIGN KEY (category) REFERENCES Item_types (it_name)  -- relying on those entering the data to not list a sabre as a type of armor
-CHECK(handedness = "one" OR handedness = "two" OR handedness = "one or two" OR handedness = "special"), -- this about cover it?
+CHECK(handedness = "light" OR handedness = "one" OR handedness = "two" OR handedness = "one or two" OR handedness = "special"), -- this about cover it?
 CHECK(size="fine" OR size ="diminutive" OR size="tiny" OR size ="medium" OR size="large" OR size="huge" OR size="Gargantuan" OR size="colossal")
 
 );''')
