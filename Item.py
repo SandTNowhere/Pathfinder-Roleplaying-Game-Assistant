@@ -86,7 +86,11 @@ class Armor(object):
         self.Mods = 0 #non-magical mods that are generally cheap.
         # The enchantment the item holds and the collection of total bonuses
         self.Enchantments = None
-	
+
+    def AC(self):
+        ret = self.ACBonus
+        # enchantments
+        return ret
 	
 	
 class Weapon(object):

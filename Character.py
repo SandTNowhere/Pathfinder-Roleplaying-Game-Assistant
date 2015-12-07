@@ -14,7 +14,7 @@ import Spells
 # These are dictionaries.
 STDSkills = {'acrobatics': 0, 'appraise': 0, 'bluff': 0, 'climb': 0, 'diplomacy': 0, 'disable device': 0,
              'disguise': 0, 'escape artist': 0, 'fly': 0, 'handle animal': 0, 'heal': 0, 'intimidate': 0,
-             'linguistics': 0, 'perception': 0, 'ride': 0, 'sense motive': 0, 'slight of hand': 0,
+             'linguistics': 0, 'perception': 0, 'ride': 0, 'sense motive': 0, 'sleight of hand': 0,
              'spellcraft': 0, 'stealth': 0, 'survival': 0, 'swim': 0, 'use magic device': 0,
              'knowledge(arcana)': 0, 'knowledge(dungeoneering)': 0, 'knowledge(engineering)': 0,
              'knowledge(geography)': 0, 'knowledge(history)': 0, 'knowledge(local)': 0, 'knowledge(nature)': 0,
@@ -22,7 +22,7 @@ STDSkills = {'acrobatics': 0, 'appraise': 0, 'bluff': 0, 'climb': 0, 'diplomacy'
 STDBase = {'acrobatics': 'dex', 'appraise': 'int', 'bluff': 'cha', 'climb': 'str', 'diplomacy':
            'cha', 'disable device': 'dex', 'disguise': 'cha', 'escape artist': 'dex', 'fly': 'dex',
            'handle animal': 'cha', 'heal': 'wis', 'intimidate': 'cha', 'linguistics': 'int',
-           'perception': 'wis', 'ride': 'dex', 'sense motive': 'wis', 'slight of hand': 'dex',
+           'perception': 'wis', 'ride': 'dex', 'sense motive': 'wis', 'sleight of hand': 'dex',
            'spellcraft': 'int', 'stealth': 'dex', 'survival': 'wis', 'swim': 'str',
            'use magic device': 'cha', 'knowledge(arcana)': 'int', 'knowledge(dungeoneering)': 'int',
            'knowledge(engineering)': 'int', 'knowledge(geography)': 'int', 'knowledge(history)': 'int',
@@ -52,7 +52,13 @@ TrainedSkills = ['disable device', 'handle animal', 'knowledge(arcana)', 'knowle
                  'knowledge(nature)','knowledge(nobility)','knowledge(planes)','knowledge(religion)','linguistics',
                  'proffession','sleight of hand','spellcraft','use magic device']
 ArmorPenalty = {'acrobatics': 1,'climb': 1,'disable device': 1, 'escape artist': 1, 'fly': 1, 'ride': 1,
-                'sleight of hand': 1,'stealth': 1,'swim': 1}
+                'sleight of hand': 1,'stealth': 1,'swim': 1, 'appraise': 0, 'bluff': 0, 'diplomacy': 0,
+                'disguise': 0, 'handle animal': 0, 'heal': 0, 'intimidate': 0,
+                'linguistics': 0, 'perception': 0, 'sense motive': 0, 'spellcraft': 0, 'survival': 0,
+                'use magic device': 0, 'knowledge(arcana)': 0, 'knowledge(dungeoneering)': 0,
+                'knowledge(engineering)': 0, 'knowledge(geography)': 0, 'knowledge(history)': 0,
+                'knowledge(local)': 0, 'knowledge(nature)': 0, 'knowledge(nobility)': 0, 'knowledge(planes)': 0,
+                'knowledge(religion)': 0}
 
 # This list is an array for Bonus Types. This is going to be useful for many things so I'm putting it here till a
 # better location can be had, if there is one. Also, a good format needs to be found for it as this is a placeholder
@@ -163,11 +169,38 @@ class Character(object):
                 self.ranks = ret
                 return ret
 
+        def ArmorAC(self):
+                if self.Armor[0]:
+                        return self.Armor[0].AC()
+                else:
+                        return 0
+
+        def ShieldAC(self):
+                if self.Armor[1]:
+                        return self.Armor[1].AC()
+                else:
+                        return 0
+
         # AC is based off of bonuses and is a bit hard to define easily, but it requires a few searches.
         def AC(self):
                 ret = 10
-                # Add armor bonus
-                # add dex capped at by the armor.
+                MaxDexArmor = -1
+                MaxDexShield = -1
+                # Add armor bonus [Armor[0]]
+                if self.Armor[0]:
+                        ret += self.Armor[0].AC()
+                        MaxDexArmor = self.Armor[0].MaxDex
+                # Add Shiled Bonus [Armor[1]]
+                if self.Armor[1]:
+                        ret += self.Armor[1].AC()
+                        MaxDexShield = self.Armor[1].MaxDex
+                # add dex capped by the armor
+                temp = self.AbilityCheck('dex')
+                if MaxDexArmor != -1 and temp > MaxDexArmor:
+                        temp = MaxDexArmor
+                if MaxDexShield != -1 and temp > MaxDexShield:
+                        temp = MaxDexShield
+                ret += temp
                 # add class feature bonuses
                 # add feat bonuses.
                 return ret
@@ -283,6 +316,13 @@ class Character(object):
                 ret = ret + self.AbilityCheck(STDBase[skill])
                 if skill in self.classSkill:
                         ret += 3
+                # Penalties applied
+                Penalty = 0
+                if self.Armor[0]:
+                        Penalty = self.Armor[0].ArmorPenalty
+                if self.Armor[1]:
+                        Penalty = self.Armor[1].ArmorPenalty
+                ret += ArmorPenalty[skill]*Penalty
                 return ret
 
         def SkillRanks(self, skill):
@@ -336,6 +376,16 @@ class Character(object):
                 else:
                         return [115, 130, 150, 175][STR - 11]
 
+        def UpdateMaxHP(self):
+                temp = 0
+                for i in self.cls:
+                        temp = i.level * (i.hd + self.AbilityCheck('con'))
+                
+                self.stats['maxhp'] = temp
+
+        def FullRecover(self):
+                self.stats['hp'] = self.stats['maxhp']
+
         # This is test code and should not be seen as part of the end product to be shown. It's rough and simply for
         # command Python IDLE testing of Character.py
         def printCharacter(self):
@@ -352,8 +402,14 @@ class Character(object):
                 print ("Armor Class: %d \t Touch: %d \t FlatFooted: %d"%(self.AC(),self.Touch(),self.Flatfooted()))
                 print ("---------------------------------------------------------------------------")
                 print ("Ranks: %d"%(self.TotalRanks()))
+                print ("Skill: Ability Bonus + Ranks - Penalty = Total")
+                CheckPenalty = 0
+                if self.Armor[0]:
+                        CheckPenalty += self.Armor[0].ArmorPenalty
+                if self.Armor[1]:
+                        CheckPenalty += self.Armor[1].ArmorPenalty
                 for i in sorted(self.skills.keys()):
-                        print ("%s: %d"%(i,self.SkillCheck(i)))
+                        print ("%s: %d + %d - %d = %d"%(i, self.AbilityCheck(STDBase[i]), self.SkillRanks(i), ArmorPenalty[i]*(CheckPenalty), self.SkillCheck(i)))
                 print ("Max Carrying Capacity:%d"%(self.MaxLoad(self.stats['str'])))
                 print ("---------------------------------------------------------------------------")
                 print ("Classes:")
@@ -364,6 +420,12 @@ class Character(object):
                 if self.Weapons:
                         for i in self.Weapons:
                                 print ("\t %s +%d: %s"%(i.Name, self.Attack(i), self.Damage(i)))
+
+        # A check to see if anything is out of the ordinary, or outside of the rules, responds not with a message
+        # that points out all errors in the sheet. This is both parts that break the rules, or any part that
+        # shouldn't be empty that is (such as empty feat slots that shouldn't be empty).
+        def ConsistencyCheck(self):
+                pass
                         
 
 
@@ -436,11 +498,29 @@ SWEP.Source = 'PRG:CRB'
 SWEP.Text = 'This weapon is usually just a shaped piece of wood, sometimes with a few nails or studs embedded in it.'
 SWEP.Enchantments = None
 
+SARM = Item.Armor()
+SARM.Name = 'Fullplate'
+SARM.IsArmor = True
+SARM.Price = 1500
+SARM.ACBonus = 9
+SARM.MaxDex = 1
+SARM.ArmorPenalty = -6
+SARM.SpellFailure = 35
+SARM.Speed = [20,15]
+SARM.Weight = 50
+SARM.text = 'This metal suit includes gauntlets, heavy leather boots, a visored helmet, and a thick layer of padding that is worn underneath the armor. Each suit of full plate must be individually fitted to its owner by a master armorsmith, although a captured suit can be resized to fit a new owner at a cost of 200 to 800 (2d4 × 100) gold pieces.'
+SARM.Source = 'PRG:CRB'
+
 Test = Character()
 Test.cls[0] = ClassEx
 Test.stats['str'] = 15
+Test.stats['dex'] = 18
 Test.stats['int'] = 14
+Test.stats['con'] = 16
 Test.Weapons = [SWEP]
+Test.UpdateMaxHP()
+Test.FullRecover()
+Test.Armor[0] = SARM
 
 # it throws errors if you ask for something that doesn't exist.
 Test.printCharacter()
