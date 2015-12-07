@@ -1,7 +1,7 @@
 Race,Base Str,Base Dex,Base Con,Base Int,Base Wis,Base Cha,Size,Type,SubType,Speed,Traits,Notes
 Dwarf, , , , , , ,Medium,Humanoid,"Dwarf","20 ft.", ,"Dwarves are a stoic but stern race, ensconced in cities carved from the hearts of mountains and fiercely determined to repel the depredations of savage races like orcs and goblins. More than any other race, dwarves have acquired a reputation as dour and humorless artisans of the earth. It could be said that their history shapes the dark disposition of many dwarves, for they reside in high mountains and dangerous realms below the earth, constantly at war with giants, goblins, and other such horrors."
 Elf, , , , , , ,Medium,Humanoid,"Elf","30 ft.", , 
-Gnome,, , , , , , ,Small,Humanoid,"Gnome","20 ft.", , 
+Gnome, , , , , , ,Small,Humanoid,"Gnome","20 ft.", , 
 Half Elf, , , , , , ,Medium,Humanoid,"Elf,Human","30 ft.", , 
 Half Orc, , , , , , ,Medium,Humanoid,"Human,Orc","30 ft.", , 
 Halfling,, , , , , , ,Small,Humanoid,"Halfling","20 ft.", , 
