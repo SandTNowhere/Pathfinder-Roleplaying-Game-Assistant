@@ -16,6 +16,7 @@ def populate_table(table_name):
 
     # open database
     db = sqlite3.connect(database)
+    db.text_factory=str
     cursor=db.cursor()
 
     #for testing only
