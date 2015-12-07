@@ -335,8 +335,7 @@ dam_type VARCHAR(1),   -- slash, pierce, bludgeon (s,p,b)
 description TEXT,        -- from book
 FOREIGN KEY (category) REFERENCES Item_types (it_name)  -- relying on those entering the data to not list a sabre as a type of armor
 CHECK(handedness = "light" OR handedness = "one" OR handedness = "two" OR handedness = "one or two" OR handedness = "special"), -- this about cover it?
-CHECK(size="fine" OR size ="diminutive" OR size="tiny" OR size ="medium" OR size="large" OR size="huge" OR size="Gargantuan" OR size="colossal"),
-CHECK(dam_type="s" OR dam_type="p" OR dam_type="b" OR dam_type="S" OR dam_type="P" OR dam_type="B")
+CHECK(size="fine" OR size ="diminutive" OR size="tiny" OR size ="medium" OR size="large" OR size="huge" OR size="Gargantuan" OR size="colossal")
 );''')
 
 # Powers granted by priest domains
