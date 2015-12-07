@@ -1,0 +1,312 @@
+ar_name VARCHAR(30), description TEXT, class VARCHAR(30)
+Armored Hulk, , Barbarian
+Breaker, , Barbarian
+Burn Rider, , Barbarian
+Drunken Brute, , Barbarian
+Drunker Rager, , Barbarian
+Elemental Kin, , Barbarian
+Flesheater, , Barbarian
+Hurler, , Barbarian
+Invulnerable Rager, , Barbarian
+Jungle Rager, , Barbarian
+Liberator, , Barbarian
+Mad Dog, , Barbarian
+Mounted Fury, , Barbarian
+Pack Ranger, , Barbarian
+Primal Hunter, , Barbarian
+Raging Cannibal, , Barbarian
+Savage Barbarian, , Barbarian
+Savage Technologist, , Barbarian
+Scarred Rager, , Barbarian
+Sea Reaver, , Barbarian
+Superstitious, , Barbarian
+Titan Mauler, , Barbarian
+Totem Warrior, , Barbarian
+True Primative, , Barbarian
+Untamed Rager, , Barbarian
+Urban Barbarian, , Barbarian
+Wild Rager, , Barbarian
+Animal Speaker, , Bard
+Arbiter, , Bard
+Arcane Duelist, , Bard
+Arcane Healer, , Bard
+Archaeologist, , Bard
+Archivist, , Bard
+Buccaneer, , Bard
+Busker, , Bard
+Celebrity, , Bard
+Court Bard, , Bard
+Daredevil, , Bard
+Demagogue, , Bard
+Dervish Dancer, , Bard
+Dervish of Dawn, , Bard
+Detective, , Bard
+Dirge Bard, , Bard
+Diva, , Bard
+Dragon Yapper (Kobold), , Bard
+Duettist, , Bard
+Flame Dancer, , Bard
+Geisha, , Bard
+Hoaxer, , Bard
+Juggler, , Bard
+Lotus Geisha, , Bard
+Magician, , Bard
+Negotiator, , Bard
+Phrenologist, , Bard
+Sandman, , Bard
+Savage Skald, , Bard
+Sea Singer, , Bard
+Silver Balladeer, , Bard
+Songhealer, , Bard
+Sound Striker, , Bard
+Street Performer, , Bard
+Thundercaller, , Bard
+Voice of the Wild, , Bard
+Asmodean Advocate, , Cleric
+Cloistered Cleric, , Cleric
+Crusader, , Cleric
+Devilbane Preist, , Cleric
+Devout Pilgrim, , Cleric
+Divine Strategist, , Cleric
+Ecclesitheurge, , Cleric
+Evangelist, , Cleric
+Herald Caller, , Cleric
+Hidden Priest, , Cleric
+Iron Priest, , Cleric
+Merciful Healer, , Cleric
+Roaming Exorcist, , Cleric
+Scroll Scholar, , Cleric
+Separatist, , Cleric
+Theologian, , Cleric
+Undead Lord, , Cleric
+Ancient Guardian, , Druid
+Ape Shaman, , Druid
+Aquatic Druid, , Druid
+Artic Druid, , Druid
+Bat Shaman, , Druid
+Bear Shaman, , Druid
+Blight Druid, , Druid
+Boar Shaman, , Druid
+Cave Druid, , Druid
+Desert Druid, , Druid
+Dragon Shaman, , Druid
+Eagle Shaman, , Druid
+Elemental Ally, , Druid
+Feral Shifter, , Druid
+Goliath Druid, , Druid
+Green Faith Initiate, , Druid
+Jungle Druid, , Druid
+Kraken Caller, , Druid
+Leshy Warden, , Druid
+Lion Shaman, , Druid
+Menhir Savant, , Druid
+Mooncaller, , Druid
+Mountain Druid, , Druid
+Nature Fang, , Druid
+Pack Lord, , Druid
+Plains Druid, , Druid
+Reincarnated Druid, , Druid
+River Druid, , Druid
+Saurian Shaman, , Druid
+Season Keeper (Triaxian), , Druid
+Serpent Shaman, , Druid
+Shark Shaman, , Druid
+Storm Druid, , Druid
+Supernaturalist, , Druid
+Survivor, , Druid
+Swamp Druid, , Druid
+Tempest Druid, , Druid
+Troll Fury (Troll), , Druid
+Urban Druid, , Druid
+Wild Whisperer, , Druid
+Wolf Shaman, , Druid
+World Walker, , Druid
+Archer, , Fighter
+Armor Master, , Fighter
+Blackjack, , Fighter
+Brawler, , Fighter
+Buckler Duelist, , Fighter
+Cad, , Fighter
+Corsair, , Fighter
+Crossbowman, , Fighter
+Cyber-Soldier, , Fighter
+Dervish of Dawn, , Fighter
+Dragoon, , Fighter
+Drill Sergeant, , Fighter
+Eldritch Guardian, , Fighter
+Free Hand Fighter, , Fighter
+Free-Style Fighter, , Fighter
+Gladiator, , Fighter
+Learned Duelist, , Fighter
+Lore Warden, , Fighter
+Martial Master, , Fighter
+Mobile Fighter, , Fighter
+Mutation Warrior, , Fighter
+Pack Mule, , Fighter
+Phalanx Soldier, , Fighter
+Polearm Master, , Fighter
+Roughrider, , Fighter
+Savage Warrior, , Fighter
+Sensate, , Fighter
+Shielded Fighter, , Fighter
+Siegebreaker, , Fighter
+Swordlord, , Fighter
+Tactician, , Fighter
+Thunderstriker, , Fighter
+Titan Fighter, , Fighter
+Tower Shield Specialist, , Fighter
+Trench Fighter, , Fighter
+Two-Handed Fighter, , Fighter
+Two-Weapon Warrior, , Fighter
+Unarmed Fighter, , Fighter
+Unbreakable, , Fighter
+Vengeful Hunter, , Fighter
+Viking, , Fighter
+Weapon Bearer Squire, , Fighter
+Weapon Master, , Fighter
+Contemplative (Dwarf), , Monk
+Drunken Master, , Monk
+Far Strike Monk, , Monk
+Flowing Monk, , Monk
+Hamatulatsu Master, , Monk
+Harrow Warden, , Monk
+Hungry Ghost Monk, , Monk
+Karmic Monk, , Monk
+Kata Master, , Monk
+Ki Mystic, , Monk
+Maneuver Master, , Monk
+Martial Artist, , Monk
+Master of Many Styles, , Monk
+Monk of the Empty Hand, , Monk
+Monk of the Four Winds, , Monk
+Monk of the Healing Hand, , Monk
+Monk of the Iron Mountain, , Monk
+Monk of the Lotus, , Monk
+Monk of the Mantis, , Monk
+Monk of the Seven Winds, , Monk
+Qinggong Monk, , Monk
+Sensei, , Monk
+Serpent-Fire Adept, , Monk
+Sohei, , Monk
+Spirit Master, , Monk
+Terra-Cotta Monk, , Monk
+Tetori, , Monk
+Weapon Adept, , Monk
+Wildcat, , Monk
+Zen Archer, , Monk
+Chosen One, , Paladin
+Combat Healer Squire, , Paladin
+Divine Defender, , Paladin
+Divine Guardian, , Paladin
+Divine Hunter, , Paladin
+Empyreal Knight, , Paladin
+Enlightened Paladin, , Paladin
+Ghost Hunter, , Paladin
+Holy Guide, , Paladin
+Holy Gun, , Paladin
+Holy Tactician, , Paladin
+Hospitaler, , Paladin
+Mind Sword, , Paladin
+Sacred Servent, , Paladin
+Sacred Shield, , Paladin
+Shining Knight, , Paladin
+Sword of Valor, , Paladin
+Tempered Champion, , Paladin
+Temple Champion, , Paladin
+Undead Scourge, , Paladin
+Warrior of the Holy Light, , Paladin
+Battle Scout, , Ranger
+Beastmaster, , Ranger
+Bow Nomad (Kasatha), , Ranger
+Cinderwalker, , Ranger
+Corpse Hunter, , Ranger
+Deep Walker, , Ranger
+Demonslayer, , Ranger
+Divine Tracker, , Ranger
+Dragon Hunter, , Ranger
+Dungeon Rover, , Ranger
+Falconer, , Ranger
+Freebooter, , Ranger
+Galvanic Saboteur, , Ranger
+Groom, , Ranger
+Guide, , Ranger
+Hooded Champion, , Ranger
+Horse Lord, , Ranger
+Infiltrator, , Ranger
+Shapeshifter, , Ranger
+Skirmisher, , Ranger
+Sky Stalker, , Ranger
+Spirit Ranger, , Ranger
+Toxophilite, , Ranger
+Trapper, , Ranger
+Trophy Hunter, , Ranger
+Urban Ranger, , Ranger
+Warden, , Ranger
+Wild Hunter, , Ranger
+Wild Stalker, , Ranger
+Witchguard, , Ranger
+Woodland Skirmisher, , Ranger
+Yokai Hunter, , Ranger
+Acrobat, , Rogue
+Bandit, , Rogue
+Burglar, , Rogue
+Carnivalist, , Rogue
+Chameleon, , Rogue
+Charlatan, , Rogue
+Counterfeit Mage, , Rogue
+Cutpurse, , Rogue
+Dark Lurker, , Rogue
+Driver, , Rogue
+Escapologist, , Rogue
+False Medium, , Rogue
+Investigator, , Rogue
+Kidnapper, , Rogue
+Knife Master, , Rogue
+Liberator, , Rogue
+Makeshift Scrapper, , Rogue
+Pirate, , Rogue
+Poisoner, , Rogue
+Rake, , Rogue
+Relic Raider, , Rogue
+River Rat, , Rogue
+Roof Runner, , Rogue
+Sanctified Rogue, , Rogue
+Sapper, , Rogue
+Scavenger, , Rogue
+Scout, , Rogue
+Scroll Scoundrel, , Rogue
+Shadow Rebel, , Rogue
+Smuggler, , Rogue
+Sniper, , Rogue
+Spy, , Rogue
+Survivalist, , Rogue
+Swashbuckler, , Rogue
+Swindler, , Rogue
+Thug, , Rogue
+Trapsmith, , Rogue
+Underground Chemist, , Rogue
+Vexing Dodger, , Rogue
+Waylayer, , Rogue
+Crossblooded, , Sorcerer
+Dragon Drinker, , Sorcerer
+Eldritch Scrapper, , Sorcerer
+False Priest, , Sorcerer
+Mongrel Mage, , Sorcerer
+Seeker, , Sorcerer
+Sorcerer of Sleep, , Sorcerer
+Tattooed Sorcerer, , Sorcerer
+Arcane Bomber, , Wizard
+Bonded Wizard, , Wizard
+Exploiter Wizard, , Wizard
+Familiar Adept, , Wizard
+Instructor, , Wizard
+Pact Wizard, , Wizard
+Primalist, , Wizard
+Scroll Scholar, , Wizard
+Scrollmaster, , Wizard
+Shadowcaster, , Wizard
+Siege Mage, , Wizard
+Spell Sage, , Wizard
+Spellsinger, , Wizard
+Spirit Binder, , Wizard
+Spirit Whisperer, , Wizard
