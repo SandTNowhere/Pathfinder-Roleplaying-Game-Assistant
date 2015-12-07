@@ -165,8 +165,8 @@ class PathfinderGUI(ttk.Frame):
             """ Basic attribute declaration """
             hplbl = ttk.Label(content, text = "Total HP", background='black', foreground='white')
             hp = ttk.Entry(content, width = 10)
-            drlbl = ttk.Label(content, text = " DR", foreground='grey')
-            dmgres = ttk.Entry(content, width = 6)
+            drlbl = ttk.Label(content, text = "DR", foreground='grey')
+            dmgres = ttk.Entry(content, width = 5)
             speedlbl = ttk.Label(content, text = "Speed", background='black', foreground='white')
             bspeed = ttk.Entry(content, width = 10)
             bpdlbl = ttk.Label(content, text = " Base", foreground='grey')
@@ -547,13 +547,13 @@ class PathfinderGUI(ttk.Frame):
             wtotbox.grid(  column = 4, row = 24, columnspan = 1)
 
             """ Carry Declarations """
-            hdlbl = ttk.Label(content, text = "|                            Load Limits                              ", background = 'black', foreground = 'white')
+            hdlbl = ttk.Label(content, text = "                              Load Limits                               ", background = 'black', foreground = 'white')
             ltlbl = ttk.Label(content, text = "Light Load")
             mdlbl = ttk.Label(content, text = "Medium Load")
             hvlbl = ttk.Label(content, text = "Heavy Load")
-            ohlbl = ttk.Label(content, text = "Lift Over Head")
-            oglbl = ttk.Label(content, text = "Lift Off Ground")
-            dplbl = ttk.Label(content, text = "Drag or Push")
+            ohlbl = ttk.Label(content, text = "Over Head")
+            oglbl = ttk.Label(content, text = "Off Ground")
+            dplbl = ttk.Label(content, text = "Drag/Push")
             ltbox = ttk.Entry(content, width = 5)
             mdbox = ttk.Entry(content, width = 5)
             hvbox = ttk.Entry(content, width = 5)
@@ -577,7 +577,7 @@ class PathfinderGUI(ttk.Frame):
             dpbox.grid( column = 10, row = 5, sticky = (E))
             
             """ Money Declarations """
-            mnlbl = ttk.Label(content, text = "                                Money                                   ", background='black', foreground='white')
+            mnlbl = ttk.Label(content, text = "                                 Money                                    ", background='black', foreground='white')
             cplbl = ttk.Label(content, text = "Copper")
             splbl = ttk.Label(content, text = "Silver")
             gplbl = ttk.Label(content, text = "Gold")
@@ -600,10 +600,10 @@ class PathfinderGUI(ttk.Frame):
             ppbox.grid(column = 10, row = 8, sticky = (E))
             
             """ Experience Declaration """
-            explbl = ttk.Label(content, text = "                         Experience Points                        ", background='black', foreground='white')
-            expbox = ttk.Entry(content, width = 40)
-            nxtlbl = ttk.Label(content, text = "           Next Level            ", background='black', foreground='white')
-            nxtbox = ttk.Entry(content, width = 20)
+            explbl = ttk.Label(content, text = "              Experience Points                ", background='black', foreground='white')
+            expbox = ttk.Entry(content, width = 30)
+            nxtlbl = ttk.Label(content, text = " Next Level ", background='black', foreground='white')
+            nxtbox = ttk.Entry(content, width = 10)
             
             """ Experience Placement """
             explbl.grid(column = 5, row = 9, columnspan = 4) 
