@@ -84,7 +84,7 @@ class Character(object):
                 # little if no mechanical effects.
                 self.name = ' '
                 self.player = ' '
-                self.alignment = ['Neutral', 'Neutral'] # for required alignments mostly, but this is a soft requirement
+                self.alignment = ' ' # for required alignments mostly, but this is a soft requirement simplified to single string for current purposes.
                 self.deity = ' '
                 self.homeland = ' '
                 self.gender = ' '

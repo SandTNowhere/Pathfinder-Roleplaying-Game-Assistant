@@ -9,6 +9,10 @@ Test.stats['str'] = 15
 Test.stats['dex'] = 18
 Test.stats['int'] = 14
 Test.stats['con'] = 16
+Test.stats['wis'] = 12
+Test.stats['cha'] = 4
+
+Current = Character.Character()
 
 root = Tk()
 
@@ -34,7 +38,10 @@ class PathfinderGUI(ttk.Frame):
             self._create_weapons_tab(character)
             self._create_armor_tab(character)
             self._create_skills_tab(character)
-            self._create_spells_tab(character)           
+            self._create_spells_tab(character)
+
+    def update_all(event, target=None, data=None):
+        target = data
             
     def _create_information_tab(self, character):
             content = ttk.Frame(character, padding=(3,3,12,12))
@@ -47,18 +54,20 @@ class PathfinderGUI(ttk.Frame):
             ibuttonexit = ttk.Button(content, text = "Exit", width = 10)
 
             """varaible declarations for comboboxes"""
-            alignmentvar=''
-            racevar=''
-            sizevar=''
-            lang1=''
-            lang2=''
-            lang3=''
-            lang4=''
-            lang5=''
-            lang6=''
+            namevar = StringVar()
+            alignmentvar = StringVar()
+            racevar = StringVar()
+            sizevar = StringVar()
+            lang1 = StringVar()
+            lang2 = StringVar()
+            lang3 = StringVar()
+            lang4 = StringVar()
+            lang5 = StringVar()
+            lang6 = StringVar()
             
             """ basic character information declaration """
-            name = ttk.Entry(content, width=58)
+            name = ttk.Entry(content, width=58, textvariable=namevar)
+            name.bind('<FocusOut>', lambda x: PathfinderGUI.update_all(x, namevar)
             namelbl = ttk.Label(content, text="Character Name")
             align = ttk.Combobox(content, width=10, textvariable=alignmentvar,values=search_db('al_name','Alignments',' ')) 
             alignlbl = ttk.Label(content, text="Alignment")
@@ -1594,6 +1603,7 @@ class PathfinderGUI(ttk.Frame):
             pbuttonexit.grid( column=4, row=45, sticky=(W) )
             
             character.add(content, text='Spells')
+
             
 if __name__ == '__main__':
     PathfinderGUI().mainloop()
