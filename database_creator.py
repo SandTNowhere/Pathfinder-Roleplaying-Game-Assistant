@@ -10,6 +10,14 @@ from config import database
 connection = sqlite3.connect(database)
 cursor = connection.cursor()
 
+# Alignments
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS Alignments(
+al_id INTEGER PRIMARY KEY,
+al_name VARCHAR(30),
+description TEXT
+);''')
+
 # Stats.(strength, intelligence, etc)
 cursor.execute('''
 CREATE TABLE IF NOT EXISTS Stats(

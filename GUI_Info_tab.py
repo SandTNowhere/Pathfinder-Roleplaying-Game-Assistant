@@ -22,14 +22,21 @@ class PathfinderGUI(ttk.Frame):
             content.grid(column=0, row=0)
 
             """varaible declarations for comboboxes"""
+            alignmentvar=''
             racevar=''
             sizevar=''
+            lang1=''
+            lang2=''
+            lang3=''
+            lang4=''
+            lang5=''
+            lang6=''
 
             
             """ basic character information declaration """
             name = ttk.Entry(content, width=47)
             namelbl = ttk.Label(content, text="Character Name")
-            align = ttk.Entry(content, width=10) 
+            align = ttk.Combobox(content, width=10, textvariable=alignmentvar,values=search_db('al_name','Alignments',' ')) 
             alignlbl = ttk.Label(content, text="Alignment")
             player = ttk.Entry(content, width=43)
             playerlbl = ttk.Label(content, text="Player")
@@ -39,9 +46,9 @@ class PathfinderGUI(ttk.Frame):
             deitylbl = ttk.Label(content, text="Deity")
             homeland = ttk.Entry(content, width=21)
             homelandlbl = ttk.Label(content, text="Homeland")
-            race = ttk.Combobox(content, width=31,textvariable=racevar,values=search_db('ra_name','Races',' '))
+            race = ttk.Entry(content, width=31)
             racelbl = ttk.Label(content, text="Race")    
-            size = ttk.Combobox(content, width=15, textvariable=sizevar, values=search_db('size','Races',' '))
+            size = ttk.Entry(content, width=15)
             sizelbl = ttk.Label(content, text="Size")
             gender = ttk.Entry(content, width=6)
             genderlbl = ttk.Label(content, text="Gender")
@@ -56,12 +63,12 @@ class PathfinderGUI(ttk.Frame):
             eyes = ttk.Entry(content, width=10)
             eyeslbl = ttk.Label(content, text="Eyes")
             languagelbl = ttk.Label(content, text = "Languages Spoken", background='black', foreground='white')
-            language1 = ttk.Entry(content, width = 15)
-            language2 = ttk.Entry(content, width = 15)
-            language3 = ttk.Entry(content, width = 15)
-            language4 = ttk.Entry(content, width = 15)
-            language5 = ttk.Entry(content, width = 15)
-            language6 = ttk.Entry(content, width = 15)
+            language1 = ttk.Combobox(content, width = 15, textvariable=lang1, values=search_db('la_name','Languages',''))
+            language2 = ttk.Combobox(content, width = 15, textvariable=lang2, values=search_db('la_name','Languages',''))
+            language3 = ttk.Combobox(content, width = 15, textvariable=lang3, values=search_db('la_name','Languages',''))
+            language4 = ttk.Combobox(content, width = 15, textvariable=lang4, values=search_db('la_name','Languages',''))
+            language5 = ttk.Combobox(content, width = 15, textvariable=lang5, values=search_db('la_name','Languages',''))
+            language6 = ttk.Combobox(content, width = 15, textvariable=lang6, values=search_db('la_name','Languages',''))
             
             """ basic character information placement """
             content.grid(    column=0, row=0)
@@ -102,6 +109,7 @@ class PathfinderGUI(ttk.Frame):
             language6.grid(  column=3, row=11, sticky=(W))            
             
             character.add(content, text='Information')
+            
 
 if __name__ == '__main__':
     PathfinderGUI().mainloop()
