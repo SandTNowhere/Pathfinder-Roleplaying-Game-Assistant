@@ -523,4 +523,4 @@ Test.FullRecover()
 Test.Armor[0] = SARM
 
 # it throws errors if you ask for something that doesn't exist.
-Test.printCharacter()
+#Test.printCharacter()
