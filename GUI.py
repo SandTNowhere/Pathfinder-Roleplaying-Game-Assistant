@@ -1,50 +1,72 @@
 from tkinter import *
 from tkinter import ttk
+import search_database
+from search_database import search_db
 
-class PathfinderGUI(ttk.Frame):
-    def __init__(self, name='pathfindergui'):
-        ttk.Frame.__init__(self, name=name)
-        self.pack(expand=Y, fill=BOTH)
-        self.master.title('NoWhere Pathfinder Assistant')
-        Panel = Frame(self, name='char')
-        Panel.pack(side=TOP, fill=BOTH, expand=Y)
+root = Tk()
 
-        character =ttk.Notebook(Panel, name='character')
-
-        character.enable_traversal()
-        character.pack(fill=BOTH, expand=Y, padx=2, pady=3)
-        self._create_information_tab(character)
-        self._create_abilities_tab(character)
-        self._create_inventory_tab(character)
-        self._create_weapons_tab(character)
-        self._create_armor_tab(character)
-        self._create_skills_tab(character)
-        self._create_spells_tab(character)
+class PathfinderGUI(ttk.Frame):    
         
+       
+    def __init__(self, name='pathfindergui'):
+            ttk.Frame.__init__(self, name=name)
+            self.pack(expand=Y, fill=BOTH)
+            self.master.title('NoWhere Pathfinder Assistant')
+            Panel = Frame(self, name='char')
+            Panel.pack(side=TOP, fill=BOTH, expand=Y)
+            
+            character =ttk.Notebook(Panel, name='character')
+            character.enable_traversal()
+            character.pack(fill=BOTH, expand=Y, padx=2, pady=3)
+            self._create_information_tab(character)
+            self._create_abilities_tab(character)
+            self._create_inventory_tab(character)
+            self._create_weapons_tab(character)
+            self._create_armor_tab(character)
+            self._create_skills_tab(character)
+            self._create_spells_tab(character)           
+            
     def _create_information_tab(self, character):
             content = ttk.Frame(character, padding=(3,3,12,12))
             content.grid(column=0, row=0)
+
+            ibuttonlbl = ttk.Label(content, text = " ")
+            ibuttonnew = ttk.Button(content, text = "New", width = 10)
+            ibuttonsave = ttk.Button(content, text = "Save", width = 10)
+            ibuttonload = ttk.Button(content, text = "Load", width = 10)
+            ibuttonexit = ttk.Button(content, text = "Exit", width = 10)
+
+            """varaible declarations for comboboxes"""
+            alignmentvar=''
+            racevar=''
+            sizevar=''
+            lang1=''
+            lang2=''
+            lang3=''
+            lang4=''
+            lang5=''
+            lang6=''
             
             """ basic character information declaration """
-            name = ttk.Entry(content, width=47)
+            name = ttk.Entry(content, width=58)
             namelbl = ttk.Label(content, text="Character Name")
-            align = ttk.Entry(content, width=10) 
+            align = ttk.Combobox(content, width=10, textvariable=alignmentvar,values=search_db('al_name','Alignments',' ')) 
             alignlbl = ttk.Label(content, text="Alignment")
             player = ttk.Entry(content, width=43)
             playerlbl = ttk.Label(content, text="Player")
-            level = ttk.Entry(content, width=58)
+            level = ttk.Entry(content, width=72)
             levellbl = ttk.Label(content, text="Character Class and Level")
             deity = ttk.Entry(content, width=21)
             deitylbl = ttk.Label(content, text="Deity")
             homeland = ttk.Entry(content, width=21)
             homelandlbl = ttk.Label(content, text="Homeland")
-            race = ttk.Entry(content, width=31)
-            racelbl = ttk.Label(content, text="Race")
-            size = ttk.Entry(content, width=15)
+            race = ttk.Entry(content, width=39)
+            racelbl = ttk.Label(content, text="Race")    
+            size = ttk.Entry(content, width=18)
             sizelbl = ttk.Label(content, text="Size")
-            gender = ttk.Entry(content, width=6)
+            gender = ttk.Entry(content, width=8)
             genderlbl = ttk.Label(content, text="Gender")
-            age = ttk.Entry(content, width=3)
+            age = ttk.Entry(content, width=4)
             agelbl = ttk.Label(content, text="Age")
             height = ttk.Entry(content, width=10)
             heightlbl = ttk.Label(content, text="Height")
@@ -55,12 +77,12 @@ class PathfinderGUI(ttk.Frame):
             eyes = ttk.Entry(content, width=10)
             eyeslbl = ttk.Label(content, text="Eyes")
             languagelbl = ttk.Label(content, text = "Languages Spoken", background='black', foreground='white')
-            language1 = ttk.Entry(content, width = 15)
-            language2 = ttk.Entry(content, width = 15)
-            language3 = ttk.Entry(content, width = 15)
-            language4 = ttk.Entry(content, width = 15)
-            language5 = ttk.Entry(content, width = 15)
-            language6 = ttk.Entry(content, width = 15)
+            language1 = ttk.Combobox(content, width = 15, textvariable=lang1, values=search_db('la_name','Languages',''))
+            language2 = ttk.Combobox(content, width = 15, textvariable=lang2, values=search_db('la_name','Languages',''))
+            language3 = ttk.Combobox(content, width = 15, textvariable=lang3, values=search_db('la_name','Languages',''))
+            language4 = ttk.Combobox(content, width = 15, textvariable=lang4, values=search_db('la_name','Languages',''))
+            language5 = ttk.Combobox(content, width = 15, textvariable=lang5, values=search_db('la_name','Languages',''))
+            language6 = ttk.Combobox(content, width = 15, textvariable=lang6, values=search_db('la_name','Languages',''))
             
             """ basic character information placement """
             content.grid(    column=0, row=0)
@@ -99,6 +121,12 @@ class PathfinderGUI(ttk.Frame):
             language4.grid(  column=1, row=11, sticky=(W))
             language5.grid(  column=2, row=11, sticky=(W))
             language6.grid(  column=3, row=11, sticky=(W))            
+
+            ibuttonlbl.grid( column=1, row=12 )
+            ibuttonnew.grid( column=1, row=13, sticky=(W) )
+            ibuttonsave.grid( column=2, row=13, sticky=(W) )
+            ibuttonload.grid( column=3, row=13, sticky=(W) )
+            ibuttonexit.grid( column=4, row=13, sticky=(W) )
             
             character.add(content, text='Information')
             
@@ -106,6 +134,12 @@ class PathfinderGUI(ttk.Frame):
             content = ttk.Frame(character, padding=(3,3,12,12))
             content.grid(column=0, row=0)
 
+            abuttonlbl = ttk.Label(content, text = " ")
+            abuttonnew = ttk.Button(content, text = "New", width = 10)
+            abuttonsave = ttk.Button(content, text = "Save", width = 10)
+            abuttonload = ttk.Button(content, text = "Load", width = 10)
+            abuttonexit = ttk.Button(content, text = "Exit", width = 10)
+            
             """ ability declaration """
             abnamelbl = ttk.Label(content, text="Ability Name", background='black', foreground='white')
             abscorelbl = ttk.Label(content, text = "Abl Score | Mod", background='black', foreground='white')
@@ -456,11 +490,23 @@ class PathfinderGUI(ttk.Frame):
             atfp16.grid(    column = 8, row = 19, sticky=(E))
             atfp17.grid(    column = 9, row = 19, sticky=(E))
 
+            abuttonlbl.grid( column=1, row=20 )
+            abuttonnew.grid( column=1, row=21, sticky=(W) )
+            abuttonsave.grid( column=2, row=21, sticky=(W) )
+            abuttonload.grid( column=3, row=21, sticky=(W) )
+            abuttonexit.grid( column=4, row=21, sticky=(W) )
+            
             character.add(content, text='Abilities')
 
     def _create_inventory_tab(self, character):
             content = ttk.Frame(character, padding=(3,3,12,12))
             content.grid(column=0, row=0)
+
+            nbuttonlbl = ttk.Label(content, text = " ")
+            nbuttonnew = ttk.Button(content, text = "New", width = 10)
+            nbuttonsave = ttk.Button(content, text = "Save", width = 10)
+            nbuttonload = ttk.Button(content, text = "Load", width = 10)
+            nbuttonexit = ttk.Button(content, text = "Exit", width = 10)
 
             """ Gear Declaration """
             gearlbl = ttk.Label(content, text = "                                       Gear                                      ", background = 'black', foreground = 'white')
@@ -624,6 +670,12 @@ class PathfinderGUI(ttk.Frame):
             expbox.grid(column = 5, row = 10, columnspan = 4)
             nxtlbl.grid(column = 9, row = 9, columnspan = 2)
             nxtbox.grid(column = 9, row = 10, columnspan = 2)
+
+            nbuttonlbl.grid( column=1, row=21 )
+            nbuttonnew.grid( column=1, row=26, sticky=(W) )
+            nbuttonsave.grid( column=2, row=26, sticky=(W) )
+            nbuttonload.grid( column=3, row=26, sticky=(W) )
+            nbuttonexit.grid( column=4, row=26, sticky=(W) )
             
             character.add(content, text='Inventory')
             
@@ -631,6 +683,12 @@ class PathfinderGUI(ttk.Frame):
             content = ttk.Frame(character, padding=(3,3,12,12))
             content.grid(column=0, row=0)
 
+            wbuttonlbl = ttk.Label(content, text = " ")
+            wbuttonnew = ttk.Button(content, text = "New", width = 10)
+            wbuttonsave = ttk.Button(content, text = "Save", width = 10)
+            wbuttonload = ttk.Button(content, text = "Load", width = 10)
+            wbuttonexit = ttk.Button(content, text = "Exit", width = 10)
+            
             """ attack stats declaration """
             bablbl = ttk.Label(content, text = "      Base Attack Bonus     ", background = 'black', foreground = 'white')
             reslbl = ttk.Label(content, text = "        Spell Resistance       ", background = 'black', foreground = 'white')
@@ -842,12 +900,24 @@ class PathfinderGUI(ttk.Frame):
             weapon5ammbox.grid(column = 3, row = 26, columnspan = 2, sticky = (W))
             weapon5dambox.grid(column = 5, row = 26, columnspan = 2, sticky = (W))
 
+            wbuttonlbl.grid( column=1, row=27 )
+            wbuttonnew.grid( column=1, row=28, sticky=(W) )
+            wbuttonsave.grid( column=2, row=28, sticky=(W) )
+            wbuttonload.grid( column=3, row=28, sticky=(W) )
+            wbuttonexit.grid( column=4, row=28, sticky=(W) )
+            
             character.add(content, text='Weapons')
 
     def _create_armor_tab(self, character):
             content = ttk.Frame(character, padding=(3,3,12,12))
             content.grid(column=0, row=0)
 
+            rbuttonlbl = ttk.Label(content, text = " ")
+            rbuttonnew = ttk.Button(content, text = "New", width = 10)
+            rbuttonsave = ttk.Button(content, text = "Save", width = 10)
+            rbuttonload = ttk.Button(content, text = "Load", width = 10)
+            rbuttonexit = ttk.Button(content, text = "Exit", width = 10)
+            
             """ Armor Declarations """
             acglbllbl = ttk.Label(content, text="Armor Class Gear           ", background='black', foreground='white')
             acgbonlbl = ttk.Label(content, text="Bonus          ", background='black', foreground='white')
@@ -949,6 +1019,12 @@ class PathfinderGUI(ttk.Frame):
             acgspftot.grid(column = 6, row = 8, columnspan = 1, sticky = (W))
             acgwgttot.grid(column = 7, row = 8, columnspan = 1, sticky = (W))
             acgprptot.grid(column = 8, row = 8, columnspan = 1, sticky = (W))
+
+            rbuttonlbl.grid( column=1, row=9 )
+            rbuttonnew.grid( column=1, row=10, sticky=(W) )
+            rbuttonsave.grid( column=2, row=10, sticky=(W) )
+            rbuttonload.grid( column=3, row=10, sticky=(W) )
+            rbuttonexit.grid( column=4, row=10, sticky=(W) )
             
             character.add(content, text='Armor')
             
@@ -956,6 +1032,12 @@ class PathfinderGUI(ttk.Frame):
             content = ttk.Frame(character, padding=(3,3,12,12))
             content.grid(column=0, row=0)
 
+            sbuttonlbl = ttk.Label(content, text = " ")
+            sbuttonnew = ttk.Button(content, text = "New", width = 10)
+            sbuttonsave = ttk.Button(content, text = "Save", width = 10)
+            sbuttonload = ttk.Button(content, text = "Load", width = 10)
+            sbuttonexit = ttk.Button(content, text = "Exit", width = 10)
+            
             """ skills declarations """
             nameslbl = ttk.Label(content, text = "Skill Names")
             totallbl = ttk.Label(content, text = "Total Bonus")
@@ -1691,12 +1773,24 @@ class PathfinderGUI(ttk.Frame):
             umdvb04.grid(column = 11, row = 41)
 
             trnonly.grid(column = 1, row = 42)
+
+            sbuttonlbl.grid( column=1, row=43 )
+            sbuttonnew.grid( column=1, row=44, sticky=(W) )
+            sbuttonsave.grid( column=2, row=44, sticky=(W) )
+            sbuttonload.grid( column=3, row=44, sticky=(W) )
+            sbuttonexit.grid( column=4, row=44, sticky=(W) )
             
             character.add(content, text='Skills')
 
     def _create_spells_tab(self, character):
             content = ttk.Frame(character, padding=(3,3,12,12))
             content.grid(column=0, row=0)
+
+            pbuttonlbl = ttk.Label(content, text = " ")
+            pbuttonnew = ttk.Button(content, text = "New", width = 10)
+            pbuttonsave = ttk.Button(content, text = "Save", width = 10)
+            pbuttonload = ttk.Button(content, text = "Load", width = 10)
+            pbuttonexit = ttk.Button(content, text = "Exit", width = 10)
             
             """ spell declarations """
             spklbl = ttk.Label(content, text = "Known")
@@ -2179,6 +2273,12 @@ class PathfinderGUI(ttk.Frame):
             dss9e4.grid(column = 10, row = 42, columnspan=4)
             dss9e5.grid(column = 6, row = 43, columnspan=4)
             dss9e6.grid(column = 10, row = 43, columnspan=4)
+
+            pbuttonlbl.grid( column=1, row=44 )
+            pbuttonnew.grid( column=1, row=45, sticky=(W) )
+            pbuttonsave.grid( column=2, row=45, sticky=(W) )
+            pbuttonload.grid( column=3, row=45, sticky=(W) )
+            pbuttonexit.grid( column=4, row=45, sticky=(W) )
             
             character.add(content, text='Spells')
             
