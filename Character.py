@@ -82,18 +82,18 @@ class Character(object):
         def __init__(self): # If it is setting data, assume it's not supposed to be in the end, at best it should be initialization
                 # Mechanically useless info. This should be self-explanatory for the most part as this really has
                 # little if no mechanical effects.
-                self.name = ' '
-                self.player = ' '
-                self.alignment = ' ' # for required alignments mostly, but this is a soft requirement simplified to single string for current purposes.
-                self.deity = ' '
-                self.homeland = ' '
-                self.gender = ' '
-                self.age = 0
-                self.height = ' '
-                self.weight = 0
-                self.hair = ' '
-                self.eyes = ' '
-                self.notes = ' '# This is not entirely a catch all, but meant for non-mechanical information.
+                self.name = 'Captain America'
+                self.player = 'Iron Man'
+                self.alignment = 'Lawful Good' # for required alignments mostly, but this is a soft requirement simplified to single string for current purposes.
+                self.deity = 'Yaweh'
+                self.homeland = 'USA'
+                self.gender = 'M'
+                self.age = 80
+                self.height = '6\'2'
+                self.weight = 200
+                self.hair = 'blonde'
+                self.eyes = 'blue'
+                self.notes = 'Hitler\'s Best Bud'# This is not entirely a catch all, but meant for non-mechanical information.
                 
                 # mechanical core, all come from this font of life, this also is required by a level 0 char
                 # These are the big six, the central most mechanical stats, that are called by more abilities than
@@ -115,7 +115,7 @@ class Character(object):
                 self.stats['size'] = 'medium'
                 # Languages are determined by the race, and most languages are learnable, but there are a
                 # few secret languages that have requirements to learn.
-                self.Language = []
+                self.Language = ['American English']
                 
                 # Class stuff, here we go, into the fun stuff
                 self.cls = [CLS.CLS()]
@@ -125,7 +125,7 @@ class Character(object):
                 # count. ex, someone takes the fighter bonus feat to get alertness, alertness' bonuses will be here
                 # it's name is recorded under that fighter feature called bonus feat, and so it's ignored when
                 # checked for feats. Any feat that has no source, will throw an problem
-                self.Feats = []
+                self.Feats = ['Shield Throw']
                 # Creates the list of skills and ranks
                 self.skills = STDSkills
                 # Creates a list of class skills that again, will be filled properly with character creation.
@@ -148,10 +148,10 @@ class Character(object):
                 # Armor is much more static, but still very different from other items, hence it's place here.
                 # There are two pieces of armor, the actual armor, and shields. Shields are not as bad, but
                 # Are still rather unique among item types.
-                self.Armor = [None, None]
+                self.Armor = [' ',' ']
                 # the proper equipment slots in order: Belts, Body, Chest, Eyes, Feet, Hands, Head,
                 # Headband, Neck, Shield, Shoulders, Wrists, Ring1, and Ring2
-                self.Slots = [None,None,None,None,None,None,None,None,None,None,None,None,None,None]
+                self.Slots = [' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ']
                 # Lastly, the slotless equipment section, this is meant to be flexible as there are no limits on
                 # Slotless magic items
                 self.Slotless = []
