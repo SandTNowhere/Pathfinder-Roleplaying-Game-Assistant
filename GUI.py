@@ -1,21 +1,36 @@
 from tkinter import *
 from tkinter import ttk
+from tkinter import messagebox
 import search_database
 from search_database import search_db
 import Character
-
-Test = Character.Character()
-Test.stats['str'] = 15
-Test.stats['dex'] = 18
-Test.stats['int'] = 14
-Test.stats['con'] = 16
-Test.stats['wis'] = 12
-Test.stats['cha'] = 4
+#import save_load_character
+import sys
+import os
+import math
 
 Current = Character.Character()
 
 root = Tk()
+root.geometry("1000x1000")
+root.resizable(width=FALSE, height=FALSE)
 
+def new_char():
+    if messagebox.askokcancel("Create New", "This will erase all unsaved data"):
+        python = sys.executable
+        os.execl(python, python, * sys.argv)
+#def save_char():
+#    messagebox.askokcancel("Overwrite Character", "This will overwrite all previous data"):
+#        save_load_character.save_character(Current)
+        
+#def load_char(namevar, plyrvar):
+#    messagebox.askokcancel("Load Character", "This will erase all unsaved data"):
+#        temporary_char = save_load_character.load_character(namevar.get(), plyrvar.get())
+        
+def exit_char():
+    if messagebox.askokcancel("Exit Program", "This will erase all unsaved data"):
+        root.destroy()
+    
 class PathfinderGUI(ttk.Frame):    
         
        
@@ -25,7 +40,7 @@ class PathfinderGUI(ttk.Frame):
             self.master.title('NoWhere Pathfinder Assistant')
             Panel = Frame(self, name='char')
             Panel.pack(side=TOP, fill=BOTH, expand=Y)
-
+            
             style = ttk.Style()
             style.map("TEntry", background=[("active","white"),("disabled","red")])
             
@@ -39,23 +54,91 @@ class PathfinderGUI(ttk.Frame):
             self._create_armor_tab(character)
             self._create_skills_tab(character)
             self._create_spells_tab(character)
+            self._create_saveloadnew_tab(character)
+            self.content = ttk.Frame(character, padding=(3,3,12,12))
+            self.content.grid(column=0, row=0)
+        
+    def update(event, target, data):
+            if target =='charname':
+                Current.name = data.get()
+            elif target == 'align':
+                Current.alignment = data.get()
+            elif target == 'playername':
+                Current.alignment = data.get()
+            elif target == 'deity':
+                Current.deity = data.get()
+            elif target == 'homeland':
+                Current.homeland = data.get()
+            elif target == 'gender':
+                Current.gender = data.get()
+            elif target == 'age':
+                Current.age = data.get()
+            elif target == 'height':
+                Current.height = data.get()
+            elif target == 'weight':
+                Current.weight = data.get()
+            elif target == 'hair':
+                Current.hair = data.get()
+            elif target == 'eyes':
+                Current.eyes = data.get()
+            elif target == 'lang1':
+                Current.Language.append(data.get())
+            elif target == 'lang2':
+                Current.Language.append(data.get())
+            elif target == 'lang3':
+                Current.Language.append(data.get())
+            elif target == 'lang4':
+                Current.Language.append(data.get())
+            elif target == 'lang5':
+                Current.Language.append(data.get())
+            elif target == 'lang6':
+                Current.Language.append(data.get())
+            elif target == 'str':
+                Current.stats['str'] = data[0].get()
+                data[1].set(Current.AbilityCheck('str'))
+            elif target == 'dex':
+                Current.stats['dex'] = data[0].get()
+                data[1].set(Current.AbilityCheck('dex'))
+            elif target == 'con':
+                Current.stats['con'] = data[0].get()
+                data[1].set(Current.AbilityCheck('con'))
+            elif target == 'int':
+                Current.stats['int'] = data[0].get()
+                data[1].set(Current.AbilityCheck('int'))
+            elif target == 'wis':
+                Current.stats['wis'] = data[0].get()
+                data[1].set(Current.AbilityCheck('wis'))
+            elif target == 'cha':
+                Current.stats['cha'] = data[0].get()
+                data[1].set(Current.AbilityCheck('cha'))
+            elif target == 'strtem':
+                data[1].set(Current.AbilityCheck('str')+math.floor(data[0].get()/2))
+            elif target == 'dextem':
+                data[1].set(Current.AbilityCheck('dex')+math.floor(data[0].get()/2))
+            elif target == 'contem':
+                data[1].set(Current.AbilityCheck('con')+math.floor(data[0].get()/2))
+            elif target == 'inttem':
+                data[1].set(Current.AbilityCheck('int')+math.floor(data[0].get()/2))
+            elif target == 'wistem':
+                data[1].set(Current.AbilityCheck('wis')+math.floor(data[0].get()/2))
+            elif target == 'chatem':
+                data[1].set(Current.AbilityCheck('cha')+math.floor(data[0].get()/2))
 
-    def update_all(event, target=None, data=None):
-        target = data
+    def SkillUpdate(Event, Skill, Value):
+            Value[0].set(Current.SkillCheck(Skill)+Value[3].get())
+            Value[1].set(Current.AbilityCheck(Character.STDBase[Skill]))
+            Current.skills[Skill] = Value[2].get()
+            # Value[3].get() Does nothing as Misc shouldn't be saved ordinarily.
             
     def _create_information_tab(self, character):
             content = ttk.Frame(character, padding=(3,3,12,12))
-            content.grid(column=0, row=0)
-
-            ibuttonlbl = ttk.Label(content, text = " ")
-            ibuttonnew = ttk.Button(content, text = "New", width = 10)
-            ibuttonsave = ttk.Button(content, text = "Save", width = 10)
-            ibuttonload = ttk.Button(content, text = "Load", width = 10)
-            ibuttonexit = ttk.Button(content, text = "Exit", width = 10)
-
+            content.grid(column=0, row=0)            
+            
             """varaible declarations for comboboxes"""
-            namevar = StringVar()
-            alignmentvar = StringVar()
+            namevar=StringVar()
+            alignmentvar= StringVar()
+            playervar = StringVar()
+            deityvar = StringVar()
             racevar = StringVar()
             sizevar = StringVar()
             lang1 = StringVar()
@@ -64,45 +147,68 @@ class PathfinderGUI(ttk.Frame):
             lang4 = StringVar()
             lang5 = StringVar()
             lang6 = StringVar()
+            homelandvar = StringVar()
+            gendervar = StringVar()
+            agevar = IntVar()
+            heightvar = StringVar()
+            weightvar = IntVar()
+            hairvar = StringVar()
+            eyesvar = StringVar()
             
             """ basic character information declaration """
             name = ttk.Entry(content, width=58, textvariable=namevar)
-            name.bind('<FocusOut>', lambda x: PathfinderGUI.update_all(x, namevar)
+            name.bind('<FocusOut>', lambda x: PathfinderGUI.update(x, 'charname', namevar))
             namelbl = ttk.Label(content, text="Character Name")
-            align = ttk.Combobox(content, width=10, textvariable=alignmentvar,values=search_db('al_name','Alignments',' ')) 
+            align = ttk.Combobox(content, width=10, textvariable=alignmentvar,values=search_db('al_name','Alignments',' '))
+            align.bind('<FocusOut>', lambda x: PathfinderGUI.update(x, 'align', alignmentvar))
             alignlbl = ttk.Label(content, text="Alignment")
-            player = ttk.Entry(content, width=43)
+            player = ttk.Entry(content, width=43, textvariable=playervar)
+            player.bind('<FocusOut>', lambda x: PathfinderGUI.update(x, 'playername', playervar))
             playerlbl = ttk.Label(content, text="Player")
-            level = ttk.Entry(content, width=72)
+            level = ttk.Entry(content, width=72) # should be read only but requires classes.
             levellbl = ttk.Label(content, text="Character Class and Level")
-            deity = ttk.Entry(content, width=21)
+            deity = ttk.Entry(content, width=21, textvariable=deityvar)
+            deity.bind('<FocusOut>', lambda x: PathfinderGUI.update(x, 'deity', deityvar))
             deitylbl = ttk.Label(content, text="Deity")
-            homeland = ttk.Entry(content, width=21)
+            homeland = ttk.Entry(content, width=21, textvariable=homelandvar)
+            homeland.bind('<FocusOut>', lambda x: PathfinderGUI.update(x, 'homeland', homelandvar))
             homelandlbl = ttk.Label(content, text="Homeland")
             race = ttk.Entry(content, width=39)
             racelbl = ttk.Label(content, text="Race")    
             size = ttk.Entry(content, width=18)
             sizelbl = ttk.Label(content, text="Size")
-            gender = ttk.Entry(content, width=8)
+            gender = ttk.Entry(content, width=8, textvariable=gendervar)
+            gender.bind('<FocusOut>', lambda x: PathfinderGUI.update(x, 'gender', gendervar))
             genderlbl = ttk.Label(content, text="Gender")
-            age = ttk.Entry(content, width=4)
+            age = ttk.Entry(content, width=4, textvariable=agevar)
+            age.bind('<FocusOut>', lambda x: PathfinderGUI.update(x, 'age', agevar))
             agelbl = ttk.Label(content, text="Age")
-            height = ttk.Entry(content, width=10)
+            height = ttk.Entry(content, width=10, textvariable=heightvar)
+            height.bind('<FocusOut>', lambda x: PathfinderGUI.update(x, 'height', heightvar))
             heightlbl = ttk.Label(content, text="Height")
-            weight = ttk.Entry(content, width=10)
+            weight = ttk.Entry(content, width=10, textvariable=weightvar)
+            weight.bind('<FocusOut>', lambda x: PathfinderGUI.update(x, 'weight', weightvar))
             weightlbl = ttk.Label(content, text="Weight")
-            hair = ttk.Entry(content, width=10)
+            hair = ttk.Entry(content, width=10, textvariable=hairvar)
+            hair.bind('<FocusOut>', lambda x: PathfinderGUI.update(x, 'hair', hairvar))
             hairlbl = ttk.Label(content, text="Hair")
-            eyes = ttk.Entry(content, width=10)
+            eyes = ttk.Entry(content, width=10, textvariable=eyesvar)
+            eyes.bind('<FocusOut>', lambda x: PathfinderGUI.update(x, 'eyes', eyesvar))
             eyeslbl = ttk.Label(content, text="Eyes")
             languagelbl = ttk.Label(content, text = "Languages Spoken", background='black', foreground='white')
             language1 = ttk.Combobox(content, width = 15, textvariable=lang1, values=search_db('la_name','Languages',''))
+            language1.bind('<FocusOut>', lambda x: PathfinderGUI.update(x, 'lang1', lang1))
             language2 = ttk.Combobox(content, width = 15, textvariable=lang2, values=search_db('la_name','Languages',''))
+            language2.bind('<FocusOut>', lambda x: PathfinderGUI.update(x, 'lang1', lang1))
             language3 = ttk.Combobox(content, width = 15, textvariable=lang3, values=search_db('la_name','Languages',''))
+            language3.bind('<FocusOut>', lambda x: PathfinderGUI.update(x, 'lang1', lang1))
             language4 = ttk.Combobox(content, width = 15, textvariable=lang4, values=search_db('la_name','Languages',''))
+            language4.bind('<FocusOut>', lambda x: PathfinderGUI.update(x, 'lang1', lang1))
             language5 = ttk.Combobox(content, width = 15, textvariable=lang5, values=search_db('la_name','Languages',''))
+            language5.bind('<FocusOut>', lambda x: PathfinderGUI.update(x, 'lang1', lang1))
             language6 = ttk.Combobox(content, width = 15, textvariable=lang6, values=search_db('la_name','Languages',''))
-            
+            language6.bind('<FocusOut>', lambda x: PathfinderGUI.update(x, 'lang1', lang1))
+                        
             """ basic character information placement """
             content.grid(    column=0, row=0)
             name.grid(       column=1, row=2, columnspan=3)
@@ -140,12 +246,6 @@ class PathfinderGUI(ttk.Frame):
             language4.grid(  column=1, row=11, sticky=(W))
             language5.grid(  column=2, row=11, sticky=(W))
             language6.grid(  column=3, row=11, sticky=(W))            
-
-            ibuttonlbl.grid( column=1, row=12 )
-            ibuttonnew.grid( column=1, row=13, sticky=(W) )
-            ibuttonsave.grid( column=2, row=13, sticky=(W) )
-            ibuttonload.grid( column=3, row=13, sticky=(W) )
-            ibuttonexit.grid( column=4, row=13, sticky=(W) )
             
             character.add(content, text='Information')
             
@@ -153,46 +253,83 @@ class PathfinderGUI(ttk.Frame):
             content = ttk.Frame(character, padding=(3,3,12,12))
             content.grid(column=0, row=0)
 
-            abuttonlbl = ttk.Label(content, text = " ")
-            abuttonnew = ttk.Button(content, text = "New", width = 10)
-            abuttonsave = ttk.Button(content, text = "Save", width = 10)
-            abuttonload = ttk.Button(content, text = "Load", width = 10)
-            abuttonexit = ttk.Button(content, text = "Exit", width = 10)
+            strvar = IntVar()
+            dexvar = IntVar()
+            convar = IntVar()
+            intvar = IntVar()
+            wisvar = IntVar()
+            chavar = IntVar()
+            strvar.set(10)
+            dexvar.set(10)
+            convar.set(10)
+            intvar.set(10)
+            wisvar.set(10)
+            chavar.set(10)
+            strmod = IntVar()
+            dexmod = IntVar()
+            conmod = IntVar()
+            intmod = IntVar()
+            wismod = IntVar()
+            chamod = IntVar()
+            strtem = IntVar()
+            dextem = IntVar()
+            contem = IntVar()
+            inttem = IntVar()
+            wistem = IntVar()
+            chatem = IntVar()
+            strtmo = IntVar()
+            dextmo = IntVar()
+            contmo = IntVar()
+            inttmo = IntVar()
+            wistmo = IntVar()
+            chatmo = IntVar()
             
             """ ability declaration """
             abnamelbl = ttk.Label(content, text="Ability Name", background='black', foreground='white')
             abscorelbl = ttk.Label(content, text = "Abl Score | Mod", background='black', foreground='white')
             tempadjlbl = ttk.Label(content, text = "Temp Adj | Mod", background='black', foreground='white')
             strlbl = ttk.Label(content, text = "   Strength    "  , background='black', foreground='white')
-            strabs = ttk.Entry(content, width = 6)
-            strabm = ttk.Entry(content, width = 6)
-            strtma = ttk.Entry(content, width = 6)
-            strtmm = ttk.Entry(content, width = 6) 
+            strabs = ttk.Entry(content, width = 6, textvariable=strvar)
+            strabm = ttk.Entry(content, width = 6, textvariable=strmod, state='readonly')
+            strabs.bind('<FocusOut>', lambda x: PathfinderGUI.update(x, 'str', [strvar,strmod,strtmo]))
+            strtma = ttk.Entry(content, width = 6, textvariable=strtem)
+            strtmm = ttk.Entry(content, width = 6, textvariable=strtmo, state='readonly')
+            strtma.bind('<FocusOut>', lambda x: PathfinderGUI.update(x, 'strtem', [strtem, strtmo]))
             dexlbl = ttk.Label(content, text = "   Dexterity    ", background='black', foreground='white')
-            dexabs = ttk.Entry(content, width = 6)
-            dexabm = ttk.Entry(content, width = 6)
-            dextma = ttk.Entry(content, width = 6)
-            dextmm = ttk.Entry(content, width = 6)
+            dexabs = ttk.Entry(content, width = 6, textvariable=dexvar)
+            dexabm = ttk.Entry(content, width = 6, textvariable=dexmod, state='readonly')
+            dexabs.bind('<FocusOut>', lambda x: PathfinderGUI.update(x, 'dex', [dexvar,dexmod,dextmo]))
+            dextma = ttk.Entry(content, width = 6, textvariable=dextem)
+            dextmm = ttk.Entry(content, width = 6, textvariable=dextmo, state='readonly')
+            dextma.bind('<FocusOut>', lambda x: PathfinderGUI.update(x, 'dextem', [dextem, dextmo]))
             conlbl = ttk.Label(content, text = "Constitution", background='black', foreground='white')
-            conabs = ttk.Entry(content, width = 6)
-            conabm = ttk.Entry(content, width = 6)
-            contma = ttk.Entry(content, width = 6)
-            contmm = ttk.Entry(content, width = 6)
+            conabs = ttk.Entry(content, width = 6, textvariable=convar)
+            conabm = ttk.Entry(content, width = 6, textvariable=conmod, state='readonly')
+            conabs.bind('<FocusOut>', lambda x: PathfinderGUI.update(x, 'con', [convar,conmod,contmo]))
+            contma = ttk.Entry(content, width = 6, textvariable=contem)
+            contmm = ttk.Entry(content, width = 6, textvariable=contmo, state='readonly')
+            contma.bind('<FocusOut>', lambda x: PathfinderGUI.update(x, 'contem', [contem, contmo]))
             intlbl = ttk.Label(content, text = " Intelligence ", background='black', foreground='white')
-            intabs = ttk.Entry(content, width = 6)
-            intabm = ttk.Entry(content, width = 6)
-            inttma = ttk.Entry(content, width = 6)
-            inttmm = ttk.Entry(content, width = 6)
+            intabs = ttk.Entry(content, width = 6, textvariable=intvar)
+            intabm = ttk.Entry(content, width = 6, textvariable=intmod, state='readonly')
+            intabs.bind('<FocusOut>', lambda x: PathfinderGUI.update(x, 'int', [intvar,intmod,inttmo]))
+            inttma = ttk.Entry(content, width = 6, textvariable=inttem)
+            inttmm = ttk.Entry(content, width = 6, textvariable=inttmo, state='readonly')
+            inttma.bind('<FocusOut>', lambda x: PathfinderGUI.update(x, 'inttem', [inttem, inttmo]))
             wislbl = ttk.Label(content, text = "   Wisdom    ", background='black', foreground='white')
-            wisabs = ttk.Entry(content, width = 6)
-            wisabm = ttk.Entry(content, width = 6)
-            wistma = ttk.Entry(content, width = 6)
-            wistmm = ttk.Entry(content, width = 6)
+            wisabs = ttk.Entry(content, width = 6, textvariable=wisvar)
+            wisabm = ttk.Entry(content, width = 6, textvariable=wismod, state='readonly')
+            wisabs.bind('<FocusOut>', lambda x: PathfinderGUI.update(x, 'wis', [wisvar,wismod, wistmo]))
+            wistma = ttk.Entry(content, width = 6, textvariable=wistem)
+            wistmm = ttk.Entry(content, width = 6, textvariable=wistmo, state='readonly')
+            wistma.bind('<FocusOut>', lambda x: PathfinderGUI.update(x, 'wistem', [wistem, wistmo]))
             chalbl = ttk.Label(content, text = "   Charisma  ", background='black', foreground='white')
-            chaabs = ttk.Entry(content, width = 6)
-            chaabm = ttk.Entry(content, width = 6)
-            chatma = ttk.Entry(content, width = 6)
-            chatmm = ttk.Entry(content, width = 6)
+            chaabs = ttk.Entry(content, width = 6, textvariable=chavar)
+            chaabm = ttk.Entry(content, width = 6, textvariable=chamod, state='readonly')
+            chaabs.bind('<FocusOut>', lambda x: PathfinderGUI.update(x, 'cha', [chavar,chamod,chatmo]))
+            chatma = ttk.Entry(content, width = 6, textvariable=chatem)
+            chatmm = ttk.Entry(content, width = 6, textvariable=chatmo, state='readonly')
+            chatma.bind('<FocusOut>', lambda x: PathfinderGUI.update(x, 'chatem', [chatem, chatmo]))
 
             """ ability placement """
             abnamelbl.grid(  column=1, row=9, sticky = (W))
@@ -508,25 +645,13 @@ class PathfinderGUI(ttk.Frame):
             atfp15.grid(    column = 7, row = 19, sticky=(E))
             atfp16.grid(    column = 8, row = 19, sticky=(E))
             atfp17.grid(    column = 9, row = 19, sticky=(E))
-
-            abuttonlbl.grid( column=1, row=20 )
-            abuttonnew.grid( column=1, row=21, sticky=(W) )
-            abuttonsave.grid( column=2, row=21, sticky=(W) )
-            abuttonload.grid( column=3, row=21, sticky=(W) )
-            abuttonexit.grid( column=4, row=21, sticky=(W) )
             
             character.add(content, text='Abilities')
 
     def _create_inventory_tab(self, character):
             content = ttk.Frame(character, padding=(3,3,12,12))
             content.grid(column=0, row=0)
-
-            nbuttonlbl = ttk.Label(content, text = " ")
-            nbuttonnew = ttk.Button(content, text = "New", width = 10)
-            nbuttonsave = ttk.Button(content, text = "Save", width = 10)
-            nbuttonload = ttk.Button(content, text = "Load", width = 10)
-            nbuttonexit = ttk.Button(content, text = "Exit", width = 10)
-
+            
             """ Gear Declaration """
             gearlbl = ttk.Label(content, text = "                                       Gear                                      ", background = 'black', foreground = 'white')
             itemlbl = ttk.Label(content, text = "Item", foreground = 'grey')
@@ -689,12 +814,6 @@ class PathfinderGUI(ttk.Frame):
             expbox.grid(column = 5, row = 10, columnspan = 4)
             nxtlbl.grid(column = 9, row = 9, columnspan = 2)
             nxtbox.grid(column = 9, row = 10, columnspan = 2)
-
-            nbuttonlbl.grid( column=1, row=21 )
-            nbuttonnew.grid( column=1, row=26, sticky=(W) )
-            nbuttonsave.grid( column=2, row=26, sticky=(W) )
-            nbuttonload.grid( column=3, row=26, sticky=(W) )
-            nbuttonexit.grid( column=4, row=26, sticky=(W) )
             
             character.add(content, text='Inventory')
             
@@ -774,14 +893,73 @@ class PathfinderGUI(ttk.Frame):
             weapon1rnglbl = ttk.Label(content, text = "Range", background = 'black', foreground = 'white')
             weapon1ammlbl = ttk.Label(content, text = "Ammunition", background = 'black', foreground = 'white')
             weapon1damlbl = ttk.Label(content, text = "Damage", background = 'black', foreground = 'white')
-            weapon1lblbox = ttk.Entry(content, width=42)
-            weapon1atkbox = ttk.Entry(content, width=12)
-            weapon1crtbox = ttk.Entry(content, width=10)
-            weapon1typbox = ttk.Entry(content, width=10)
-            weapon1rngbox = ttk.Entry(content, width=10)
-            weapon1ammbox = ttk.Entry(content, width=20)
-            weapon1dambox = ttk.Entry(content, width=23)
 
+            weapon1lblvar=StringVar()
+            weapon1atkvar=StringVar()
+            weapon1crtvar=StringVar()
+            weapon1typvar=StringVar()
+            weapon1rngvar=StringVar()
+            weapon1ammvar=StringVar()
+            weapon1damvar=StringVar()
+
+            def updateweapon1(self, event=None):
+                nonlocal weapon1lblvar
+                nonlocal weapon1atkvar
+                nonlocal weapon1crtvar
+                nonlocal weapon1typvar
+                nonlocal weapon1rngvar
+                nonlocal weapon1ammvar
+                nonlocal weapon1damvar
+                weapon1_search_condition=str(' WHERE we_name="' + str(weapon1lblvar.get()).strip('{}[(,)]')+ '"')
+                weapon1atkvar.set('Not Implemented') #search_db + Math
+                weapon1crtvar.set(str(search_db('crit_rng', 'Weapons', weapon1_search_condition)).strip('{}[(,)]')+'/x'+str(search_db('crit_m', 'Weapons', weapon1_search_condition)).strip('{}[(,)]'))
+                weapon1typvar.set(str(search_db('dam_type', 'Weapons', weapon1_search_condition)).strip('{}[(,)]'))
+                weapon1rngvar.set(search_db('range', 'Weapons', weapon1_search_condition))
+                weapon1ammvar.set('NA')
+                weapon1damvar.set('Not Implemented') #search_db + Math
+                
+            weapon1lblbox = ttk.Combobox(content, width=42, textvariable=weapon1lblvar, values=search_db('we_name', 'Weapons', ' '))
+            weapon1lblbox.bind('<<ComboboxSelected>>', updateweapon1)
+            weapon1atkbox = ttk.Label(content, width=12, textvariable=weapon1atkvar, relief=RAISED) 
+            weapon1crtbox = ttk.Label(content, width=10, textvariable=weapon1crtvar, relief=RAISED) 
+            weapon1typbox = ttk.Label(content, width=10, textvariable=weapon1typvar, relief=RAISED) 
+            weapon1rngbox = ttk.Label(content, width=10, textvariable=weapon1rngvar, relief=RAISED) 
+            weapon1ammbox = ttk.Label(content, width=20, textvariable=weapon1ammvar, relief=RAISED) 
+            weapon1dambox = ttk.Label(content, width=23, textvariable=weapon1damvar, relief=RAISED)
+
+            
+            weapon2lblvar=StringVar()
+            weapon2atkvar=StringVar()
+            weapon2crtvar=StringVar()
+            weapon2typvar=StringVar()
+            weapon2rngvar=StringVar()
+            weapon2ammvar=StringVar()
+            weapon2damvar=StringVar()
+
+            def updateweapon2(self, event=None):
+                nonlocal weapon2lblvar
+                nonlocal weapon2atkvar
+                nonlocal weapon2crtvar
+                nonlocal weapon2typvar
+                nonlocal weapon2rngvar
+                nonlocal weapon2ammvar
+                nonlocal weapon2damvar
+                weapon2_search_condition=str(' WHERE we_name="' + str(weapon2lblvar.get()).strip('{}[(,)]')+ '"')
+                weapon2atkvar.set('Not Implemented') #search_db + Math
+                weapon2crtvar.set(str(search_db('crit_rng', 'Weapons', weapon2_search_condition)).strip('{}[(,)]')+'/x'+str(search_db('crit_m', 'Weapons', weapon2_search_condition)).strip('{}[(,)]'))
+                weapon2typvar.set(str(search_db('dam_type', 'Weapons', weapon2_search_condition)).strip('{}[(,)]'))
+                weapon2rngvar.set(search_db('range', 'Weapons', weapon2_search_condition))
+                weapon2ammvar.set('NA')
+                weapon2damvar.set('Not Implemented') #search_db + Math
+                
+            weapon2lblbox = ttk.Combobox(content, width=42, textvariable=weapon2lblvar, values=search_db('we_name', 'Weapons', ' '))
+            weapon2lblbox.bind('<<ComboboxSelected>>', updateweapon2)
+            weapon2atkbox = ttk.Label(content, width=12, textvariable=weapon2atkvar, relief=RAISED) 
+            weapon2crtbox = ttk.Label(content, width=10, textvariable=weapon2crtvar, relief=RAISED) 
+            weapon2typbox = ttk.Label(content, width=10, textvariable=weapon2typvar, relief=RAISED) 
+            weapon2rngbox = ttk.Label(content, width=10, textvariable=weapon2rngvar, relief=RAISED) 
+            weapon2ammbox = ttk.Label(content, width=20, textvariable=weapon2ammvar, relief=RAISED) 
+            weapon2dambox = ttk.Label(content, width=23, textvariable=weapon2damvar, relief=RAISED)
             weapon2lbllbl = ttk.Label(content, text = "Weapon 2", background = 'black', foreground = 'white')
             weapon2atklbl = ttk.Label(content, text = "Attack Bonus", background = 'black', foreground = 'white')
             weapon2crtlbl = ttk.Label(content, text = "Critical", background = 'black', foreground = 'white')
@@ -789,14 +967,40 @@ class PathfinderGUI(ttk.Frame):
             weapon2rnglbl = ttk.Label(content, text = "Range", background = 'black', foreground = 'white')
             weapon2ammlbl = ttk.Label(content, text = "Ammunition", background = 'black', foreground = 'white')
             weapon2damlbl = ttk.Label(content, text = "Damage", background = 'black', foreground = 'white')
-            weapon2lblbox = ttk.Entry(content, width=42)
-            weapon2atkbox = ttk.Entry(content, width=12)
-            weapon2crtbox = ttk.Entry(content, width=10)
-            weapon2typbox = ttk.Entry(content, width=10)
-            weapon2rngbox = ttk.Entry(content, width=10)
-            weapon2ammbox = ttk.Entry(content, width=20)
-            weapon2dambox = ttk.Entry(content, width=23)
 
+            
+            weapon3lblvar=StringVar()
+            weapon3atkvar=StringVar()
+            weapon3crtvar=StringVar()
+            weapon3typvar=StringVar()
+            weapon3rngvar=StringVar()
+            weapon3ammvar=StringVar()
+            weapon3damvar=StringVar()
+
+            def updateweapon3(self, event=None):
+                nonlocal weapon3lblvar
+                nonlocal weapon3atkvar
+                nonlocal weapon3crtvar
+                nonlocal weapon3typvar
+                nonlocal weapon3rngvar
+                nonlocal weapon3ammvar
+                nonlocal weapon3damvar
+                weapon3_search_condition=str(' WHERE we_name="' + str(weapon3lblvar.get()).strip('{}[(,)]')+ '"')
+                weapon3atkvar.set('Not Implemented') #search_db + Math
+                weapon3crtvar.set(str(search_db('crit_rng', 'Weapons', weapon3_search_condition)).strip('{}[(,)]')+'/x'+str(search_db('crit_m', 'Weapons', weapon3_search_condition)).strip('{}[(,)]'))
+                weapon3typvar.set(str(search_db('dam_type', 'Weapons', weapon3_search_condition)).strip('{}[(,)]'))
+                weapon3rngvar.set(search_db('range', 'Weapons', weapon3_search_condition))
+                weapon3ammvar.set('NA')
+                weapon3damvar.set('Not Implemented') #search_db + Math
+                
+            weapon3lblbox = ttk.Combobox(content, width=42, textvariable=weapon3lblvar, values=search_db('we_name', 'Weapons', ' '))
+            weapon3lblbox.bind('<<ComboboxSelected>>', updateweapon3)
+            weapon3atkbox = ttk.Label(content, width=12, textvariable=weapon3atkvar, relief=RAISED) 
+            weapon3crtbox = ttk.Label(content, width=10, textvariable=weapon3crtvar, relief=RAISED) 
+            weapon3typbox = ttk.Label(content, width=10, textvariable=weapon3typvar, relief=RAISED) 
+            weapon3rngbox = ttk.Label(content, width=10, textvariable=weapon3rngvar, relief=RAISED) 
+            weapon3ammbox = ttk.Label(content, width=20, textvariable=weapon3ammvar, relief=RAISED) 
+            weapon3dambox = ttk.Label(content, width=23, textvariable=weapon3damvar, relief=RAISED)
             weapon3lbllbl = ttk.Label(content, text = "Weapon 3", background = 'black', foreground = 'white')
             weapon3atklbl = ttk.Label(content, text = "Attack Bonus", background = 'black', foreground = 'white')
             weapon3crtlbl = ttk.Label(content, text = "Critical", background = 'black', foreground = 'white')
@@ -804,14 +1008,40 @@ class PathfinderGUI(ttk.Frame):
             weapon3rnglbl = ttk.Label(content, text = "Range", background = 'black', foreground = 'white')
             weapon3ammlbl = ttk.Label(content, text = "Ammunition", background = 'black', foreground = 'white')
             weapon3damlbl = ttk.Label(content, text = "Damage", background = 'black', foreground = 'white')
-            weapon3lblbox = ttk.Entry(content, width=42)
-            weapon3atkbox = ttk.Entry(content, width=12)
-            weapon3crtbox = ttk.Entry(content, width=10)
-            weapon3typbox = ttk.Entry(content, width=10)
-            weapon3rngbox = ttk.Entry(content, width=10)
-            weapon3ammbox = ttk.Entry(content, width=20)
-            weapon3dambox = ttk.Entry(content, width=23)
 
+
+            weapon4lblvar=StringVar()
+            weapon4atkvar=StringVar()
+            weapon4crtvar=StringVar()
+            weapon4typvar=StringVar()
+            weapon4rngvar=StringVar()
+            weapon4ammvar=StringVar()
+            weapon4damvar=StringVar()
+
+            def updateweapon4(self, event=None):
+                nonlocal weapon4lblvar
+                nonlocal weapon4atkvar
+                nonlocal weapon4crtvar
+                nonlocal weapon4typvar
+                nonlocal weapon4rngvar
+                nonlocal weapon4ammvar
+                nonlocal weapon4damvar
+                weapon4_search_condition=str(' WHERE we_name="' + str(weapon4lblvar.get()).strip('{}[(,)]')+ '"')
+                weapon4atkvar.set('Not Implemented') #search_db + Math
+                weapon4crtvar.set(str(search_db('crit_rng', 'Weapons', weapon4_search_condition)).strip('{}[(,)]')+'/x'+str(search_db('crit_m', 'Weapons', weapon4_search_condition)).strip('{}[(,)]'))
+                weapon4typvar.set(str(search_db('dam_type', 'Weapons', weapon4_search_condition)).strip('{}[(,)]'))
+                weapon4rngvar.set(search_db('range', 'Weapons', weapon4_search_condition))
+                weapon4ammvar.set('NA')
+                weapon4damvar.set('Not Implemented') #search_db + Math
+                
+            weapon4lblbox = ttk.Combobox(content, width=42, textvariable=weapon4lblvar, values=search_db('we_name', 'Weapons', ' '))
+            weapon4lblbox.bind('<<ComboboxSelected>>', updateweapon4)
+            weapon4atkbox = ttk.Label(content, width=12, textvariable=weapon4atkvar, relief=RAISED) 
+            weapon4crtbox = ttk.Label(content, width=10, textvariable=weapon4crtvar, relief=RAISED) 
+            weapon4typbox = ttk.Label(content, width=10, textvariable=weapon4typvar, relief=RAISED) 
+            weapon4rngbox = ttk.Label(content, width=10, textvariable=weapon4rngvar, relief=RAISED) 
+            weapon4ammbox = ttk.Label(content, width=20, textvariable=weapon4ammvar, relief=RAISED) 
+            weapon4dambox = ttk.Label(content, width=23, textvariable=weapon4damvar, relief=RAISED)            
             weapon4lbllbl = ttk.Label(content, text = "Weapon 4" , background = 'black', foreground = 'white')
             weapon4atklbl = ttk.Label(content, text = "Attack Bonus", background = 'black', foreground = 'white')
             weapon4crtlbl = ttk.Label(content, text = "Critical", background = 'black', foreground = 'white')
@@ -819,14 +1049,40 @@ class PathfinderGUI(ttk.Frame):
             weapon4rnglbl = ttk.Label(content, text = "Range", background = 'black', foreground = 'white')
             weapon4ammlbl = ttk.Label(content, text = "Ammunition", background = 'black', foreground = 'white')
             weapon4damlbl = ttk.Label(content, text = "Damage", background = 'black', foreground = 'white')
-            weapon4lblbox = ttk.Entry(content, width=42)
-            weapon4atkbox = ttk.Entry(content, width=12)
-            weapon4crtbox = ttk.Entry(content, width=10)
-            weapon4typbox = ttk.Entry(content, width=10)
-            weapon4rngbox = ttk.Entry(content, width=10)
-            weapon4ammbox = ttk.Entry(content, width=20)
-            weapon4dambox = ttk.Entry(content, width=23)
 
+
+            weapon5lblvar=StringVar()
+            weapon5atkvar=StringVar()
+            weapon5crtvar=StringVar()
+            weapon5typvar=StringVar()
+            weapon5rngvar=StringVar()
+            weapon5ammvar=StringVar()
+            weapon5damvar=StringVar()
+
+            def updateweapon5(self, event=None):
+                nonlocal weapon5lblvar
+                nonlocal weapon5atkvar
+                nonlocal weapon5crtvar
+                nonlocal weapon5typvar
+                nonlocal weapon5rngvar
+                nonlocal weapon5ammvar
+                nonlocal weapon5damvar
+                weapon5_search_condition=str(' WHERE we_name="' + str(weapon5lblvar.get()).strip('{}[(,)]')+ '"')
+                weapon5atkvar.set('Not Implemented') #search_db + Math
+                weapon5crtvar.set(str(search_db('crit_rng', 'Weapons', weapon5_search_condition)).strip('{}[(,)]')+'/x'+str(search_db('crit_m', 'Weapons', weapon5_search_condition)).strip('{}[(,)]'))
+                weapon5typvar.set(str(search_db('dam_type', 'Weapons', weapon5_search_condition)).strip('{}[(,)]'))
+                weapon5rngvar.set(search_db('range', 'Weapons', weapon5_search_condition))
+                weapon5ammvar.set('NA')
+                weapon5damvar.set('Not Implemented') #search_db + Math
+                
+            weapon5lblbox = ttk.Combobox(content, width=42, textvariable=weapon5lblvar, values=search_db('we_name', 'Weapons', ' '))
+            weapon5lblbox.bind('<<ComboboxSelected>>', updateweapon5)
+            weapon5atkbox = ttk.Label(content, width=12, textvariable=weapon5atkvar, relief=RAISED) 
+            weapon5crtbox = ttk.Label(content, width=10, textvariable=weapon5crtvar, relief=RAISED) 
+            weapon5typbox = ttk.Label(content, width=10, textvariable=weapon5typvar, relief=RAISED) 
+            weapon5rngbox = ttk.Label(content, width=10, textvariable=weapon5rngvar, relief=RAISED) 
+            weapon5ammbox = ttk.Label(content, width=20, textvariable=weapon5ammvar, relief=RAISED) 
+            weapon5dambox = ttk.Label(content, width=23, textvariable=weapon5damvar, relief=RAISED)
             weapon5lbllbl = ttk.Label(content, text = "Weapon 5", background = 'black', foreground = 'white')
             weapon5atklbl = ttk.Label(content, text = "Attack Bonus", background = 'black', foreground = 'white')
             weapon5crtlbl = ttk.Label(content, text = "Critical", background = 'black', foreground = 'white')
@@ -834,13 +1090,7 @@ class PathfinderGUI(ttk.Frame):
             weapon5rnglbl = ttk.Label(content, text = "Range", background = 'black', foreground = 'white')
             weapon5ammlbl = ttk.Label(content, text = "Ammunition", background = 'black', foreground = 'white')
             weapon5damlbl = ttk.Label(content, text = "Damage", background = 'black', foreground = 'white')
-            weapon5lblbox = ttk.Entry(content, width=42)
-            weapon5atkbox = ttk.Entry(content, width=12)
-            weapon5crtbox = ttk.Entry(content, width=10)
-            weapon5typbox = ttk.Entry(content, width=10)
-            weapon5rngbox = ttk.Entry(content, width=10)
-            weapon5ammbox = ttk.Entry(content, width=20)
-            weapon5dambox = ttk.Entry(content, width=23)
+
 
             """ weapons placement """
 
@@ -945,41 +1195,172 @@ class PathfinderGUI(ttk.Frame):
             acgspflbl = ttk.Label(content, text="Spell Failure", background='black', foreground='white')
             acgwgtlbl = ttk.Label(content, text="Weight        ", background='black', foreground='white')
             acgprplbl = ttk.Label(content, text="Properties   ", background='black', foreground='white')
-            armor1acg = ttk.Entry(content, width=20)
-            armor1bon = ttk.Entry(content, width=10)
-            armor1typ = ttk.Entry(content, width=10)
-            armor1chk = ttk.Entry(content, width=12)
-            armor1spf = ttk.Entry(content, width=10)
-            armor1wgt = ttk.Entry(content, width=10)
-            armor1prp = ttk.Entry(content, width=10)
-            armor2acg = ttk.Entry(content, width=20)
-            armor2bon = ttk.Entry(content, width=10)
-            armor2typ = ttk.Entry(content, width=10)
-            armor2chk = ttk.Entry(content, width=12)
-            armor2spf = ttk.Entry(content, width=10)
-            armor2wgt = ttk.Entry(content, width=10)
-            armor2prp = ttk.Entry(content, width=10)
-            armor3acg = ttk.Entry(content, width=20)
-            armor3bon = ttk.Entry(content, width=10)
-            armor3typ = ttk.Entry(content, width=10)
-            armor3chk = ttk.Entry(content, width=12)
-            armor3spf = ttk.Entry(content, width=10)
-            armor3wgt = ttk.Entry(content, width=10)
-            armor3prp = ttk.Entry(content, width=10)
-            armor4acg = ttk.Entry(content, width=20)
-            armor4bon = ttk.Entry(content, width=10)
-            armor4typ = ttk.Entry(content, width=10)
-            armor4chk = ttk.Entry(content, width=12)
-            armor4spf = ttk.Entry(content, width=10)
-            armor4wgt = ttk.Entry(content, width=10)
-            armor4prp = ttk.Entry(content, width=10)
-            armor5acg = ttk.Entry(content, width=20)
-            armor5bon = ttk.Entry(content, width=10)
-            armor5typ = ttk.Entry(content, width=10)
-            armor5chk = ttk.Entry(content, width=12)
-            armor5spf = ttk.Entry(content, width=10)
-            armor5wgt = ttk.Entry(content, width=10)
-            armor5prp = ttk.Entry(content, width=10)
+
+            armor1acgvar=StringVar()
+            armor1bonvar=StringVar()
+            armor1typvar=StringVar()
+            armor1chkvar=StringVar()
+            armor1spfvar=StringVar()
+            armor1wgtvar=StringVar()
+            armor1prpvar=StringVar()
+            
+            def updatearmor1(self, event=None):
+                nonlocal armor1acgvar
+                nonlocal armor1bonvar
+                nonlocal armor1typvar
+                nonlocal armor1chkvar
+                nonlocal armor1spfvar
+                nonlocal armor1wgtvar
+                nonlocal armor1prpvar
+                armor1_search_condition=str(' WHERE ar_name="' + str(armor1acgvar.get()).strip('{}[(,)]')+ '"')
+                armor1bonvar.set(search_db('ac_bonus', 'Armour', armor1_search_condition)) 
+                armor1typvar.set(search_db('eq_slot', 'Armour', armor1_search_condition))
+                armor1chkvar.set(search_db('armour_penalty', 'Armour', armor1_search_condition))
+                armor1spfvar.set(search_db('spell_failure', 'Armour', armor1_search_condition))
+                armor1wgtvar.set(search_db('weight', 'Armour', armor1_search_condition))
+                armor1prpvar.set('Not Implemented') #search_db            
+            
+            armor1acg = ttk.Combobox(content, width=20, textvariable=armor1acgvar, values=search_db('ar_name', 'Armour', ' '))
+            armor1acg.bind('<<ComboboxSelected>>', updatearmor1)
+            armor1bon = ttk.Label(content, width=10, textvariable=armor1bonvar, relief=RAISED)
+            armor1typ = ttk.Label(content, width=10, textvariable=armor1typvar, relief=RAISED)
+            armor1chk = ttk.Label(content, width=12, textvariable=armor1chkvar, relief=RAISED)
+            armor1spf = ttk.Label(content, width=10, textvariable=armor1spfvar, relief=RAISED)
+            armor1wgt = ttk.Label(content, width=10, textvariable=armor1wgtvar, relief=RAISED)
+            armor1prp = ttk.Label(content, width=10, textvariable=armor1prpvar, relief=RAISED)
+            
+            armor2acgvar=StringVar()
+            armor2bonvar=StringVar()
+            armor2typvar=StringVar()
+            armor2chkvar=StringVar()
+            armor2spfvar=StringVar()
+            armor2wgtvar=StringVar()
+            armor2prpvar=StringVar()
+            
+            def updatearmor2(self, event=None):
+                nonlocal armor2acgvar
+                nonlocal armor2bonvar
+                nonlocal armor2typvar
+                nonlocal armor2chkvar
+                nonlocal armor2spfvar
+                nonlocal armor2wgtvar
+                nonlocal armor2prpvar
+                armor2_search_condition=str(' WHERE ar_name="' + str(armor2acgvar.get()).strip('{}[(,)]')+ '"')
+                armor2bonvar.set(search_db('ac_bonus', 'Armour', armor2_search_condition)) 
+                armor2typvar.set(search_db('eq_slot', 'Armour', armor2_search_condition))
+                armor2chkvar.set(search_db('armour_penalty', 'Armour', armor2_search_condition))
+                armor2spfvar.set(search_db('spell_failure', 'Armour', armor2_search_condition))
+                armor2wgtvar.set(search_db('weight', 'Armour', armor2_search_condition))
+                armor2prpvar.set('Not Implemented') #search_db            
+            
+            armor2acg = ttk.Combobox(content, width=20, textvariable=armor2acgvar, values=search_db('ar_name', 'Armour', ' '))
+            armor2acg.bind('<<ComboboxSelected>>', updatearmor2)
+            armor2bon = ttk.Label(content, width=10, textvariable=armor2bonvar, relief=RAISED)
+            armor2typ = ttk.Label(content, width=10, textvariable=armor2typvar, relief=RAISED)
+            armor2chk = ttk.Label(content, width=12, textvariable=armor2chkvar, relief=RAISED)
+            armor2spf = ttk.Label(content, width=10, textvariable=armor2spfvar, relief=RAISED)
+            armor2wgt = ttk.Label(content, width=10, textvariable=armor2wgtvar, relief=RAISED)
+            armor2prp = ttk.Label(content, width=10, textvariable=armor2prpvar, relief=RAISED)
+            
+            armor3acgvar=StringVar()
+            armor3bonvar=StringVar()
+            armor3typvar=StringVar()
+            armor3chkvar=StringVar()
+            armor3spfvar=StringVar()
+            armor3wgtvar=StringVar()
+            armor3prpvar=StringVar()
+            
+            def updatearmor3(self, event=None):
+                nonlocal armor3acgvar
+                nonlocal armor3bonvar
+                nonlocal armor3typvar
+                nonlocal armor3chkvar
+                nonlocal armor3spfvar
+                nonlocal armor3wgtvar
+                nonlocal armor3prpvar
+                armor3_search_condition=str(' WHERE ar_name="' + str(armor3acgvar.get()).strip('{}[(,)]')+ '"')
+                armor3bonvar.set(search_db('ac_bonus', 'Armour', armor3_search_condition)) 
+                armor3typvar.set(search_db('eq_slot', 'Armour', armor3_search_condition))
+                armor3chkvar.set(search_db('armour_penalty', 'Armour', armor3_search_condition))
+                armor3spfvar.set(search_db('spell_failure', 'Armour', armor3_search_condition))
+                armor3wgtvar.set(search_db('weight', 'Armour', armor3_search_condition))
+                armor3prpvar.set('Not Implemented') #search_db            
+            
+            armor3acg = ttk.Combobox(content, width=20, textvariable=armor3acgvar, values=search_db('ar_name', 'Armour', ' '))
+            armor3acg.bind('<<ComboboxSelected>>', updatearmor3)
+            armor3bon = ttk.Label(content, width=10, textvariable=armor3bonvar, relief=RAISED)
+            armor3typ = ttk.Label(content, width=10, textvariable=armor3typvar, relief=RAISED)
+            armor3chk = ttk.Label(content, width=12, textvariable=armor3chkvar, relief=RAISED)
+            armor3spf = ttk.Label(content, width=10, textvariable=armor3spfvar, relief=RAISED)
+            armor3wgt = ttk.Label(content, width=10, textvariable=armor3wgtvar, relief=RAISED)
+            armor3prp = ttk.Label(content, width=10, textvariable=armor3prpvar, relief=RAISED)
+            
+            armor4acgvar=StringVar()
+            armor4bonvar=StringVar()
+            armor4typvar=StringVar()
+            armor4chkvar=StringVar()
+            armor4spfvar=StringVar()
+            armor4wgtvar=StringVar()
+            armor4prpvar=StringVar()
+            
+            def updatearmor4(self, event=None):
+                nonlocal armor4acgvar
+                nonlocal armor4bonvar
+                nonlocal armor4typvar
+                nonlocal armor4chkvar
+                nonlocal armor4spfvar
+                nonlocal armor4wgtvar
+                nonlocal armor4prpvar
+                armor4_search_condition=str(' WHERE ar_name="' + str(armor4acgvar.get()).strip('{}[(,)]')+ '"')
+                armor4bonvar.set(search_db('ac_bonus', 'Armour', armor4_search_condition)) 
+                armor4typvar.set(search_db('eq_slot', 'Armour', armor4_search_condition))
+                armor4chkvar.set(search_db('armour_penalty', 'Armour', armor4_search_condition))
+                armor4spfvar.set(search_db('spell_failure', 'Armour', armor4_search_condition))
+                armor4wgtvar.set(search_db('weight', 'Armour', armor4_search_condition))
+                armor4prpvar.set('Not Implemented') #search_db            
+            
+            armor4acg = ttk.Combobox(content, width=20, textvariable=armor4acgvar, values=search_db('ar_name', 'Armour', ' '))
+            armor4acg.bind('<<ComboboxSelected>>', updatearmor4)
+            armor4bon = ttk.Label(content, width=10, textvariable=armor4bonvar, relief=RAISED)
+            armor4typ = ttk.Label(content, width=10, textvariable=armor4typvar, relief=RAISED)
+            armor4chk = ttk.Label(content, width=12, textvariable=armor4chkvar, relief=RAISED)
+            armor4spf = ttk.Label(content, width=10, textvariable=armor4spfvar, relief=RAISED)
+            armor4wgt = ttk.Label(content, width=10, textvariable=armor4wgtvar, relief=RAISED)
+            armor4prp = ttk.Label(content, width=10, textvariable=armor4prpvar, relief=RAISED)            
+            
+            armor5acgvar=StringVar()
+            armor5bonvar=StringVar()
+            armor5typvar=StringVar()
+            armor5chkvar=StringVar()
+            armor5spfvar=StringVar()
+            armor5wgtvar=StringVar()
+            armor5prpvar=StringVar()
+            
+            def updatearmor5(self, event=None):
+                nonlocal armor5acgvar
+                nonlocal armor5bonvar
+                nonlocal armor5typvar
+                nonlocal armor5chkvar
+                nonlocal armor5spfvar
+                nonlocal armor5wgtvar
+                nonlocal armor5prpvar
+                armor5_search_condition=str(' WHERE ar_name="' + str(armor5acgvar.get()).strip('{}[(,)]')+ '"')
+                armor5bonvar.set(search_db('ac_bonus', 'Armour', armor5_search_condition)) 
+                armor5typvar.set(search_db('eq_slot', 'Armour', armor5_search_condition))
+                armor5chkvar.set(search_db('armour_penalty', 'Armour', armor5_search_condition))
+                armor5spfvar.set(search_db('spell_failure', 'Armour', armor5_search_condition))
+                armor5wgtvar.set(search_db('weight', 'Armour', armor5_search_condition))
+                armor5prpvar.set('Not Implemented') #search_db            
+            
+            armor5acg = ttk.Combobox(content, width=20, textvariable=armor5acgvar, values=search_db('ar_name', 'Armour', ' '))
+            armor5acg.bind('<<ComboboxSelected>>', updatearmor5)
+            armor5bon = ttk.Label(content, width=10, textvariable=armor5bonvar, relief=RAISED)
+            armor5typ = ttk.Label(content, width=10, textvariable=armor5typvar, relief=RAISED)
+            armor5chk = ttk.Label(content, width=12, textvariable=armor5chkvar, relief=RAISED)
+            armor5spf = ttk.Label(content, width=10, textvariable=armor5spfvar, relief=RAISED)
+            armor5wgt = ttk.Label(content, width=10, textvariable=armor5wgtvar, relief=RAISED)
+            armor5prp = ttk.Label(content, width=10, textvariable=armor5prpvar, relief=RAISED)
+            
             acgtotlbl = ttk.Label(content, text="Totals                              ", background='black', foreground='white')
             acgbontot = ttk.Entry(content, width=10)
             acgtyptot = ttk.Entry(content, width=10)
@@ -1046,16 +1427,11 @@ class PathfinderGUI(ttk.Frame):
             rbuttonexit.grid( column=4, row=10, sticky=(W) )
             
             character.add(content, text='Armor')
+
             
     def _create_skills_tab(self, character):
             content = ttk.Frame(character, padding=(3,3,12,12))
             content.grid(column=0, row=0)
-
-            sbuttonlbl = ttk.Label(content, text = " ")
-            sbuttonnew = ttk.Button(content, text = "New", width = 10)
-            sbuttonsave = ttk.Button(content, text = "Save", width = 10)
-            sbuttonload = ttk.Button(content, text = "Load", width = 10)
-            sbuttonexit = ttk.Button(content, text = "Exit", width = 10)
             
             """ skills declarations """
             nameslbl = ttk.Label(content, text = "Skill Names")
@@ -1063,25 +1439,45 @@ class PathfinderGUI(ttk.Frame):
             abltylbl = ttk.Label(content, text = "Ability Mod")
             rankslbl = ttk.Label(content, text = "Ranks Mod")
             miscmlbl = ttk.Label(content, text = "Misc Mod")
-
+        
             ## Start of loop
             # 2d array [skill][tkinter function in order on row.
             SkillArray = {' ': []} # Empty starter
+            SkillVars = {' ': []} # Empty starters
             j = 2
             for i in sorted(Character.STDSkills.keys()):
                 j += 1
+                SkillVars[i] = [IntVar()]
+                SkillVars[i].append(IntVar())
+                SkillVars[i].append(IntVar())
+                SkillVars[i].append(IntVar())
+                
                 SkillArray[i] = [ttk.Checkbutton(content, text = i)]
-                SkillArray[i].append(ttk.Entry(content, width = 10))
-                SkillArray[i][1].insert(END,"%d"%Test.SkillCheck(i))
+                
+                SkillArray[i].append(ttk.Entry(content, width = 10, textvariable= SkillVars[i][0]))
+                SkillVars[i][0].set(Current.SkillCheck(i))
                 SkillArray[i][1].state(['readonly'])
+                
                 SkillArray[i].append(ttk.Label(content, text = " = %s "%Character.STDBase[i]))
-                SkillArray[i].append(ttk.Entry(content, width = 10, state = 'normal'))
-                SkillArray[i][3].insert(END,"%d"%Test.AbilityCheck(Character.STDBase[i]))
+                
+                SkillArray[i].append(ttk.Entry(content, width = 10, state = 'normal', textvariable=SkillVars[i][1]))
+                SkillVars[i][1].set(Current.AbilityCheck(Character.STDBase[i]))
                 SkillArray[i][3].state(['readonly'])
+                
                 SkillArray[i].append(ttk.Label(content, text = "+"))
-                SkillArray[i].append(ttk.Entry(content, width = 10))
+                
+                SkillArray[i].append(ttk.Entry(content, width = 10, textvariable=SkillVars[i][2]))
+                
                 SkillArray[i].append(ttk.Label(content, text = "+"))
-                SkillArray[i].append(ttk.Entry(content, width = 10))
+                
+                SkillArray[i].append(ttk.Entry(content, width = 10, textvariable=SkillVars[i][3]))
+
+                SkillArray[i][5].bind('<FocusOut>', lambda x: PathfinderGUI.SkillUpdate(x, i, SkillVars[i]))
+                SkillArray[i][7].bind('<FocusOut>', lambda x: PathfinderGUI.SkillUpdate(x, i, SkillVars[i]))
+                SkillArray[i][1].bind('<Enter>', lambda x: PathfinderGUI.SkillUpdate(x, i, SkillVars[i]))
+                SkillArray[i][3].bind('<Enter>', lambda x: PathfinderGUI.SkillUpdate(x, i, SkillVars[i]))
+                SkillArray[i][5].bind('<Enter>', lambda x: PathfinderGUI.SkillUpdate(x, i, SkillVars[i]))
+                SkillArray[i][7].bind('<Enter>', lambda x: PathfinderGUI.SkillUpdate(x, i, SkillVars[i]))
 
                 # If armor Penalty do stuff.
             
@@ -1095,24 +1491,13 @@ class PathfinderGUI(ttk.Frame):
                 SkillArray[i][7].grid(column = 11, row = j)
 
             ## End of loop
-
-            sbuttonlbl.grid( column=1, row=43 )
-            sbuttonnew.grid( column=1, row=44, sticky=(W) )
-            sbuttonsave.grid( column=2, row=44, sticky=(W) )
-            sbuttonload.grid( column=3, row=44, sticky=(W) )
-            sbuttonexit.grid( column=4, row=44, sticky=(W) )
+            SkillArray['acrobatics'][1].bind('<Enter>', lambda x: PathfinderGUI.SkillUpdate(x, 'acrobatics', SkillVars['acrobatics']))
             
             character.add(content, text='Skills')
 
     def _create_spells_tab(self, character):
             content = ttk.Frame(character, padding=(3,3,12,12))
             content.grid(column=0, row=0)
-
-            pbuttonlbl = ttk.Label(content, text = " ")
-            pbuttonnew = ttk.Button(content, text = "New", width = 10)
-            pbuttonsave = ttk.Button(content, text = "Save", width = 10)
-            pbuttonload = ttk.Button(content, text = "Load", width = 10)
-            pbuttonexit = ttk.Button(content, text = "Exit", width = 10)
             
             """ spell declarations """
             spklbl = ttk.Label(content, text = "Known")
@@ -1595,15 +1980,35 @@ class PathfinderGUI(ttk.Frame):
             dss9e4.grid(column = 10, row = 42, columnspan=4)
             dss9e5.grid(column = 6, row = 43, columnspan=4)
             dss9e6.grid(column = 10, row = 43, columnspan=4)
-
-            pbuttonlbl.grid( column=1, row=44 )
-            pbuttonnew.grid( column=1, row=45, sticky=(W) )
-            pbuttonsave.grid( column=2, row=45, sticky=(W) )
-            pbuttonload.grid( column=3, row=45, sticky=(W) )
-            pbuttonexit.grid( column=4, row=45, sticky=(W) )
             
             character.add(content, text='Spells')
 
+    def _create_saveloadnew_tab(self, character):
+            content = ttk.Frame(character, padding=(3,3,12,12))
+            content.grid(column=0, row=0)
+
+            namevar = StringVar()
+            plyvar = StringVar()
+            
+            loadnamelabel = ttk.Label(content, text = "Character:")
+            loadnameentry = ttk.Entry(content, width = 10, textvariable = namevar)
+            loadplyrlabel = ttk.Label(content, text = "Player:")
+            loadplyrentry = ttk.Entry(content, width = 10, textvariable = plyvar)
+            buttonnew = ttk.Button(content, text = "New", width = 10, command=new_char)
+            buttonsave = ttk.Button(content, text = "Save", width = 10)#, command=save_char)
+            buttonload = ttk.Button(content, text = "Load", width = 10)#, command=load_char(namevar, plyrvar))
+            buttonexit = ttk.Button(content, text = "Exit", width = 10, command=exit_char)
+            
+            loadnamelabel.grid(column = 1, row = 3, sticky = (W))
+            loadnameentry.grid(column = 2, row = 3, sticky = (W))
+            loadplyrlabel.grid(column = 3, row = 3, sticky = (W))
+            loadplyrentry.grid(column = 4, row = 3, sticky = (W))
+            buttonnew.grid(column = 1, row = 2, sticky = (W))
+            buttonsave.grid(column = 2, row = 2, sticky = (W))
+            buttonload.grid(column = 3, row = 2, sticky = (W))
+            buttonexit.grid(column = 4, row = 2, sticky = (W))
+
+            character.add(content, text='Options')
             
 if __name__ == '__main__':
     PathfinderGUI().mainloop()
