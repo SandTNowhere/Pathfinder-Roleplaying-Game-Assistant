@@ -443,53 +443,5 @@ FOREIGN KEY (bonus_type) REFERENCES Spell_Types(ty_name)
 
 );''')
 
-#Characters. See class for explanation of vars
-cursor.execute('''
-CREATE TABLE IF NOT EXISTS Characters(
-ch_id INTEGER PRIMARY KEY,
-ch_name VARCHAR(30), -- character
-pl_name VARCHAR(30), -- player
-alignment VARCHAR(30),
-deity VARCHAR(30),
-homeland VARCHAR(30),
-gender VARCHAR(30),
-age INT,
-height VARCHAR(30),
-weight REAL,
-hair VARCHAR (30),
-eyes VARCHAR (30),
-notes TEXT,
-str INT,
-dex INT,
-con INT,
-int INT,
-wis INT,
-cha INT,
-maxHP INT,
-curHP INT,
-tempHP INT,
-race VARCHAR(30),
-speed INT,
-size VARCHAR(30),
-lang TEXT, --comma seperated list
-class VARCHAR(50), -- One class only for now
-feats TEXT, -- comma seperated list
-skills TEXT, -- comma seperated list
-class_skills TEXT, -- comma sperated list
-ranks INT, 
-GP REAL,
-cumulative_GP REAL,
-Weapons TEXT, -- comma seperated list
-Armor TEXT, -- comma seperated list
-Slots TEXT, -- comma sperated list
-Slotless TEXT, -- comma seperated list
-inventory TEXT, -- comma seperated list
-UNIQUE(ch_name,pl_name),
-FOREIGN KEY (race) REFERENCES Races(ra_name),
-FOREIGN KEY (size) REFERENCES Races(size),
-FOREIGN KEY (lang) REFERENCES Languages(la_name),
-FOREIGN KEY (class) REFERENCES Classes(cl_name)
-);''')
-
 connection.commit()
 connection.close()
