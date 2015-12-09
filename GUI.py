@@ -124,7 +124,7 @@ class PathfinderGUI(ttk.Frame):
             elif target == 'chatem':
                 data[1].set(Current.AbilityCheck('cha')+math.floor(data[0].get()/2))
 
-    def SkillUpdate(Event, Skill, Value):
+    def SkillUpdate( Skill, Value):
             Value[0].set(Current.SkillCheck(Skill)+Value[3].get())
             Value[1].set(Current.AbilityCheck(Character.STDBase[Skill]))
             Current.skills[Skill] = Value[2].get()
@@ -1444,7 +1444,9 @@ class PathfinderGUI(ttk.Frame):
             # 2d array [skill][tkinter function in order on row.
             SkillArray = {' ': []} # Empty starter
             SkillVars = {' ': []} # Empty starters
-            j = 2
+
+            SkillUpdate = lambda x: (lambda p: PathfinderGUI.SkillUpdate( x, SkillVars[x]))
+            j = 3
             for i in sorted(Character.STDSkills.keys()):
                 j += 1
                 SkillVars[i] = [IntVar()]
@@ -1472,12 +1474,12 @@ class PathfinderGUI(ttk.Frame):
                 
                 SkillArray[i].append(ttk.Entry(content, width = 10, textvariable=SkillVars[i][3]))
 
-                SkillArray[i][5].bind('<FocusOut>', lambda x: PathfinderGUI.SkillUpdate(x, i, SkillVars[i]))
-                SkillArray[i][7].bind('<FocusOut>', lambda x: PathfinderGUI.SkillUpdate(x, i, SkillVars[i]))
-                SkillArray[i][1].bind('<Enter>', lambda x: PathfinderGUI.SkillUpdate(x, i, SkillVars[i]))
-                SkillArray[i][3].bind('<Enter>', lambda x: PathfinderGUI.SkillUpdate(x, i, SkillVars[i]))
-                SkillArray[i][5].bind('<Enter>', lambda x: PathfinderGUI.SkillUpdate(x, i, SkillVars[i]))
-                SkillArray[i][7].bind('<Enter>', lambda x: PathfinderGUI.SkillUpdate(x, i, SkillVars[i]))
+                SkillArray[i][5].bind('<FocusOut>', SkillUpdate(i))
+                SkillArray[i][7].bind('<FocusOut>', SkillUpdate(i))
+                SkillArray[i][1].bind('<Enter>', SkillUpdate(i))
+                SkillArray[i][3].bind('<Enter>', SkillUpdate(i))
+                SkillArray[i][5].bind('<Enter>', SkillUpdate(i))
+                SkillArray[i][7].bind('<Enter>', SkillUpdate(i))
 
                 # If armor Penalty do stuff.
             
