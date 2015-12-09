@@ -123,6 +123,12 @@ class PathfinderGUI(ttk.Frame):
                 data[1].set(Current.AbilityCheck('wis')+math.floor(data[0].get()/2))
             elif target == 'chatem':
                 data[1].set(Current.AbilityCheck('cha')+math.floor(data[0].get()/2))
+
+    def SkillUpdate(Event, Skill, Value):
+            Value[0].set(Current.SkillCheck(Skill)+Value[3].get())
+            Value[1].set(Current.AbilityCheck(Character.STDBase[Skill]))
+            Current.skills[Skill] = Value[2].get()
+            # Value[3].get() Does nothing as Misc shouldn't be saved ordinarily.
             
     def _create_information_tab(self, character):
             content = ttk.Frame(character, padding=(3,3,12,12))
@@ -1150,21 +1156,41 @@ class PathfinderGUI(ttk.Frame):
             ## Start of loop
             # 2d array [skill][tkinter function in order on row.
             SkillArray = {' ': []} # Empty starter
+            SkillVars = {' ': []} # Empty starters
             j = 2
             for i in sorted(Character.STDSkills.keys()):
                 j += 1
+                SkillVars[i] = [IntVar()]
+                SkillVars[i].append(IntVar())
+                SkillVars[i].append(IntVar())
+                SkillVars[i].append(IntVar())
+                
                 SkillArray[i] = [ttk.Checkbutton(content, text = i)]
-                SkillArray[i].append(ttk.Entry(content, width = 10))
-                SkillArray[i][1].insert(END,"%d"%Current.SkillCheck(i))
+                
+                SkillArray[i].append(ttk.Entry(content, width = 10, textvariable= SkillVars[i][0]))
+                SkillVars[i][0].set(Current.SkillCheck(i))
                 SkillArray[i][1].state(['readonly'])
+                
                 SkillArray[i].append(ttk.Label(content, text = " = %s "%Character.STDBase[i]))
-                SkillArray[i].append(ttk.Entry(content, width = 10, state = 'normal'))
-                SkillArray[i][3].insert(END,"%d"%Current.AbilityCheck(Character.STDBase[i]))
+                
+                SkillArray[i].append(ttk.Entry(content, width = 10, state = 'normal', textvariable=SkillVars[i][1]))
+                SkillVars[i][1].set(Current.AbilityCheck(Character.STDBase[i]))
                 SkillArray[i][3].state(['readonly'])
+                
                 SkillArray[i].append(ttk.Label(content, text = "+"))
-                SkillArray[i].append(ttk.Entry(content, width = 10))
+                
+                SkillArray[i].append(ttk.Entry(content, width = 10, textvariable=SkillVars[i][2]))
+                
                 SkillArray[i].append(ttk.Label(content, text = "+"))
-                SkillArray[i].append(ttk.Entry(content, width = 10))
+                
+                SkillArray[i].append(ttk.Entry(content, width = 10, textvariable=SkillVars[i][3]))
+
+                SkillArray[i][5].bind('<FocusOut>', lambda x: PathfinderGUI.SkillUpdate(x, i, SkillVars[i]))
+                SkillArray[i][7].bind('<FocusOut>', lambda x: PathfinderGUI.SkillUpdate(x, i, SkillVars[i]))
+                SkillArray[i][1].bind('<Enter>', lambda x: PathfinderGUI.SkillUpdate(x, i, SkillVars[i]))
+                SkillArray[i][3].bind('<Enter>', lambda x: PathfinderGUI.SkillUpdate(x, i, SkillVars[i]))
+                SkillArray[i][5].bind('<Enter>', lambda x: PathfinderGUI.SkillUpdate(x, i, SkillVars[i]))
+                SkillArray[i][7].bind('<Enter>', lambda x: PathfinderGUI.SkillUpdate(x, i, SkillVars[i]))
 
                 # If armor Penalty do stuff.
             
@@ -1178,6 +1204,7 @@ class PathfinderGUI(ttk.Frame):
                 SkillArray[i][7].grid(column = 11, row = j)
 
             ## End of loop
+            SkillArray['acrobatics'][1].bind('<Enter>', lambda x: PathfinderGUI.SkillUpdate(x, 'acrobatics', SkillVars['acrobatics']))
             
             character.add(content, text='Skills')
 
