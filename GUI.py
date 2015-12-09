@@ -3,14 +3,8 @@ from tkinter import ttk
 import search_database
 from search_database import search_db
 import Character
+import math
 
-Test = Character.Character()
-Test.stats['str'] = 15
-Test.stats['dex'] = 18
-Test.stats['int'] = 14
-Test.stats['con'] = 16
-Test.stats['wis'] = 12
-Test.stats['cha'] = 4
 
 Current = Character.Character()
 
@@ -66,6 +60,48 @@ class PathfinderGUI(ttk.Frame):
                 Current.hair = data.get()
             elif target == 'eyes':
                 Current.eyes = data.get()
+            elif target == 'lang1':
+                Current.Language.append(data.get())
+            elif target == 'lang2':
+                Current.Language.append(data.get())
+            elif target == 'lang3':
+                Current.Language.append(data.get())
+            elif target == 'lang4':
+                Current.Language.append(data.get())
+            elif target == 'lang5':
+                Current.Language.append(data.get())
+            elif target == 'lang6':
+                Current.Language.append(data.get())
+            elif target == 'str':
+                Current.stats['str'] = data[0].get()
+                data[1].set(Current.AbilityCheck('str'))
+            elif target == 'dex':
+                Current.stats['dex'] = data[0].get()
+                data[1].set(Current.AbilityCheck('dex'))
+            elif target == 'con':
+                Current.stats['con'] = data[0].get()
+                data[1].set(Current.AbilityCheck('con'))
+            elif target == 'int':
+                Current.stats['int'] = data[0].get()
+                data[1].set(Current.AbilityCheck('int'))
+            elif target == 'wis':
+                Current.stats['wis'] = data[0].get()
+                data[1].set(Current.AbilityCheck('wis'))
+            elif target == 'cha':
+                Current.stats['cha'] = data[0].get()
+                data[1].set(Current.AbilityCheck('cha'))
+            elif target == 'strtem':
+                data[1].set(Current.AbilityCheck('str')+math.floor(data[0].get()/2))
+            elif target == 'dextem':
+                data[1].set(Current.AbilityCheck('dex')+math.floor(data[0].get()/2))
+            elif target == 'contem':
+                data[1].set(Current.AbilityCheck('con')+math.floor(data[0].get()/2))
+            elif target == 'inttem':
+                data[1].set(Current.AbilityCheck('int')+math.floor(data[0].get()/2))
+            elif target == 'wistem':
+                data[1].set(Current.AbilityCheck('wis')+math.floor(data[0].get()/2))
+            elif target == 'chatem':
+                data[1].set(Current.AbilityCheck('cha')+math.floor(data[0].get()/2))
         
             
     def _create_information_tab(self, character):
@@ -141,11 +177,17 @@ class PathfinderGUI(ttk.Frame):
             eyeslbl = ttk.Label(content, text="Eyes")
             languagelbl = ttk.Label(content, text = "Languages Spoken", background='black', foreground='white')
             language1 = ttk.Combobox(content, width = 15, textvariable=lang1, values=search_db('la_name','Languages',''))
+            language1.bind('<FocusOut>', lambda x: PathfinderGUI.update(x, 'lang1', lang1))
             language2 = ttk.Combobox(content, width = 15, textvariable=lang2, values=search_db('la_name','Languages',''))
+            language2.bind('<FocusOut>', lambda x: PathfinderGUI.update(x, 'lang1', lang1))
             language3 = ttk.Combobox(content, width = 15, textvariable=lang3, values=search_db('la_name','Languages',''))
+            language3.bind('<FocusOut>', lambda x: PathfinderGUI.update(x, 'lang1', lang1))
             language4 = ttk.Combobox(content, width = 15, textvariable=lang4, values=search_db('la_name','Languages',''))
+            language4.bind('<FocusOut>', lambda x: PathfinderGUI.update(x, 'lang1', lang1))
             language5 = ttk.Combobox(content, width = 15, textvariable=lang5, values=search_db('la_name','Languages',''))
+            language5.bind('<FocusOut>', lambda x: PathfinderGUI.update(x, 'lang1', lang1))
             language6 = ttk.Combobox(content, width = 15, textvariable=lang6, values=search_db('la_name','Languages',''))
+            language6.bind('<FocusOut>', lambda x: PathfinderGUI.update(x, 'lang1', lang1))
             
             """ basic character information placement """
             content.grid(    column=0, row=0)
@@ -202,41 +244,84 @@ class PathfinderGUI(ttk.Frame):
             abuttonsave = ttk.Button(content, text = "Save", width = 10)
             abuttonload = ttk.Button(content, text = "Load", width = 10)
             abuttonexit = ttk.Button(content, text = "Exit", width = 10)
+
+            strvar = IntVar()
+            dexvar = IntVar()
+            convar = IntVar()
+            intvar = IntVar()
+            wisvar = IntVar()
+            chavar = IntVar()
+            strvar.set(10)
+            dexvar.set(10)
+            convar.set(10)
+            intvar.set(10)
+            wisvar.set(10)
+            chavar.set(10)
+            strmod = IntVar()
+            dexmod = IntVar()
+            conmod = IntVar()
+            intmod = IntVar()
+            wismod = IntVar()
+            chamod = IntVar()
+            strtem = IntVar()
+            dextem = IntVar()
+            contem = IntVar()
+            inttem = IntVar()
+            wistem = IntVar()
+            chatem = IntVar()
+            strtmo = IntVar()
+            dextmo = IntVar()
+            contmo = IntVar()
+            inttmo = IntVar()
+            wistmo = IntVar()
+            chatmo = IntVar()
             
             """ ability declaration """
             abnamelbl = ttk.Label(content, text="Ability Name", background='black', foreground='white')
             abscorelbl = ttk.Label(content, text = "Abl Score | Mod", background='black', foreground='white')
             tempadjlbl = ttk.Label(content, text = "Temp Adj | Mod", background='black', foreground='white')
             strlbl = ttk.Label(content, text = "   Strength    "  , background='black', foreground='white')
-            strabs = ttk.Entry(content, width = 6)
-            strabm = ttk.Entry(content, width = 6)
-            strtma = ttk.Entry(content, width = 6)
-            strtmm = ttk.Entry(content, width = 6) 
+            strabs = ttk.Entry(content, width = 6, textvariable=strvar)
+            strabm = ttk.Entry(content, width = 6, textvariable=strmod, state='readonly')
+            strabs.bind('<FocusOut>', lambda x: PathfinderGUI.update(x, 'str', [strvar,strmod,strtmo]))
+            strtma = ttk.Entry(content, width = 6, textvariable=strtem)
+            strtmm = ttk.Entry(content, width = 6, textvariable=strtmo, state='readonly')
+            strtma.bind('<FocusOut>', lambda x: PathfinderGUI.update(x, 'strtem', [strtem, strtmo]))
             dexlbl = ttk.Label(content, text = "   Dexterity    ", background='black', foreground='white')
-            dexabs = ttk.Entry(content, width = 6)
-            dexabm = ttk.Entry(content, width = 6)
-            dextma = ttk.Entry(content, width = 6)
-            dextmm = ttk.Entry(content, width = 6)
+            dexabs = ttk.Entry(content, width = 6, textvariable=dexvar)
+            dexabm = ttk.Entry(content, width = 6, textvariable=dexmod, state='readonly')
+            dexabs.bind('<FocusOut>', lambda x: PathfinderGUI.update(x, 'dex', [dexvar,dexmod,dextmo]))
+            dextma = ttk.Entry(content, width = 6, textvariable=dextem)
+            dextmm = ttk.Entry(content, width = 6, textvariable=dextmo, state='readonly')
+            dextma.bind('<FocusOut>', lambda x: PathfinderGUI.update(x, 'dextem', [dextem, dextmo]))
             conlbl = ttk.Label(content, text = "Constitution", background='black', foreground='white')
-            conabs = ttk.Entry(content, width = 6)
-            conabm = ttk.Entry(content, width = 6)
-            contma = ttk.Entry(content, width = 6)
-            contmm = ttk.Entry(content, width = 6)
+            conabs = ttk.Entry(content, width = 6, textvariable=convar)
+            conabm = ttk.Entry(content, width = 6, textvariable=conmod, state='readonly')
+            conabs.bind('<FocusOut>', lambda x: PathfinderGUI.update(x, 'con', [convar,conmod,contmo]))
+            contma = ttk.Entry(content, width = 6, textvariable=contem)
+            contmm = ttk.Entry(content, width = 6, textvariable=contmo, state='readonly')
+            contma.bind('<FocusOut>', lambda x: PathfinderGUI.update(x, 'contem', [contem, contmo]))
             intlbl = ttk.Label(content, text = " Intelligence ", background='black', foreground='white')
-            intabs = ttk.Entry(content, width = 6)
-            intabm = ttk.Entry(content, width = 6)
-            inttma = ttk.Entry(content, width = 6)
-            inttmm = ttk.Entry(content, width = 6)
+            intabs = ttk.Entry(content, width = 6, textvariable=intvar)
+            intabm = ttk.Entry(content, width = 6, textvariable=intmod, state='readonly')
+            intabs.bind('<FocusOut>', lambda x: PathfinderGUI.update(x, 'int', [intvar,intmod,inttmo]))
+            inttma = ttk.Entry(content, width = 6, textvariable=inttem)
+            inttmm = ttk.Entry(content, width = 6, textvariable=inttmo, state='readonly')
+            inttma.bind('<FocusOut>', lambda x: PathfinderGUI.update(x, 'inttem', [inttem, inttmo]))
             wislbl = ttk.Label(content, text = "   Wisdom    ", background='black', foreground='white')
-            wisabs = ttk.Entry(content, width = 6)
-            wisabm = ttk.Entry(content, width = 6)
-            wistma = ttk.Entry(content, width = 6)
-            wistmm = ttk.Entry(content, width = 6)
+            wisabs = ttk.Entry(content, width = 6, textvariable=wisvar)
+            wisabm = ttk.Entry(content, width = 6, textvariable=wismod, state='readonly')
+            wisabs.bind('<FocusOut>', lambda x: PathfinderGUI.update(x, 'wis', [wisvar,wismod, wistmo]))
+            wistma = ttk.Entry(content, width = 6, textvariable=wistem)
+            wistmm = ttk.Entry(content, width = 6, textvariable=wistmo, state='readonly')
+            wistma.bind('<FocusOut>', lambda x: PathfinderGUI.update(x, 'wistem', [wistem, wistmo]))
             chalbl = ttk.Label(content, text = "   Charisma  ", background='black', foreground='white')
-            chaabs = ttk.Entry(content, width = 6)
-            chaabm = ttk.Entry(content, width = 6)
-            chatma = ttk.Entry(content, width = 6)
-            chatmm = ttk.Entry(content, width = 6)
+            chaabs = ttk.Entry(content, width = 6, textvariable=chavar)
+            chaabm = ttk.Entry(content, width = 6, textvariable=chamod, state='readonly')
+            chaabs.bind('<FocusOut>', lambda x: PathfinderGUI.update(x, 'cha', [chavar,chamod,chatmo]))
+            chatma = ttk.Entry(content, width = 6, textvariable=chatem)
+            chatmm = ttk.Entry(content, width = 6, textvariable=chatmo, state='readonly')
+            chatma.bind('<FocusOut>', lambda x: PathfinderGUI.update(x, 'chatem', [chatem, chatmo]))
 
             """ ability placement """
             abnamelbl.grid(  column=1, row=9, sticky = (W))
@@ -1116,11 +1201,11 @@ class PathfinderGUI(ttk.Frame):
                 j += 1
                 SkillArray[i] = [ttk.Checkbutton(content, text = i)]
                 SkillArray[i].append(ttk.Entry(content, width = 10))
-                SkillArray[i][1].insert(END,"%d"%Test.SkillCheck(i))
+                SkillArray[i][1].insert(END,"%d"%Current.SkillCheck(i))
                 SkillArray[i][1].state(['readonly'])
                 SkillArray[i].append(ttk.Label(content, text = " = %s "%Character.STDBase[i]))
                 SkillArray[i].append(ttk.Entry(content, width = 10, state = 'normal'))
-                SkillArray[i][3].insert(END,"%d"%Test.AbilityCheck(Character.STDBase[i]))
+                SkillArray[i][3].insert(END,"%d"%Current.AbilityCheck(Character.STDBase[i]))
                 SkillArray[i][3].state(['readonly'])
                 SkillArray[i].append(ttk.Label(content, text = "+"))
                 SkillArray[i].append(ttk.Entry(content, width = 10))

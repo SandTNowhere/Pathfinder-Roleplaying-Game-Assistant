@@ -115,7 +115,7 @@ class Character(object):
                 self.stats['size'] = 'medium'
                 # Languages are determined by the race, and most languages are learnable, but there are a
                 # few secret languages that have requirements to learn.
-                self.Language = []
+                self.Language = [ '','','','','','']
                 
                 # Class stuff, here we go, into the fun stuff
                 self.cls = [CLS.CLS()]
