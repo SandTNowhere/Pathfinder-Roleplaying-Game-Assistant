@@ -16,6 +16,9 @@ Current = Character.Character()
 
 root = Tk()
 
+def Show(event):
+    print (Current.name)
+
 class PathfinderGUI(ttk.Frame):    
         
        
@@ -40,8 +43,30 @@ class PathfinderGUI(ttk.Frame):
             self._create_skills_tab(character)
             self._create_spells_tab(character)
 
-    def update_all(event, target=None, data=None):
-        target = data
+    def update(event, target, data):
+            if target =='charname':
+                Current.name = data.get()
+            elif target == 'align':
+                Current.alignment = data.get()
+            elif target == 'playername':
+                Current.alignment = data.get()
+            elif target == 'deity':
+                Current.deity = data.get()
+            elif target == 'homeland':
+                Current.homeland = data.get()
+            elif target == 'gender':
+                Current.gender = data.get()
+            elif target == 'age':
+                Current.age = data.get()
+            elif target == 'height':
+                Current.height = data.get()
+            elif target == 'weight':
+                Current.weight = data.get()
+            elif target == 'hair':
+                Current.hair = data.get()
+            elif target == 'eyes':
+                Current.eyes = data.get()
+        
             
     def _create_information_tab(self, character):
             content = ttk.Frame(character, padding=(3,3,12,12))
@@ -54,8 +79,10 @@ class PathfinderGUI(ttk.Frame):
             ibuttonexit = ttk.Button(content, text = "Exit", width = 10)
 
             """varaible declarations for comboboxes"""
-            namevar = StringVar()
-            alignmentvar = StringVar()
+            namevar=StringVar()
+            alignmentvar= StringVar()
+            playervar = StringVar()
+            deityvar = StringVar()
             racevar = StringVar()
             sizevar = StringVar()
             lang1 = StringVar()
@@ -64,36 +91,53 @@ class PathfinderGUI(ttk.Frame):
             lang4 = StringVar()
             lang5 = StringVar()
             lang6 = StringVar()
+            homelandvar = StringVar()
+            gendervar = StringVar()
+            agevar = IntVar()
+            heightvar = StringVar()
+            weightvar = IntVar()
+            hairvar = StringVar()
+            eyesvar = StringVar()
             
             """ basic character information declaration """
             name = ttk.Entry(content, width=58, textvariable=namevar)
-            name.bind('<FocusOut>', lambda x: PathfinderGUI.update_all(x, namevar)
+            name.bind('<FocusOut>', lambda x: PathfinderGUI.update(x, 'charname', namevar))
             namelbl = ttk.Label(content, text="Character Name")
-            align = ttk.Combobox(content, width=10, textvariable=alignmentvar,values=search_db('al_name','Alignments',' ')) 
+            align = ttk.Combobox(content, width=10, textvariable=alignmentvar,values=search_db('al_name','Alignments',' '))
+            align.bind('<FocusOut>', lambda x: PathfinderGUI.update(x, 'align', alignmentvar))
             alignlbl = ttk.Label(content, text="Alignment")
-            player = ttk.Entry(content, width=43)
+            player = ttk.Entry(content, width=43, textvariable=playervar)
+            player.bind('<FocusOut>', lambda x: PathfinderGUI.update(x, 'playername', playervar))
             playerlbl = ttk.Label(content, text="Player")
-            level = ttk.Entry(content, width=72)
+            level = ttk.Entry(content, width=72) # should be read only but requires classes.
             levellbl = ttk.Label(content, text="Character Class and Level")
-            deity = ttk.Entry(content, width=21)
+            deity = ttk.Entry(content, width=21, textvariable=deityvar)
+            deity.bind('<FocusOut>', lambda x: PathdfinderGUI.update(x, 'deity', deityvar))
             deitylbl = ttk.Label(content, text="Deity")
-            homeland = ttk.Entry(content, width=21)
+            homeland = ttk.Entry(content, width=21, textvariable=homelandvar)
+            homeland.bind('<FocusOut>', lambda x: PathfinderGUI.update(x, 'homeland', homelandvar))
             homelandlbl = ttk.Label(content, text="Homeland")
             race = ttk.Entry(content, width=39)
             racelbl = ttk.Label(content, text="Race")    
             size = ttk.Entry(content, width=18)
             sizelbl = ttk.Label(content, text="Size")
-            gender = ttk.Entry(content, width=8)
+            gender = ttk.Entry(content, width=8, textvariable=gendervar)
+            gender.bind('<FocusOut>', lambda x: PathfinderGUI.update(x, 'gender', gendervar))
             genderlbl = ttk.Label(content, text="Gender")
-            age = ttk.Entry(content, width=4)
+            age = ttk.Entry(content, width=4, textvariable=agevar)
+            age.bind('<FocusOut>', lambda x: PathfinderGUI.update(x, 'age', agevar))
             agelbl = ttk.Label(content, text="Age")
-            height = ttk.Entry(content, width=10)
+            height = ttk.Entry(content, width=10, textvariable=heightvar)
+            height.bind('<FocusOut>', lambda x: PathfinderGUI.update(x, 'height', heightvar))
             heightlbl = ttk.Label(content, text="Height")
-            weight = ttk.Entry(content, width=10)
+            weight = ttk.Entry(content, width=10, textvariable=weightvar)
+            weight.bind('<FocusOut>', lambda x: PathfinderGUI.update(x, 'weight', weightvar))
             weightlbl = ttk.Label(content, text="Weight")
-            hair = ttk.Entry(content, width=10)
+            hair = ttk.Entry(content, width=10, textvariable=hairvar)
+            hair.bind('<FocusOut>', lambda x: PathfinderGUI.update(x, 'hair', hairvar))
             hairlbl = ttk.Label(content, text="Hair")
-            eyes = ttk.Entry(content, width=10)
+            eyes = ttk.Entry(content, width=10, textvariable=eyesvar)
+            eyes.bind('<FocusOut>', lambda x: PathfinderGUI.update(x, 'eyes', eyesvar))
             eyeslbl = ttk.Label(content, text="Eyes")
             languagelbl = ttk.Label(content, text = "Languages Spoken", background='black', foreground='white')
             language1 = ttk.Combobox(content, width = 15, textvariable=lang1, values=search_db('la_name','Languages',''))
